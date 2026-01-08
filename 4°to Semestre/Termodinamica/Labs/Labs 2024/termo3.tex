@@ -1,0 +1,452 @@
+\documentclass[12pt, paperletter]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{xcolor}
+\usepackage{cancel}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{amsmath, amssymb,amsmath}
+\usepackage[spanishes-lcroman]{babel}
+\usepackage{multicol}
+\usepackage{ulem}
+\usepackage{hyperref}
+\usepackage{cancel}
+\usepackage{graphicx}
+\usepackage{moresize}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\newtheorem{prop}{Proposición}
+\usepackage{enumitem}
+\usepackage{stackrel}
+\usepackage{float}
+
+\parindent=2.1pc
+\setlength{\textwidth}{16cm} \setlength{\textheight}{23cm}
+\usepackage[top=2.5cm, bottom=2cm,left=2cm, right=2cm]{geometry}
+\date{}
+\usepackage{fancyhdr}
+\fancypagestyle{plain}{
+\fancyhead[L]{\begin{picture}(0,0)\put(0,12){\includegraphics[width=3cm]{azu_nyan_vector_by_vunk_d2vpcdt-fullview.png}}    
+\end{picture}}
+\fancyhead[r]{\vspace{1cm}\\Universidad de Concepción, Campus Concepción. \\
+Facultad de Cs. Físicas y Matemáticas.\\ 
+\vspace{0.5cm}}
+\fancyfoot[c]{}}
+
+\fancypagestyle{fancy}{
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot[c]{\thepage}}
+
+\begin{document}
+\pagestyle{fancy}
+
+\maketitle
+
+\vspace{3cm}
+\begin{center}
+    \title{\HUGE\textbf{Laboratorio 2}}\\
+    \vspace{0.2cm}
+    \textbf{Leyes de los Gases Ideales.}\\
+    \vspace{0.3cm}
+    \author{ Fernando Contreras \\Daniel Sepúlveda\\Joaquin Riquelme}\\
+\end{center}
+\maketitle
+\vspace{7.0cm}
+\begin{flushleft}
+        \begin{itemize}      
+        \item   \textbf{\underline{Carrera:}}  Ingeniería Civil Matemática\\[0.2cm]
+        \item   \textbf{\underline{Profesor:}}  Claudio Faundez\\[0.2cm]
+        \item   \textbf{\underline{Asignatura:}} Termodinámica\\[0.2cm]
+        \item  \textbf{\underline{Ayudante:}}  Giulianni Bernal\\[0.2cm]
+        \end{itemize}
+        % \end{flushleft}
+\end{flushleft}
+
+\newpage
+\section{Introducción}
+En este informe se presentarán una serie de experimentos computacionales cuyo principal \textbf{objetivo} consiste en estudiar el comportamiento de los gases ideales bajo distintas condiciones, modificando parámetros como lo son; la temperatura, el volumen, la presión y el numero de partículas presentes. Mediante estos experimentos, se \textbf{pretende} entender como se comportan y aplican las leyes de los gases ideales en la práctica, así como observar la relación entre estas variables. La \textbf{importancia} del estudio de los gases ideales radica en que constituyen un modelo fundamental para la termodinámica, Aunque los gases reales difieren en cierta medida de los aspectos de los gases ideales, el estudio de los gases ideales nos permite una muy buena aproximación para estos en ciertas condiciones.
+En \textbf{conclusión} podemos rescatar que los experimentos realizados proporcionaron una excelente forma de aterrizar los conocimientos vistos de forma teórica a la practica, realizando conexiones y comprendiendo de manera más clara y simple sus comportamientos.
+\newpage
+
+
+
+
+\section{Marco Teórico}
+
+
+
+Un  \textit{Gas ideal} es un modelo idealizado que pretende representar el comportamiento de los gases donde se presupone que las moléculas de los gases no interaccionan entre si y poseen volumen despreciable.
+En condiciones normales de presión y temperaturas, los gases reales suelen
+comportarse en forma cualitativa de la misma forma que un gas ideal\cite{1}.
+En general, la representación se hace mas exacta a presiones muy bajas y temperaturas altas.\\
+
+\noindent Se recuerdan algunas definiciones de las magnitudes a estudiar. La \textbf{temperatura} es una medida de la energía cinética media de las partículas de un sistema, medida en Kelvin. El \textbf{Volumen} es en espacio total ocupado por las partículas en movimiento aleatorio, medida en metros cúbicos.
+La \textbf{Presión} es la medida de la fuerza media por unidad de superficie que ejercen las partículas en los límites del volumen que ocupan, medida en Pascales.\cite{4}  \\
+
+\noindent Se enuncian a continuación Las Leyes de los Gases ideales que fueron relevantes en el experimento: 
+\begin{enumerate}
+    \item Ley de Boyle: La ley de Boyle es aquella que expresa la relación entre la presión ejercida sobre un gas, y el volumen que ocupa este; manteniendo constante tanto la temperatura del gas, así como su cantidad de moles.
+    \begin{equation*}
+        V \propto \frac{1}{P}
+    \end{equation*} 
+    A temperatura cte.
+    \item Ley de Charles: La ley de Charles nos dice que para un gas a una presión constante, al aumentar la temperatura, el volumen del gas aumenta.
+    \begin{equation*}
+        V \propto T 
+    \end{equation*}
+    A presión cte.
+    \item Ley de Gay-Lussac: La ley de Gay-Lussac es una ley que nos dice que dependiendo del volumen que exista de manera constante, la presión de un gas será directamente proporcional a la temperatura. Esto provoca que se cumpla la siguiente relación:
+    \begin{equation*}
+        \frac{P_1}{T_1} = \frac{P_2}{T_2}
+    \end{equation*}
+        \begin{itemize}
+            \item $P_1$ = Presión inicial
+            \item $T_1$ = Temperatura inicial
+            \item $P_2$ = Presión final
+            \item $T_2$ = Temperatura final
+        \end{itemize}
+    \item Ley de Avogadro: Esta ley establece que dos volúmenes iguales de gases diferentes que se encuentren en las mismas condiciones de temperatura y presión, contendrán el mismo número de partículas gaseosas.
+\newpage
+    \item Ley de los Gases Ideales: \begin{equation*}
+        PV = nRT
+    \end{equation*}
+    Donde: 
+    \begin{itemize}
+        \item P = Presión ejercida
+        \item V = Volumen del gases
+        \item n = número de moles
+        \item R = constante universal de los gases 
+        \item T = temperatura (en Kelvin)
+    \end{itemize}
+\end{enumerate}
+
+\\
+
+Mediante el análisis de las leyes expuestas se plantean las siguientes hipótesis:
+
+\begin{itemize}
+    \item Se analizará la presión obtenida variando el volumen del recipiente a cierto número de moles y a una temperatura constante. Se espera que despejando la presión de la ecuación de los gases ideales, la presión aumentará al disminuir el volumen, debido a que es una relación inversamente proporcional:
+    \begin{align*}
+        &P_1 = \frac{nRT}{V}\\ &P_2 = \frac{nRT}{2V} \Longrightarrow P_2 = \frac{1}{2}P_1
+    \end{align*}
+    Por lo cual al aumentar el volumen y manteniendo las demás condiciones iguales, notamos que la presión disminuirá
+    \item Se analizará el volumen obtenido al variar la temperatura dado una presión y número de moles constantes. Se espera que despejando el volumen de la ecuación de los gases ideales el volumen aumentará a mayor temperatura, ya que es una relación directamente proporcional:
+    \begin{align*}
+        &V_1 = \frac{nRT}{P}\\
+        &V_2 = \frac{nR(2T)}{P} \Longrightarrow V_2 = 2V_1
+    \end{align*}
+    Por lo tanto, al tener el doble de la temperatura, manteniendo las otras condiciones constantes se obtiene que el volumen será el doble de $V_1$.
+\end{itemize}
+
+
+\newpage
+\section{Materiales involucrados en la simulación}
+\begin{enumerate}
+    \item Recipiente con gas
+    \item Pistón
+    \item Termómetro
+    \item Barómetro
+    \item Regularizador de temperatura
+    \item Bomba de moléculas 
+\end{enumerate}
+
+\newpage
+
+\section{Procedimiento}
+
+Se realizaran los experimentos por medio de la pagina web: \url{https://phet.colorado.edu/sims/html/gas-properties/latest/gas-properties_es.html}
+\\
+\noindent En ella, se seleccionó el primer experimento llamado Ideal en el que se simulan gases ideales.
+
+\begin{enumerate}
+    \item Para las primeras 3 Simulaciones se analizó como cambia la presión(atm) cuando variamos la longitud(volumen)(nm). Para ello se fijo una temperatura de 300K y se trabajara con 50, 100 y 150 partículas pesadas(n)
+          \begin{figure}[h]
+      \centering         \includegraphics[width=0.4\linewidth]{300k-50n 2.png}
+\end{figure} 
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+$50$ & $3.9$ & 300 & 15.0 \\ \hline
+$50$ &  $4.55$ & 300 & 13 \\ \hline
+$50$ &  $5.35$ & 300 & 11\\ \hline
+$50$ &  $6.45$ & 300 & 9 \\ \hline
+$50$ &  $8.35$ & 300 & 7 \\ \hline
+$50$ &  $11.7$ & 300 & 5 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura}
+\label{tabla:comparacion}
+\end{table}\\
+
+ \begin{figure}[h]
+      \centering         \includegraphics[width=0.4\linewidth]{300k-100n 2.png}
+\end{figure} 
+\begin{table}[h!]
+\centering
+
+
+
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+$100$ & $7.75$ & 300 & 15.0 \\ \hline
+$100$ &  $9$ & 300 & 13 \\ \hline
+$100$ &  $10.6$ & 300 & 11\\ \hline
+$100$ &  $13$ & 300 & 9 \\ \hline
+$100$ &  $16.7$ & 300 & 7 \\ \hline
+$100$ &  $23.35$ & 300 & 5 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura}
+\label{tabla:comparacion}
+\end{table}\\
+
+
+\begin{figure}[h]
+      \centering         \includegraphics[width=0.4\linewidth]{300k-150n 2.png}
+\end{figure} 
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+$150$ & $11.65$ & 300 & 15.0 \\ \hline
+$150$ &  $13.5$ & 300 & 13 \\ \hline
+$150$ &  $15.9$ & 300 & 11\\ \hline
+$150$ &  $19.45$ & 300 & 9 \\ \hline
+$150$ &  $25.15$ & 300 & 7 \\ \hline
+$150$ &  $35$ & 300 & 5 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura}
+\label{tabla:comparacion}
+\end{table}
+
+\newpage
+
+\item Luego se repitió el mismo experimento, pero fijando la temperatura a 600K  
+
+\begin{figure}[h!]
+      \centering         \includegraphics[width=0.4\linewidth]{600k-50n 2.png}
+\end{figure} 
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+$50$ & $7.8$ & 600 & 15.0 \\ \hline
+$50$ &  $9$ & 600 & 13 \\ \hline
+$50$ &  $10.45$ & 600 & 11\\ \hline
+$50$ &  $12.9$ & 600 & 9 \\ \hline
+$50$ &  $16.75$ & 600 & 7 \\ \hline
+$50$ &  $23.3$ & 600 & 5 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura}
+\label{tabla:comparacion}
+\end{table}\\
+
+\begin{figure}[H]  % [H] asegura que la imagen se quede en esta posición
+    \centering
+    \includegraphics[width=0.4\linewidth]{600k-100n 2.png}
+    \caption{Diagrama P-V para \( n = 100 \) y \( T = 600 \, K \)}
+    \label{fig:600k-100n}
+\end{figure}
+
+\bigskip  % Espacio entre figura y tabla
+
+% Tabla 1
+\begin{table}[H]  % [H] asegura que la tabla se quede en esta posición
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+100 & 15.55 & 600 & 15.0 \\ \hline
+100 & 18.00 & 600 & 13.0 \\ \hline
+100 & 21.10 & 600 & 11.0 \\ \hline
+100 & 25.85 & 600 & 9.0 \\ \hline
+100 & 33.10 & 600 & 7.0 \\ \hline
+100 & 46.65 & 600 & 5.0 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura para \( n = 100 \)}
+\label{tabla:comparacion_100}
+\end{table}
+
+\bigskip  % Espacio entre tabla y siguiente figura
+
+% Figura 2
+\begin{figure}[H]  % [H] asegura que la imagen se quede en esta posición
+    \centering
+    \includegraphics[width=0.4\linewidth]{600k-150n 2.png}
+    \caption{Diagrama P-V para \( n = 150 \) y \( T = 600 \, K \)}
+    \label{fig:600k-150n}
+\end{figure}
+
+\bigskip  % Espacio entre figura y tabla
+
+% Tabla 2
+\begin{table}[H]  % [H] asegura que la tabla se quede en esta posición
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+150 & 23.40 & 600 & 15.0 \\ \hline
+150 & 26.90 & 600 & 13.0 \\ \hline
+150 & 31.90 & 600 & 11.0 \\ \hline
+150 & 38.80 & 600 & 9.0 \\ \hline
+150 & 50.00 & 600 & 7.0 \\ \hline
+150 & 69.95 & 600 & 5.0 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura para \( n = 150 \)}
+\label{tabla:comparacion_150}
+\end{table}
+
+\item En ese experimento se analizó como varía la longitud(volumen)(nm) cuando variamos la temperatura(K), para ello se fijo una presión de 5.8 atm y se trabajó con 50 partículas pesadas(n)
+
+\begin{figure}[h]
+      \centering         \includegraphics[width=0.4\linewidth]{50n-5.8atm.png}
+\end{figure} 
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+$50$ & $5.8$ & 150 & 5.0 \\ \hline
+$50$ &  $5.8$ & 225 & 7.5 \\ \hline
+$50$ &  $5.8$ & 375 & 12.5\\ \hline
+$50$ &  $5.8$ & 450 & 15.0 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura}
+\label{tabla:comparacion}
+\end{table}\\
+\newpage
+    \item Repitiendo la Simulación anterior con n = 150 a una presión constante de \textbf{17.5 atm}, variaremos la temperatura para analizar como se comporta el volumen.
+    \begin{table}[h!]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+$150$ & $17.5$ & 150 & 5.0 \\ \hline
+$150$ &  $17.5$ & 225 & 7.5 \\ \hline
+$150$ &  $17.5$ & 375 & 12.5 \\ \hline
+$150$ &  $17.5$ & 450 & 15.0 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura}\begin{table}[h!]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+$150$ & $17.5$ & 150 & 5.0 \\ \hline
+$150$ &  $17.5$ & 225 & 7.5 \\ \hline
+$150$ &  $17.5$ & 375 & 12.5 \\ \hline
+$150$ &  $17.5$ & 450 & 15.0 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura}
+\label{tabla:comparacion}
+\end{table}\\
+\label{tabla:comparacion}
+\end{table}\\
+Ahora bien, graficando los datos mostrados anteriormente se tiene que:
+\begin{figure}[h]
+      \centering         \includegraphics[width=0.3\linewidth]{grafico_1.png}
+          \hspace{0.09\linewidth}
+        \includegraphics[width=0.3\linewidth]{grafico_2.png}
+\end{figure}
+\newpage
+
+    \item volvemos a realizar la simulación con un $n = 250$, una temperatura inicial de $300$K, el recipiente tendrá un ancho inicial de $10$nm, la presión estará oscilando entré $28,8$atm y $29,6$atm,\\
+    
+    Se fija la presión en $29.2$:
+
+\end{enumerate}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+\textbf{n} & \textbf{Presión (atm)} & \textbf{Temperatura (K)} & \textbf{Longitud (nm)} \\ \hline
+$250$ & $29.2$ & 150 & 5.0 \\ \hline
+$250$ & $29.2 $ & 225 & 7.5 \\ \hline
+$250$ & $29.2$ & 375 & 12.5 \\ \hline
+$250$ & $29.2$ & 450 & 15.0 \\ \hline
+\end{tabular}
+\caption{Comparación de Presión, Longitud y Temperatura}
+\label{tabla:comparacion}
+\end{table}
+Usando Volumen como $L$, la gráfica que relaciona temperatura y volumen es:
+\begin{figure}[h]
+      \centering         \includegraphics[width=0.4\linewidth]{Figure_1 (3).png}
+          \hspace{0.09\linewidth}
+        \includegraphics[width=0.4\linewidth]{Figure_2 (2).png}
+\end{figure}
+
+\newpage
+
+\section{Análisis}
+Es importante destacar que en estos experimentos, como se mencionó previamente, al analizar el volumen del recipiente solo se consideró su ancho. Esto se debe a que tanto el largo como la altura se mantuvieron constantes, y por lo tanto, no influyeron en los resultados obtenidos en este estudio.
+\\
+
+\noindent Del primer experimento se puede observar y concluir que la presión y el volumen tienen una relación inversamente proporcional cuando la temperatura se mantiene constante. Esto queda reflejado en la curva con forma de hipérbola que se obtuvo.\\
+
+\noindent Otro hallazgo relevante de este experimento es que, al incrementar el número de partículas o la temperatura, la presión también aumentó, pero la gráfica conservó su forma hiperbólica. Esto se debe a la Ley de los Gases Ideales, que describe una relación directamente proporcional entre la presión y tanto el número de partículas como la temperatura del gas.\\
+
+\noindent En los siguientes tres experimentos, es fundamental analizar los resultados de manera simultánea. Se observa una relación directamente proporcional entre el volumen y la temperatura, manteniendo constante la presión y el número de partículas, lo cual queda respaldado por la gráfica lineal obtenida.\\
+
+\noindent Además,  al analizar los resultados de los diferentes experimentos, podemos concluir que al mantener la temperatura y el volumen constantes, un aumento en la cantidad de partículas provoca un incremento directamente proporcional en la presión del sistema\\
+
+\noindent ya con estos resultado se podrán responder las siguientes preguntas:
+
+\begin{enumerate}
+    \item ¿Que predice que le sucederá la presión dentro de un recipiente cuando la temperatura permanece constante pero el volumen cambia?
+\\
+
+\noindent Los resultados obtenidos permiten predecir el comportamiento de la presión de un gas al experimentar cambios en el volumen a temperatura constante. En todos los experimentos donde se analizó la relación entre presión y volumen con temperatura constante, se observó una gráfica con forma de hipérbola.
+\\
+\noindent   De este modo, se puede inferir que, a temperatura constante, la relación entre presión y volumen es inversamente proporcional. Esto permite predecir que, al aumentar el volumen, la presión disminuirá, mientras que, al reducir el volumen, la presión aumentará.
+\\
+\noindent Este resultado es coherente con los resultados obtenidos por Robert Boyle, que establece la relación inversamente proporcional entre el volumen y la presión.
+\newpage
+    \item ¿Que generalizaciones puede hacer acerca de cómo los cambios de temperatura afectan la presión
+    cuando el volumen en un recipiente permanece constante?
+ \\
+ \noindent Por otro lado de los últimos 3 experimentos, se puede predecir el efecto que tiene la temperatura sobre la presión a volumen constante. De los experimentos, comparando la presión a distintas temperaturas pero volumen constante, es evidente que a medida que la temperatura aumenta, también lo hará la presión del sistema.
+
+\noindent Este resultado también es coherente con los resultados obtenidos por Gay-Lussac, la cual describe un comportamiento directamente proporcional entre la presión y temperatura.
+
+
+    \item ¿Qué representa el área bajo la curva en un diagrama (P-V)? ¿Cómo se calcula?
+    \\
+    
+De la Mecánica Clásica obtenemos que, el área bajo la curva de un diagrama P-V entrega la magnitud del trabajo realizado en un proceso termodinámico. Es importante tener en cuenta, que el signo entregado nos proporciona información de la dirección del cambio de estado.
+
+\noindent Gracias a los conocimientos del Calculo Diferencia e Integral, se sabe que el área bajo la curva es representado por una integral. En esta caso, esta dado por:
+$$\int_{V_i}^{V_f} P dV$$
+
+
+
+
+
+
+
+
+    
+\end{enumerate}
+
+
+\newpage
+
+\section{Conclusión}
+
+En conclusión, se logro comprobar de manera empírica las leyes de gases ideales usando la simulación disponible en internet, siendo los datos consistentes con la teoría. Así se dan por corroboradas las hipótesis planteadas al inicio del informe. \\ 
+El procedimiento consto con una recolección de datos, la tabulación de los mismos para luego crear una gráfica que ejemplifique la relación entre las variables, de este modo se analizó la dependencia o independencia al variar ciertos parámetros. Específicamente se aprecio la relación de proporcionalidad inversa de entre la presión y el volumen. Además de  la relación directa entre temperatura y volumen.\\
+Se hace mención de la importancia de la experimentación empírica como apoyo al momento de comprender las leyes físicas, ya que esta misma experimentación fue la que permitió la formulación de las leyes en primer instancia.
+
+
+\begin{thebibliography}{5}
+\bibitem{1} Faúndez Araya, C. (2024). \textit{Apuntes Clase} 
+\bibitem{2} Tao Pang. "An Introduction to Computational Physics". Cambridge University Press.
+\bibitem{3} Hewitt, P. G., (2007) Física Conceptual, Decima Edición, México, Pearson Educación
+\bibitem{4} StudySmarter (s.f.). Leyes de los gases. www.studysmarter.es/resumenes/fisica/fisica-termica/leyes-de-los-gases/
+\end{thebibliography}
+
+\end{document}
+
