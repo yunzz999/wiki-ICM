@@ -1,0 +1,40 @@
+Ejemplos Taller I
+
+Ejemplo 5.2.2 div_eu
+Entrada1:[1,-22,190,-820,1849,-2038,840]
+Entrada2:[1,-45,805,-7155,31594,-55440]
+
+Salida: [1,-7]
+
+
+Ejemplo 5.3.2 bezout_poly 
+Entrada1: [-5,6,-7,4,2]
+Entrada2: [3,4,-5,6,-7]
+
+Salida: 
+MCD =1
+
+Q(x)=[34458/154655, 15742/30931, 7070/30931, 129271/154655]
+
+R(x)=[11486/30931, -14306/154655, 19338/30931, 14841/154655]
+
+
+Ejemplo 6.2 rrt
+Entrada1:[24,-7,7,2,-6,1,8]
+
+Salida: No posee raices racionales;
+
+
+Ejemplo 6.3 rrt 
+Entrada1:[1,-11,2,226,-803,585]
+
+Salida: 1,-5,9
+
+Ejemplo 7.2 bezout_poly 
+Entrada1: [1,0,-1]
+Entrada2: [-2,1]
+
+Salidas:
+MCD=1
+A_0= [-4/3]
+A_1= [-2/3,-1/3]

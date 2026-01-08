@@ -1,0 +1,262 @@
+\documentclass[12pt, paperletter]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{xcolor}
+\usepackage{cancel}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{amsmath, amssymb,amsmath}
+\usepackage[spanishes-lcroman]{babel}
+\usepackage{multicol}
+\usepackage{gensymb}
+\usepackage{ulem}
+\usepackage{hyperref}
+\usepackage{cancel}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{moresize}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\newtheorem{prop}{Proposición}
+\usepackage{enumitem}
+\usepackage{stackrel}
+\usepackage{float}
+
+\parindent=2.1pc
+\setlength{\textwidth}{16cm} \setlength{\textheight}{23cm}
+\usepackage[top=2.5cm, bottom=2cm,left=2cm, right=2cm]{geometry}
+\date{}
+\usepackage{fancyhdr}
+\fancypagestyle{plain}{
+\fancyhead[L]{\begin{picture}(0,0)\put(0,12){\includegraphics[width=3.5cm]{nazuna.jpg}}    
+\end{picture}}
+\fancyhead[r]{\vspace{1cm}\\Universidad de Concepción, Campus Concepción. \\
+Facultad de Cs. Físicas y Matemáticas.\\ 
+\vspace{0.5cm}}
+\fancyfoot[c]{}}
+
+\fancypagestyle{fancy}{
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot[c]{\thepage}}
+
+\begin{document}
+\pagestyle{fancy}
+
+\maketitle
+
+\vspace{3cm}
+\begin{center}
+    \title{\HUGE\textbf{Laboratorio 4}}\\
+    \vspace{0.2cm}
+    \textbf{Calor latente de fusión}\\
+    \vspace{0.3cm}
+    \author{ Fernando Contreras \\Daniel Sepúlveda\\Joaquin Riquelme}\\
+\end{center}
+\maketitle
+\vspace{7.0cm}
+\begin{flushleft}
+        \begin{itemize}      
+        \item   \textbf{\underline{Carrera:}}  Ingeniería Civil Matemática\\[0.2cm]
+        \item   \textbf{\underline{Profesor:}}  Claudio Faundez\\[0.2cm]
+        \item   \textbf{\underline{Asignatura:}} Termodinámica\\[0.2cm]
+        \item  \textbf{\underline{Ayudante:}}  Giulianni Bernal\\[0.2cm]
+        \end{itemize}
+        % \end{flushleft}
+\end{flushleft}
+
+\newpage
+\section{Introducción}
+El presente informe aborda el estudio experimental del calor latente de fusión del hielo, un concepto fundamental en termodinámica. En este trabajo, se aplicará el principio de las mezclas de Regnault para determinar el calor latente específico de una sustancia que no reacciona químicamente con el resto del sistema. Este fenómeno físico se analiza debido a su importancia en la comprensión de los procesos de cambio de fase, los cuales son esenciales en diversas aplicaciones científicas e industriales.
+El estudio del calor latente de fusión no solo permite profundizar en la transferencia de energía en procesos de cambio de estado. sino que también contribuye al estudio en la aplicación de principios físicos, como la conservación de la energía en sistemas aislados. 
+El objetivo principal de este informe es el calculo de el calor latente de fusión del hielo utilizando datos experimentales y compararlos con valores reportados en la literatura. Con ello, se espera fomentar el entendimiento práctico de conceptos teóricos, así como la capacidad de análisis crítico de los resultados obtenidos.
+En este informe se detallarán los procedimientos seguidos para el cálculo del calor latente del hielo, las observaciones realizadas, la comparación con los valores teóricos, el cálculo del error del mismo y conclusiones al respecto de todo el proceso experimental.
+
+\newpage
+
+\section{Marco Teórico}
+\indent El calor es una forma de energía que se transfiere espontáneamente entre diferentes regiones de un cuerpo o entre distintos cuerpos. En termodinámica, el término "calor" se refiere específicamente a la transferencia de energía, la cual ocurre siempre en una dirección determinada por la diferencia de temperatura. Este flujo de energía se produce del cuerpo con mayor temperatura hacia el de menor temperatura, hasta alcanzar un estado de equilibrio térmico.\\
+\indent En el campo de la termodinámica, uno de los conceptos importantes es el calor latente, un tipo de calor que se manifiesta cuando una sustancia experimenta un cambio de estado sin alterar su temperatura, incluso al recibir o liberar energía térmica. El calor latente es una magnitud física que describe la cantidad de energía necesaria para que una sustancia cambie de estado, como de sólido a líquido (fusión) o de líquido a gas (vaporización), entre otros. Durante este proceso, la energía térmica se utiliza para modificar el grado de segregación molecular en lugar de aumentar la temperatura.
+\\
+\indent Existen dos tipos principales de calor latente: el calor latente de vaporización y el calor latente de fusión.
+
+El calor latente de vaporización, también conocido como entalpía de vaporización, se refiere a la cantidad de energía necesaria para que una sustancia en fase líquida pase a la fase gaseosa. Este proceso ocurre sin un cambio de temperatura y está relacionado con el punto de ebullición de la sustancia. La energía suministrada se utiliza para superar las fuerzas intermoleculares que mantienen las moléculas en estado líquido, permitiendo que estas se dispersen en forma de vapor.\\
+\indent Por otro lado, el calor latente de fusión se refiere a la cantidad de energía necesaria para que una sustancia pase de la fase sólida a la fase líquida. Al igual que en el caso del calor latente de vaporización, este proceso ocurre sin un cambio de temperatura y está estrechamente relacionado con el punto de fusión de la sustancia. Durante este proceso, la energía suministrada se emplea para romper las fuerzas intermoleculares que mantienen las moléculas en una estructura sólida, permitiendo que estas se deslicen entre sí en estado líquido.
+\\
+\indent En el laboratorio que realizaremos, analizaremos el comportamiento de una sustancia al aplicarle calor, utilizando hielo como ejemplo. Inicialmente, al aplicar calor al hielo, su temperatura aumentará gradualmente hasta alcanzar el punto de fusión (0 °C). A partir de este momento, aunque se siga suministrando energía, la temperatura permanecerá constante, ya que la energía térmica se utiliza exclusivamente para romper las fuerzas intermoleculares que mantienen el hielo en estado sólido, permitiendo su transición a estado líquido. Este proceso continuará hasta que todo el hielo se haya fundido.
+
+Una vez completada la fusión, el calor suministrado hará que la temperatura del agua líquida comience a aumentar progresivamente hasta alcanzar el punto de ebullición (100 °C). En este punto, al igual que en la fusión, la temperatura se mantendrá constante mientras la energía se emplea para cambiar la fase líquida a gaseosa. Finalmente, cuando todo el líquido se haya convertido en vapor, cualquier energía adicional hará que la temperatura del gas siga aumentando hasta alcanzar el límite deseado o establecido.
+\newpage
+\indent Este experimento nos permitirá observar y analizar los principios asociados con los cambios de estado y los conceptos de capacidad calorífica y calor latente.
+\\
+Para hacer el calculo del calor latente se utiliza la formula:
+$$Q=m\cdot l$$
+Donde:
+\begin{itemize}
+    \item Q es la cantidad de calor cedido o absorvido por el sistema medido en J
+    \item m es la masa medida en kg
+    \item l es el calor latente medida en $\frac{J}{kg}$
+\end{itemize}
+La capacidad calorífica se define como la cantidad de energía necesaria para aumentar la temperatura de una unidad de masa de una sustancia en una unidad de temperatura. Es una propiedad específica de cada material y juega un papel fundamental en la transferencia de calor.
+
+En nuestro experimento, será esencial conocer la capacidad calorífica de cada sustancia involucrada, ya que este valor nos permitirá calcular la energía requerida en cada etapa del proceso, tanto para los incrementos de temperatura como para los cambios de estado. Esta información es clave para comprender y cuantificar cómo cada sustancia responde al suministro de calor. El cual se representa por la ecuación:
+$$c=\frac{Q}{m\cdot \Delta T}$$
+Donde:
+\begin{itemize}
+    \item Q es el calor añadido o cedido por el sistema en J
+    \item m es la masa del cuerpo medida en kg
+\item $\Delta T$ es el cambio de temperatura, medido en Celsius(°C) o Kelvin (K)
+\end{itemize}
+La capacidad calorífica en el Sistema Internacional se mide en $\frac{J}{kg K}$.\\
+\indent Según el principio de mezclas de Regnault, cuando dos cuerpos con temperaturas diferentes interactúan térmicamente, el calor absorbido por el cuerpo más frío es igual al calor cedido por el cuerpo más caliente. Este principio se expresa matemáticamente como:
+$$Q_{abs}-Q_{ced}=0$$
+
+Para poder determinar el calor latente de fusión del hielo, este principio se puede ocupar para determinar la transferencia de calor entre el hielo y el agua caliente. Para ello, consideramos:
+\begin{equation}
+    Q_{hielo}+Q_{fusion}+Q_{agua}=0
+\end{equation}
+\begin{equation}\label{ecuación}
+    m_{hielo}\cdot c_{hielo}\cdot (T_{final}-T_{inic.hielo})+ l_{hielo}\cdot m_{hielo}+m_{agua}\cdot c_{agua}\cdot (T_f-T_{inic.agua})=0
+\end{equation}
+
+
+Ocupando la ecuación anterior es posible despejar el calor latente de fusión del hielo, y en conjunto de los datos obtenidos en el experimento a realizar, obtener su resultado numérico.
+
+\indent El principio de la conservación de la energía es fundamental en el estudio de los fenómenos físicos, la cual establece que la energía total de un sistema aislado permanece constante con el tiempo, EL calor ganado o cedido por una parte del sistema es igual al calor ganado o cedido de la otra parte.
+ 
+\indent Por último, la ley de la conservación de la masa, que establece que la masa total de un sistema cerrado permanece constante con el tiempo, es fundamental para realizar cálculos precisos en este experimento. Gracias a esta ley, podemos determinar la masa del agua caliente utilizando la siguiente relación:
+$$m_{agua caliente}=m_{vaso y agua}-m_{solo vaso}$$
+De manera similar, aplicando el mismo principio, podemos calcular la masa del hielo utilizando la ecuación:
+$$m_{hielo}=m_{hielo y agua}-m_{aguacaliente}$$
+
+Estas relaciones nos permiten obtener de forma indirecta las masas necesarias para los análisis térmicos del experimento, asegurando precisión en los cálculos relacionados con la transferencia de calor y los cambios de fase.
+
+
+
+
+
+
+\newpage
+\section{Materiales}
+\begin{itemize}
+    \item Generador de vapor PASCO TD-8556A
+    \item Calorímetro
+    \item Vaso precipitado
+    \item Termometro de mercurio 
+    \item Agua
+    \item Balanza digital
+\end{itemize}
+
+\begin{figure}[h]
+      \centering
+         \includegraphics[width=0.25\linewidth]{30fcb70a-bb02-47b3-82f8-c9ef0a956ec1.jpg}
+          \hspace{0.2\linewidth}
+      \includegraphics[width=0.255\linewidth]{calorimetro2.jpg}
+     
+\end{figure}
+\hspace{1.5cm}(a) Generador de vapor  \hspace{4.5cm}(b) Calorimetro 
+
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Procedimiento y Resultados}
+\subsection*{Procedimiento}
+Mediante el método del mezclas determinaremos el calor latente de fusión del hielo. Para ellos haremos interactuar una cantidad de hielo a una temperatura conocida con una masa de agua tibia. Luego de esperar unos minutos a que se funda, determinar la temperatura final del proceso.
+\begin{itemize}
+    \item Se vierte agua caliente en el calorímetro hasta un poco más de la mitad de su volumen, a una temperatura superior a los 40 grados celcius, para disminuir la tasa de error.
+    \item Determinar la masa del agua caliente mediante diferencia de masas, restando la masa del vaso vacío a la del vaso con agua.
+    \item Medimos la temperatura de el agua en el vaso. 
+    \item Conseguir un trozo de hielo y averiguar su temperatura mediante la temperatura del congelador.
+    \item Poner el hielo en el vaso con agua e ir midiendo su temperatura hasta que todo el hielo se funda, observar cuando la temperatura llegue a un valor constante.
+    \item Masar nuevamente el vaso y determinar la masa del hielo que interaccionó térmicamente.
+    \item Registrar los datos obtenidos.
+    \item Con los datos obtenidos determinar el valor del calor latente de fusión para el hielo.
+\end{itemize}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\linewidth]{pesando.jpg}
+\end{figure}
+\hspace{6.5cm}(c) Masando el calorimetro.
+\subsection*{Resultados}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|m{7cm}|m{2cm}|}
+        \hline
+        \textbf{Parámetro} & \textbf{Valor} \\ \hline
+        Temperatura inicial del hielo $T_{\text{inic,hielo}}$ & -15 °C \\ \hline
+        Temperatura del agua en el vaso $T_{\text{agua}}$ & 45.4 °C \\ \hline
+        Temperatura final de la mezcla $T_f$ & 30.80 °C \\ \hline
+        Masa del hielo $m_{\text{hielo}}$ & 24.1 g \\ \hline
+        Masa del agua caliente $m_{\text{agua}}$ & 234.99 g \\ \hline
+    \end{tabular}
+    \caption{Resultados experimentales}
+    \label{tab:resultados}
+\end{table}
+
+
+
+\section{Análisis}
+\begin{itemize}
+    \item [P1] Calcule el calor latente de fusion del hielo y compárelo con los valores existentes de la literatura
+    
+    \underline{Respuesta:} Despejando de la ecuación \ref{ecuación} del marco teórico:\\
+    $$m_{hielo} \cdot c_{hielo}\cdot (T_{final} -T_{inic.hielo}) + m_{hielo} \cdot l_{12} + m_{agua} \cdot c_{agua} \cdot (T_f -T_{inic.agua})=0$$
+    
+    $$ \Longleftrightarrow l_{12}=-\frac{m_{agua}}{m_{hielo}} c_{agua} (T_f -T_{inic.agua}) - c_{hielo}(T_{final}-T_{inic.hielo})$$
+    Remplazando con los datos obtenidos.
+    $$l_{12}=-\frac{234.99g}{24.1g} \cdot 4.182 \frac{J}{g \degree C} (30.80 \degree C -(45.4) \degree C) - 2.09 \frac{J}{g \degree C}(30.80\degree C - (-15 )\degree C) $$
+    $$l_{12}=500.998\frac{J}{g} $$
+El valor de referencia obtenido de \cite{2} es $L=334 \frac{J}{g}$.\\
+
+El cual difiere notablemente del valor experimental, teorizamos que es debido a trabajar con temperaturas distantes de la temperatura ambiente, esto provoca que mucho del calor sea absorbido o cedido por el ambiente.
+    \item [P2] Calcule el error
+
+    
+    \underline{Respuesta:} 
+    $$error=\Bigg|\frac{l_{12}-L}{L}\Bigg|*100\% $$
+    $$error=49.99\%$$
+
+
+\newpage
+
+    \item [P3] ¿Que podría haber mejorado sus resultados?
+        
+    
+    \underline{Respuesta:}  La larga exposición del hielo al medio ambiente provoca que absorba calor del ambiente, por lo que para mejorar el resultado se podría reducir la distancia entre el congelador y la zona de trabajo, Así reduciendo el tiempo de exposición con el ambiente. \\ El manipular el  hielo con las manos permite que  transfiera calor de la mano al hielo, esto se podría evitar con el uso de pinzas u otro objeto a la misma temperatura del hielo.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Conclusión}
+
+Mediante el experimento se logro dar respuesta a nuestro objetivo el cual era determinar el Calor latente de fusión del hielo, dando un valor experimental de $500.998\frac{J}{g} $. Este valor posee un error del $49.99\%$ en comparación con la literatura disponible. \\Se conjetura que el error es debido principalmente a la idealización del experimento, donde se considera que el hielo se mueve instantáneamente del congelador al vaso con agua, obviando así la transferencia de calor que se produce con el aire del medio ambiente al momento de sacar el hielo del congelador, ademas de errores humanos en la lectura del termómetro propios de la experimentación.
+
+
+
+
+\begin{thebibliography}{5}
+\bibitem{1} Faúndez Araya, C. (2024). \textit{Apuntes Clase} 
+\bibitem{2} Calor latente de fusión. (s. f.). http://www.sc.ehu.es/sbweb/fisica/estadistica/otros/fusion/fusion.htm
+
+
+\end{thebibliography}
+
+\end{document}
