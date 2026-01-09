@@ -1,0 +1,551 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{enumitem}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Comandos
+\renewcommand{\natural}{\mathbb{N}}
+\newcommand{\abs}[2][y]{\if#1y\left\fi\lvert#2\if#1y\right\fi\rvert}
+\newcommand{\norm}[2][y]{{\if#1y\left\fi\lVert#2\if#1y\right\fi\rVert}}
+\newcommand{\dd}{\,d}
+\newcommand{\Real}{R}
+\newtheorem{teo}{Teorema}
+\theoremstyle{definition}
+\newtheorem{problem}{\color{azul}{Problema}}
+\renewcommand{\theproblem}{\Alph{problem}}
+\numberwithin{equation}{problem}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Análisis Funcional II}}
+\newcommand{\tarea}{\textbf{Evaluación 1}}
+%\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\textbf{\today}}
+% Titulo
+\title{\color{azul}\textbf{Elementos Finitos}\\
+	\textbf{Tarea 2}}
+\author{\color{azul}\autor}
+\date{\color{azul}}
+\begin{document}
+	\begin{problem}[Convolución entre función $C_c(\Real^N)$ y una distribución]
+    La función $\varrho \colon R^N \to R$, definida en \cite[Lem.~2.4]{Tartar} mediante
+    %
+    \begin{equation*}
+    	\varrho(x) := \begin{cases}
+    		\exp\mathopen{}\left(-\frac{1}{1-\abs{x}^2}\mathclose{}\right) & \text{si } \abs{x}<1,\\
+    		0 & \text{si } \abs{x} \geq 1,
+    	\end{cases}
+    \end{equation*}
+    %
+    es un ejemplo muy útil de función en $C^\infty_c(R^N)$ que no es idénticamente nula, tiene soporte conocido exactamente ($\overline{B^N})$ y es nonegativa.
+    En particular, normalizando a $\varrho$ en $L^1(R^N)$ y reescalando el resultado apropiadamente, es posible construir una sucesión suavizante especial (cf.\ \cite[Def.~3.1]{Tartar}), que a su vez es muy útil para probar resultados de aproximación por funciones suaves.
+    
+    Sin embargo, $\varrho$ no es atractiva para hacer cálculos explícitos.
+    El objetivo de esta tarea es construir, en el caso unidimensional, una función análoga que sí se preste para estos fines a costa de menor regularidad.
+    
+    \begin{enumerate}[label=\textbf{\theproblem.\arabic{*}.},ref=\theproblem.\arabic{*},parsep=1ex]
+    	\item\label{q:bumpRegularity} (2 puntos) Pruebe que la función nonegativa $r \colon R \to R$ definida por
+    	%
+    	\begin{equation*}
+    		r(x) := \begin{cases}
+    			(1-x^2)^2 & \text{si } \abs{x}<1,\\
+    			0 & \text{si } \abs{x} \geq 1
+    		\end{cases}
+    	\end{equation*}
+    	%
+    	pertenece a $C^1_c(R)$ pero \emph{no} a $C^2_c(R)$.
+    	\item\label{q:bumpNorm} (2 puntos) Calcule $\norm{r}_1$.
+    	\item\label{q:scaledBumpNorm} (2 puntos) Para $n \in \natural = \{1, 2, 3, \dotsc \}$ sea $r_n \colon R \to R$ definida por
+    	%
+    	\begin{equation*}
+    		r_n(x) := \norm{r}_1^{-1} \, n \, r(n \, x).
+    	\end{equation*}
+    	%
+    	Calcule $\norm{r_n}_1$.
+    	\item\label{q:convoHeaviside} (6 puntos) Considere a la función escalón de Heaviside $H \colon R \to R$ definida por
+    	%
+    	\begin{equation*}
+    		H(x) := \begin{cases}
+    			0 & \text{si } x < 0,\\
+    			1 & \text{si } x \geq 0.
+    		\end{cases}
+    	\end{equation*}
+    	%
+    	Calcule $r_n \star H$.
+    	\item\label{q:convoBox} (4 puntos) Sea $G \colon R \to R$ la función definida por
+    	%
+    	\begin{equation*}
+    		G(x) := \begin{cases}
+    			0 & \text{si } x<-1,\\
+    			1 & \text{si } -1 \leq x < 1,\\
+    			0 & \text{si } x \geq 1.
+    		\end{cases}
+    	\end{equation*}
+    	%
+    	Calcule $r_n \star G$.
+    	\emph{Indicación:} Explote que $G(x) = H(x+1) - H(x-1)$.
+    	\item\label{q:convoBoxApproximation} (6 puntos)
+    	Pruebe que $\norm{G - r_n \star G}_1 \xrightarrow{n \to \infty} 0$.
+    \end{enumerate}
+	\end{problem}
+    \begin{proof}[\textcolor{rojo}{Demostración}]
+    	\begin{enumerate}[label=\textbf{\theproblem.\arabic{*}.},ref=\theproblem.\arabic{*},parsep=1ex]
+    		\item Es claro que $r$ es continua en $R$, ya que,
+    		\begin{align*}
+    			\lim_{x\to 1}r(x) = r(1)\quad \text{y}\quad \lim_{x\to -1}r(x) = r(-1)
+    		\end{align*}
+    	    y cuando $x\in R-\{-1,1\}$ la función $r$ es un polinomio. Por otro lado, se tiene que 
+    	    \begin{itemize}
+    	    	\item Cuando $\abs{x}<1$,
+    	    	\begin{align*}
+    	    		r'(x) = -4x(1-x^2)
+    	    	\end{align*}
+        	    \item Cuando $\abs{x}>1$,
+        	    \begin{align*}
+        	    	r'(x) = 0.
+        	    \end{align*}
+                \item Cuando $x=1$,
+                \begin{align*}
+                	r'(1) = \lim_{x\to 1} \frac{r(x)-r(1)}{x-1} = \lim_{x\to 1}\frac{(1-x)^{2}(1+x)^{2}}{1-x} = \lim_{x\to 1} (x-1)(x+1)^{2} = 0.
+                \end{align*}
+                \item Cuando $x=-1$,
+                \begin{align*}
+                	r'(-1) = \lim_{x\to -1} \frac{r(x)-r(1)}{x+1} = \lim_{x\to -1}\frac{(1-x)^{2}(1+x)^{2}}{1+x} = \lim_{x\to -1} (x-1)^{2}(x+1) = 0.
+                \end{align*}
+    	    \end{itemize}
+             Luego, la función $r'$ tiene la forma
+             \begin{align*}
+             	r'(x) := \begin{cases}
+             		-4x\left(1-x^{2}\right) & \text{si } \abs{x}<1,\\
+             		0 & \text{si } \abs{x} \geq 1.
+             	\end{cases}
+             \end{align*}
+             Es claro que la función $r'$ es continua en $R-\{-1,1\}$, ya que es un polinomio. Si $\abs{x} = 1$, entonces
+             \begin{align*}
+             	\lim_{x\to 1} r'(x) = r'(1) \quad \text{y}\quad \lim_{x\to -1}r'(x) = r'(-1),
+             \end{align*}
+              con esto se tiene que $r'$ es continua en $R$. Además, por construcción $\text{supp}(r) = [-1,1]$. Por tanto, se tiene que  $r\in C^{1}_{c}(R)$.\hspace{0.2cm}
+              
+              Por otro lado
+              \begin{itemize}
+              	\item Cuando $\abs{x}<1$
+              	\begin{align*}
+              		r''(x) = 4\left(3x^{2}-1\right).
+              	\end{align*}
+                \item Cuando $\abs{x}>1$
+                \begin{align*}
+                	r''(x) = 0.
+                \end{align*}
+                \item Cuando $x=1$
+                \begin{align*}
+                	r''(1) = \lim_{x\to 1}\frac{r'(x)-r'(1)}{x-1} = \lim_{x\to 1}\frac{-4x(1-x^{2})}{x-1} = \lim_{x\to 1}\frac{-4x(1-x)(1+x)}{x-1} = \lim_{x\to 1} 4x(1+x) = 8.
+                \end{align*}
+                \item Cuando $x=-1$
+                \begin{align*}
+                	r''(-1) = \lim_{x\to-1}\frac{r'(x)-r'(-1)}{x+1} = \lim_{x\to -1} \frac{-4x(1-x^{2})}{x+1} = \lim_{x\to -1}\frac{-4x(1-x)(1+x)}{x+1} = \lim_{x\to -1}-4x(1-x) = 8.
+                \end{align*}
+              \end{itemize}
+              Luego, la función $r''$ tiene la forma
+              \begin{align*}
+              	r''(x) := \begin{cases}
+              		4\left(3x^{2}-1\right) & \text{si } \abs{x}<1,\\
+              		8 & \text{si } \abs{x} = 1,\\
+              		0 & \text{si } \abs{x} > 1.
+              	\end{cases}
+              \end{align*}
+              Esta función no es continua cuando $x = 1$, en efecto,
+              \begin{align*}
+              	\lim_{x\to 1^{+}}r''(x) = 0 \neq r''(1) .
+              \end{align*}
+              Con lo anterior se deduce que $r\notin C^{2}_{c}(R)$.
+              \item Usando que $\text{supp}(r) = [-1,1]$ y que $r$ es una función par, se deduce
+              \begin{align*}
+              	\norm{r}_{1} = \int_{R}\abs{r(x)}\ \text{d}x = \int_{-1}^{1} \left(1-x^{2}\right)^{2}\ \text{d}x = 2\int_{0}^{1}1-2x^{2}+x^{4}\ \text{d}x = 2\left[x-\frac{2x^{3}}{3} + \frac{x^{5}}{5}\right]_{0}^{1} = \frac{16}{15}
+              \end{align*}
+              \item Dado $n\in \mathbb{N}$, luego 
+              \begin{equation*}
+              	r_{n}(x) := \begin{cases}
+              		\frac{15}{16}n(1-(nx)^2)^2 & \text{si } \abs{x}<\frac{1}{n},\\
+              		0 & \text{si } \abs{x} \geq \frac{1}{n}.
+              	\end{cases}
+              \end{equation*}
+              Es claro que $\text{supp}(r_{n}) = \left[-\frac{1}{n},\frac{1}{n}\right]$, luego de un cálculo directo se tiene que
+              \begin{align*}
+              	\norm{r_{n}}_{1} = \int_{R}\frac{15}{16}n\abs{r(nx)}\ \text{d}x =  \frac{15}{16}n\int_{-1/n}^{1/n}\left(1-(nx)^{2}\right)^{2}\ \text{d}x \underset{z = nx}{=} \frac{15}{16}n\int_{-1}^{1}\left(1-z^{2}\right)^{2}\frac{1}{n}\ \text{d}z = \frac{15}{16}\frac{n}{n}\frac{16}{15} = 1.
+              \end{align*}
+              \newpage
+              \item Dado $n\in \mathbb{N}$. El problema se divide en tres casos:
+              \begin{itemize}
+              	\item Si $\frac{1}{n}\leq t$
+              	\begin{align*}
+              		\left(r_{n}\star H\right)(t) = \int_{R}r_{n}(x)H(t-x)\ \text{d}x = \int_{-1/n}^{1/n}r_{n}(x)\ \text{d}x = 1.
+              	\end{align*} 
+              	\item Si $-\frac{1}{n}< t < \frac{1}{n}$
+              	\begin{align*}
+              		\left(r_{n}\star H\right)(t) = \int_{R}r_{n}(x)H(t-x)\ \text{d}x = \int_{-1/n}^{t}r_{n}(x)\ \text{d}x = \frac{15}{16}\left(nt - \frac{2(nt)^{3}}{3} + \frac{(nt)^{5}}{5} + \frac{8}{15}\right) =: p_{n}(t).
+              	\end{align*}
+                \item Si $t\leq -\frac{1}{n}$
+                \begin{align*}
+                	\left(r_{n}\star H\right)(t) = \int_{R}r_{n}(x)H(t-x)\ \text{d}x = 0.
+                \end{align*}
+              \end{itemize}
+              Luego, la función $\left(r_{n}\star H\right)$ tiene la forma
+              \begin{align*}
+              	\left(r_{n}\star H\right)(t) =  \begin{cases}
+              		1 & \text{si } \frac{1}{n} \leq t,\\
+              		p_{n}(t) & \text{si } \abs{t} < \frac{1}{n},\\
+              		0 & \text{si } t \leq -\frac{1}{n}.
+              	\end{cases}
+              \end{align*}
+              \item Dado $n\in\mathbb{N}$. Usado que $G(x) = H(x+1)-H(x-1)$, se tiene
+              \begin{align*}
+              	\left(r_{n}\star G \right)(t) = \left(r_{n}\star H\right)(t+1) - \left(r_{n}\star H\right)(t-1)
+              \end{align*}
+              Luego, por lo hecho en \ref{q:convoHeaviside}
+              \begin{align*}
+              	\left(r_{n}\star H\right)(t+1) =  \begin{cases}
+              		1 & \text{si } \frac{1}{n} \leq t+1\\
+              		p_{n}(t+1) & \text{si } \abs{t+1} < \frac{1}{n}\\
+              		0 & \text{si } t+1 \leq -\frac{1}{n}
+              	\end{cases} = \begin{cases}
+              	1 & \text{si } \frac{1}{n}-1 \leq t,\\
+              	p_{n}(t+1) & \text{si } -1-\frac{1}{n}< t < \frac{1}{n}-1,\\
+              	0 & \text{si } t \leq -\frac{1}{n}-1.
+              \end{cases}
+              \end{align*}
+              De forma similar
+              \begin{align*}
+              	\left(r_{n}\star H\right)(t-1) =  \begin{cases}
+              		1 & \text{si } \frac{1}{n} \leq t-1\\
+              		p_{n}(t-1) & \text{si } \abs{t-1} < \frac{1}{n}\\
+              		0 & \text{si } t-1 \leq -\frac{1}{n}
+              	\end{cases} = \begin{cases}
+              		1 & \text{si } \frac{1}{n}+1 \leq t,\\
+              		p_{n}(t-1) & \text{si } 1-\frac{1}{n}< t < \frac{1}{n}+1,\\
+              		0 & \text{si } t \leq -\frac{1}{n}+1.
+              	\end{cases}
+              \end{align*}
+              Usando que $t+\frac{1}{n}>t-\frac{1}{n}$, se deduce 
+              \begin{align*}
+              	\left(r_{n}\star G\right)(t)  = \begin{cases}
+              		0 & \text{si } \frac{1}{n}+1 \leq t,\\
+              		1-p_{n}(t-1) & \text{si } 1-\frac{1}{n} \leq t < \frac{1}{n} + 1,\\
+              		1 & \text{si } \frac{1}{n}-1 \leq t < 1-\frac{1}{n},\\
+              		p_{n}(t+1) & \text{si } -1-\frac{1}{n} \leq t < \frac{1}{n} - 1,\\
+              		0 & \text{si } -\frac{1}{n}-1 < t.
+              	\end{cases}
+              \end{align*}
+              \item De un cálculo directo
+              \begin{align*}
+              	\norm{G-r_{n}\star G}_{1} &= \int_{R} \abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t\\
+              	&= \int_{\frac{1}{n}+1}^{+\infty} \abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t + \int_{1-\frac{1}{n}}^{1+\frac{1}{n}}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t\\
+              	&+ \int_{\frac{1}{n}-1}^{1-\frac{1}{n}}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t + \int_{-1-\frac{1}{n}}^{\frac{1}{n}-1}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t\\
+              	&+ \int_{-\infty}^{-\frac{1}{n}-1}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t\\
+              	&= \int_{1-\frac{1}{n}}^{1+\frac{1}{n}}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t + \int_{-1-\frac{1}{n}}^{\frac{1}{n}-1}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t.
+              \end{align*}
+              Luego, 
+              \begin{align*}
+              	\int_{1-\frac{1}{n}}^{1+\frac{1}{n}}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t &= \int_{1-\frac{1}{n}}^{1}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t + \int_{1}^{1+\frac{1}{n}}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t \\
+              	&= \int_{1-\frac{1}{n}}^{1}\abs{p_{n}(t-1)}\ \text{d}t + \int_{1}^{1+\frac{1}{n}}\abs{1-p_{n}(t-1)}\ \text{d}t\\
+              	&\leq \int_{1-\frac{1}{n}}^{1}\abs{p_{n}(t-1)}\ \text{d}t + \int_{1}^{1+\frac{1}{n}}\abs{p_{n}(t-1)}\ \text{d}t +  \int_{1}^{1+\frac{1}{n}}\ \text{d}t\\
+              	&= \int_{1-\frac{1}{n}}^{1}\abs{p_{n}(t-1)}\ \text{d}t + \int_{1}^{1+\frac{1}{n}}\abs{p_{n}(t-1)}\ \text{d}t + \frac{1}{n}.
+              \end{align*}
+              Fijando $t>-\frac{1}{n}+1$, se deduce que
+              \begin{align*}
+              	\abs{p_{n}(t-1)} = \abs{\int_{-\frac{1}{n}}^{t-1}r_{n}(x)\ \text{d}x}\leq \int_{-\frac{1}{n}}^{t-1}\abs{r_{n}(x)}\ \text{d}x \leq  \int_{-\frac{1}{n}}^{t-1}\abs{r_{n}(x)}\ \text{d}x + \int_{t-1}^{\frac{1}{n}}\abs{r_{n}(x)}\ \text{d}x = \int_{-\frac{1}{n}}^{\frac{1}{n}}\abs{r_{n}(x)}\ \text{d}x = 1,
+              \end{align*}
+              note que si $t\geq\frac{1}{n}+1$, se tiene la igualdad. Por tanto
+              \begin{align*}
+              	\int_{1-\frac{1}{n}}^{1+\frac{1}{n}}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t\leq \int_{1-\frac{1}{n}}^{1}\text{d}t + \int_{1}^{\frac{1}{n}+1}\text{d}t + \frac{1}{n} = \frac{3}{n}.
+              \end{align*}
+              De forma similar se deduce que 
+              \begin{align*}
+              	\int_{-1-\frac{1}{n}}^{\frac{1}{n}-1}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t &= \int_{-1-\frac{1}{n}}^{-1}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t + \int_{-1}^{\frac{1}{n}-1}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t\\
+              	&= \int_{-1-\frac{1}{n}}^{-1}\abs{p_{n}(t+1)}\ \text{d}t + \int_{-1}^{\frac{1}{n}-1}\abs{1-p_{n}(t+1)}\ \text{d}t\\
+              	&\leq \int_{-1-\frac{1}{n}}^{-1}\abs{p_{n}(t+1)}\ \text{d}t + \int_{-1}^{\frac{1}{n}-1}\abs{p_{n}(t+1)}\ \text{d}t + \int_{-1}^{\frac{1}{n}-1} \text{d}t\\
+              	&= \int_{-1-\frac{1}{n}}^{-1}\abs{p_{n}(t+1)}\ \text{d}t + \int_{-1}^{\frac{1}{n}-1}\abs{p_{n}(t+1)}\ \text{d}t + \frac{1}{n}.
+              \end{align*}
+              Fijando $t>-\frac{1}{n}-1$, se deduce que
+              \begin{align*}
+              	\abs{p_{n}(t+1)} = \abs{\int_{-\frac{1}{n}}^{t+1}r_{n}(x)\ \text{d}x}\leq \int_{-\frac{1}{n}}^{t+1}\abs{r_{n}(x)}\ \text{d}x \leq  \int_{-\frac{1}{n}}^{t+1}\abs{r_{n}(x)}\ \text{d}x + \int_{t+1}^{\frac{1}{n}}\abs{r_{n}(x)}\ \text{d}x = \int_{-\frac{1}{n}}^{\frac{1}{n}}\abs{r_{n}(x)}\ \text{d}x = 1,
+              \end{align*}
+              note que si $t\geq\frac{1}{n}-1$, se tiene la igualdad. Por tanto
+              \begin{align*}
+              	\int_{-1-\frac{1}{n}}^{\frac{1}{n}-1}\abs{G(t)-\left(r_{n}\star G\right)(t)}\ \text{d}t\leq \int_{-1-\frac{1}{n}}^{-1}\text{d}t + \int_{-1}^{\frac{1}{n}-1}\text{d}t + \frac{1}{n} = \frac{3}{n}.
+              \end{align*}
+              Finalmente,
+              \begin{align*}
+              	\norm{G-r_{n}\star G}_{1} \leq \frac{6}{n} \overset{n\to\infty}{\longrightarrow} 0.
+              \end{align*}
+    	\end{enumerate}
+    \end{proof}
+    \newpage
+    \begin{problem}[Convolución entre función $C_c(\Real^N)$ y una distribución]
+    	Dadas una función $g \in C_c(\Real^N)$ y una distribución $u \in \mathcal{D}'(\Real^N)$, definimos sobre $C^\infty_c(\Real^N)$ a la forma lineal $g \circledast u$ mediante
+    	%
+    	\begin{equation*}
+    		\left(\forall\,\varphi\in C^\infty_c(\Real^N)\right) \quad
+    		\langle g \circledast u, \varphi \rangle := \langle u, \check g \star \varphi \rangle,
+    	\end{equation*}
+    	%
+    	donde, recordemos, $\check g(x) := g(-x)$.
+    	
+    	\begin{enumerate}[label=\textbf{\theproblem.\arabic{*}.},ref=\theproblem.\arabic{*},parsep=1ex]
+    		\item\label{it:CFD-distribution}
+    		Pruebe que, para todo $g \in C_c(\Real^N)$ y $u \in \mathcal{D}'(\Real^N)$, $g \circledast u$ está bien definida, efectivamente es lineal y es una distribución.
+    		\item\label{it:CFD-compatible}
+    		Suponga que $u$ es una distribución regular.
+    		Pruebe que $g \circledast u$ coincide con la distribución inducida por la función $g \star u \colon \Real^N \to \Real$.
+    		\item\label{it:CFD-delta}
+    		Pruebe que, para todo $g \in C_c(\Real^N)$, $g \circledast \delta_0$ coincide con la distribución inducida por $g$.
+    	\end{enumerate}
+    \end{problem}
+    \begin{proof}[\textcolor{rojo}{Demostración}] En lo que sigue, sea $g\in C_{c}(R^{N})$ y $u\in\mathcal{D}'(R^{N})$.
+    	\begin{enumerate}[label=\textbf{\theproblem.\arabic{*}.},ref=\theproblem.\arabic{*},parsep=1ex]
+    		\item Sean $\alpha,\beta\in R$ y $\varphi,\psi\in C_{c}^{\infty}(R^{N})$, luego, usando la definición y el hecho que $u$ es una distribución
+    		\begin{align*}
+    			\langle g\circledast u, \alpha\varphi + \beta\psi \rangle &= \langle u, \check{g}\star\left(\alpha\varphi+\beta\psi\right)   \rangle\\ &= \langle u, \alpha\check{g}\star\varphi + \beta\check{g}\star\psi \rangle\\ &= \alpha\langle u,\check{g}\star\varphi \rangle + \beta\langle u,\check{g}\star\psi \rangle\\ &= \alpha\langle g\circledast u, \varphi \rangle + \beta\langle g\circledast u,\psi \rangle.
+    		\end{align*}
+    	   Por lo tanto, $g\circledast u$ es lineal.\hspace{0.2cm}
+    	   
+    	   Sea, $K\subset R^{N}$ un compacto y $\varphi\in C_{c}^{\infty}(R^{N})$ con $\text{supp}(\varphi)\subset K$. Luego, $\text{supp}(\check{g}\star \varphi)\subset \text{supp}(\check{g}) + K$, dado que $A := \text{supp}(\check{g})+K$ es un conjunto compacto contenido en $R^{N}$, se tiene, ya que $u$ es una distribución, la existencia de las constantes $C(K)>0$ y $m(K)\in\mathbb{N}$ tales que
+    	   \begin{align*}
+    	   	\abs{\langle g\circledast u,\varphi \rangle} &= \abs{\langle  u,\check{g}\star \varphi\rangle}\\ &\leq C(K)\max_{\abs{\alpha} \leq m(K)}\norm{D^{\alpha}\left(\check{g}\star \varphi\right)}_{\infty}\\ &= C(K)\max_{\abs{\alpha}\leq m(K)}\norm{D^{\alpha}\left(\varphi\star\check{g}\right)}_{\infty}\\ &= C(K)\max_{\abs{\alpha}\leq m(K)}\norm{D^{\alpha}\left(\varphi\right)\star \check{g}}_{\infty}\\
+    	   	&\leq C(K)\max_{\abs{\alpha}\leq m(K)}\norm{D^{\alpha}\left(\varphi\right)}_{\infty}\norm{\check{g}}_{1}\\
+    	   	&= C(K)\norm{\check{g}}_{1}\max_{\abs{\alpha}\leq m(K)}\norm{D^{\alpha}\left(\varphi\right)}_{\infty}
+    	   \end{align*}
+           Por tanto $g\circledast u$ es una distribución.
+           \item Sea $u$ una distribución regular y $\varphi\in C_{c}^{\infty}(R^{N})$, luego
+           \begin{align*}
+           	\langle g\circledast u,\varphi \rangle &= \langle u,\check{g}\star \varphi \rangle\\
+           	&= \int_{R^{N}}u(x)\left(\check{g}\star \varphi\right)(x)\ \text{d}x\\
+           	&= \int_{R^{N}}u(x)\left(\varphi\star\check{g} \right)(x)\ \text{d}x\\
+           	&= \int_{R^{N}} u(x) \left(\int_{R^{N}}\varphi(y)\check{g}\left(x-y\right)\ \text{d}y\right)\text{d}x\\
+           	&= \int_{R^{N}} u(x) \left(\int_{R^{N}}\varphi(y)g\left(y-x\right)\ \text{d}y\right)\text{d}x\\
+           	&= \int_{R^{N}}\int_{R^{N}}u(x)\varphi(y)g(y-x)\ \text{d}y\text{d}x\\
+           	&\underset{\text{Fubini}}{=} \int_{R^{N}}\int_{R^{N}}u(x)\varphi(y)g(y-x)\ \text{d}x\text{d}y\\
+           	&= \int_{R^{N}}\left(u\star g\right)(y)\varphi(y)\ \text{d}y\\
+           	&= \langle u\star g,\varphi \rangle 
+           \end{align*}
+           El Teorema de Fubini es válido, ya que para un compacto $K$ tal que $\text{supp}(\varphi\star\check{g})\subset K$, se tiene
+           \begin{align*}
+           	\int_{R^{N}}\int_{R^{N}}\abs{u(x)\varphi(y)g(y-x)}\ \text{d}y\text{d}x &= \int_{R^{N}}\abs{u(x)(\varphi\star\check{g})(x)}\ \text{d}x\\ &= \int_{K}\abs{u(x)(\varphi\star\check{g})(x)}\ \text{d}x\\ &\leq \norm{u}_{L^{1}(K)}\norm{\varphi\star\check{g}}_{L^{\infty}(K)}\\&= \norm{u}_{L^{1}(K)}\norm{\varphi\star\check{g}}_{L^{\infty}(R^{N})}\\
+           	&\leq \norm{u}_{L^{1}(K)} \norm{\varphi}_{L^{1}(R^{N})}\norm{\check{g}}_{L^{\infty}(R^{N})} < +\infty.
+           \end{align*}
+           \item Sea $\varphi\in C_{c}^{\infty}(R^{N})$, entonces
+           \begin{align*}
+           	\langle g\circledast \delta_0,\varphi \rangle &= \langle \delta_0, \check{g}\star \varphi \rangle\\
+           	&= \left(\check{g}\star \varphi\right)(0)\\
+           	&= \left(\varphi\star\check{g}\right)(0)\\
+           	&= \int_{R^{N}} \varphi(y)\check{g}\left(-y\right)\ \text{d}y\\
+           	&= \int_{R^{N}} \varphi(y)g\left(y\right)\ \text{d}y\\
+           	&= \langle g,\varphi \rangle.
+           \end{align*}
+           Concluyendo así lo pedido.
+    	\end{enumerate}
+    \end{proof}
+    \bigskip
+    \newpage
+    \begin{problem}[Espacios de Sobolev ponderados]
+    	Sea $\Omega$ un abierto de $R^N$, $1 < p < \infty$ y sea $w\colon \Omega \to R$ una función medible que satisface las condiciones:
+    	%
+    	\begin{equation*}
+    		w > 0 \text{ casi en todas partes} \quad \wedge \quad w^{-1/(p-1)} \in L^1_{\mathrm{loc}}(\Omega)
+    	\end{equation*}
+    	%
+    	Definimos al espacio de Lebesgue ponderado $L^p_w(\Omega)$ mediante
+    	%
+    	\begin{equation*}
+    		L^p_w(\Omega) := \left\{ u \colon \Omega \to R \mid \text{$u$ es medible} \ \wedge \ \int_\Omega \abs{u(x)}^p w(x) \dd x < \infty \right\}
+    	\end{equation*}
+    	%
+    	(como siempre funciones iguales casi en todas partes se identifican) y se le equipa con la norma
+    	%
+    	\begin{equation*}
+    		\norm{u}_{L^p_w(\Omega)} := \left( \int_\Omega \abs{u(x)}^p w(x) \dd x \right)^{1/p}.
+    	\end{equation*}
+    	\begin{enumerate}[label=\textbf{\theproblem.\arabic{*}.},ref=\theproblem.\arabic{*},parsep=1ex]
+    		\item\label{q:weightedLebesgueBanach} (3 puntos) Pruebe que $L^p_w(\Omega)$ es un espacio de Banach.
+    		\emph{Indicación:} Utilice la transformación $u \mapsto w^{1/p} \, u$ y las propiedades del espacio de Lebesgue convencional $L^p(\Omega)$.
+    		\item\label{q:weightedLebesgueIsLocallyIntegrable} (4 puntos) Pruebe que $L^p_w(\Omega) \subseteq L^1_{\mathrm{loc}}(\Omega)$.
+    		\item\label{q:AFunctionalOnWeightedLebesgue} (4 puntos) Dado $\varphi \in C^\infty_c(\Omega)$, pruebe que el mapa $F_\varphi \colon L^p_w(\Omega) \to R$ definido por
+    		%
+    		\begin{equation*}
+    			F_\varphi(v) := \int_\Omega v(x) \, \varphi(x) \dd x
+    		\end{equation*}
+    		%
+    		es un funcional lineal y acotado sobre $L^p_w(\Omega)$ (esto es, $F_\varphi \in [L^p_w(\Omega)]'$).
+    		\item\label{q:weightedSobolevBanach} (6 puntos) Definimos al espacio de Sobolev ponderado $W^{1,p}_w(\Omega)$ mediante
+    		%
+    		\begin{equation*}
+    			W^{1,p}_w(\Omega) := \left\{ u \in L^p_w(\Omega) \,\middle|\, (\forall\,i\in\{1,\dotsc,n\})\ \frac{\partial u}{\partial x_i} \in L^p_w(\Omega) \right\},
+    		\end{equation*}
+    		%
+    		y se le equipa con la norma
+    		%
+    		\begin{equation*}
+    			\norm{u}_{W^{1,p}_w(\Omega)} := \left( \norm{u}_{L^p_w(\Omega)}^p + \sum_{i=1}^N \norm{\frac{\partial u}{\partial x_i}}_{L^p_w(\Omega)}^p \right)^{1/p}.
+    		\end{equation*}
+    		%
+    		Pruebe que $W^{1,p}_w(\Omega)$ es un espacio de Banach.
+    	\end{enumerate}
+    \end{problem}
+    \begin{proof}[\textcolor{rojo}{Demostración}]
+    	\begin{enumerate}[label=\textbf{\theproblem.\arabic{*}.},ref=\theproblem.\arabic{*},parsep=1ex]
+    		\item Sea $\{u_{n}\}_{n\in\mathbb{N}}$ una sucesión de Cauchy en $L^{p}_{\omega}(\Omega)$, además sea $\{v_{n}\}_{n\in\mathbb{N}}$ una sucesión de la de forma $v_{n}(x) := u_{n}(x)\omega^{1/p}(x)$, para todo $n\in\mathbb{N}$. Es claro que $\{v_{n}\}_{n\in\mathbb{N}}\subset L^{p}(\Omega)$, pues
+    		\begin{align*}
+    			\norm{v_{n}}_{L^{p}(\Omega)} = \left(\int_{\Omega}\abs{u_{n}(x)\omega^{1/p}(x)}^{p}\ \text{d}x\right)^{1/p} = \left(\int_{\Omega}\abs{u_{n}(x)}^{p}\omega(x)\ \text{d}x\right)^{1/p} = \norm{u_{n}}_{L^{p}_{\omega}(\Omega)} < +\infty.
+    		\end{align*} 
+    	    Esta sucesión es de Cauchy pues
+    	    \begin{align*}
+    	    	\norm{v_{n} - v_{m}}_{L^{p}(\Omega)} = \left(\int_{\Omega}\abs{v_{n}(x)- v_{m}(x)}^{p}\ \text{d}x \right)^{1/p} = \left(\int_{\Omega}\abs{u_{n}(x)- u_{m}(x)}^{p}\omega(x)\ \text{d}x \right)^{1/p} = \norm{u_{n}-u_{m}}_{L^{p}_{\omega}(\Omega)}\overset{n,m\to\infty}{\longrightarrow} 0.
+    	    \end{align*}
+            Como $L^{p}$ es Banach con su norma usual, se deduce que existe $v\in L^{p}(\Omega)$ tal que $\{v_{n}\}_{n\in\mathbb{N}}$ converge a $v$ en $L^{p}(\Omega)$. Con lo anterior, se define la función $u(x) := v(x)\omega^{-1/p}(x)$, la cual cumple que 
+            \begin{align*}
+            	\norm{u}_{L^{p}_{\omega}(\Omega)} = \left(\int_{\Omega}\abs{v(x)\omega^{-1/p}}^{p}\omega(x)\ \text{d}x\right)^{1/p} = \norm{v}_{L^{p}(\Omega)} < +\infty
+            \end{align*}
+            es decir, $u\in L^{p}_{\omega}(\Omega)$. Además,
+            \begin{align*}
+            	\norm{u_{n}-u}_{L^{p}_{\omega}(\Omega)} = \left(\int_{\Omega}\abs{v_{n}(x)\omega^{-1/p}(x)-v(x)\omega^{-1/p}(x)}^{p}\ \text{d}x\right)^{1/p} = \norm{v_{n}-v}_{L^{p}(\Omega)}\overset{n\to\infty}{\longrightarrow} 0,
+            \end{align*}
+            con esto se deduce que la sucesión $\{u_{n}\}_{n\in\mathbb{N}}$ converge a $u$ en $L^{p}_{\omega}(\Omega)$. Concluyendo así, que todas las sucesiones de Cauchy en $L^{p}_{\omega}(\Omega)$ convergen, es decir, $L^{p}_{\omega}(\Omega)$ es un espacio de Banach.
+            \item Sea $u\in L_{\omega}^{p}(\Omega)$ y $K$ un subconjunto de $\Omega$ compacto. Entonces
+            \begin{align*}
+            	\norm{u}_{L^{1}(K)} &= \int_{K}\abs{u(x)}\ \text{d}x\\ &= \int_{K}\abs{u(x)\omega^{\frac{1}{p}}(x)\omega^{-\frac{1}{p}}(x)}\ \text{d}x\\ 
+            	&\leq \left(\int_{K}\abs{u(x)}^{p}\omega(x)\ \text{d}x \right)^{\frac{1}{p}}\left(\int_{K}\abs{\omega^{-\frac{1}{p}}(x)}^{\frac{p}{p-1}}\ \text{d}x\right)^{1-\frac{1}{p}}\\ &\leq \norm{\omega^{-\frac{1}{p-1}}}^{\frac{p-1}{p}}_{L^{1}(K)}\norm{u}_{L^{p}_{\omega}(\Omega)},
+            \end{align*}
+            lo cual prueba lo pedido.
+            \item En lo que sigue $\varphi\in C_{c}^{\infty}(\Omega)$. Sean $\alpha,\beta\in R$ y $u,v\in L^{p}_{\omega}(\Omega)$, luego,
+            \begin{align*}
+            	F_{\varphi}\left(\alpha u + \beta v\right) &= \int_{\Omega}\left(\alpha u(x) + \beta v(x)\right)\varphi(x)\ \text{d}x\\ &= \int_{\Omega}\alpha u(x)\varphi(x) + \beta v(x)\varphi(x)\ \text{d}x\\ &= \alpha\int_{\Omega}u(x)\varphi(x)\ \text{d}x + \beta\int_{\Omega}v(x)\varphi(x)\ \text{d}x\\ &= \alpha F_{\varphi}(u) + \beta F_{\varphi}(v).
+            \end{align*}
+            Concluyendo así la linealidad. Para la continuidad, sea $z\in L^{p}_{\omega}(\Omega)$
+            \begin{align*}
+            	\abs{F_{\varphi}(z)} &= \abs{\int_{\Omega}z(x)\varphi(x)\ \text{d}x}\\ &= \abs{\int_{\text{supp}(\varphi)}z(x)\varphi(x)\ \text{d}x}\\ &\leq \int_{\text{supp}(\varphi)}\abs{z(x)}\abs{\varphi(x)}\ \text{d}x\\
+            	&\leq \norm{\varphi}_{\infty} \int_{\text{supp}(\varphi)}\abs{z(x)}\ \text{d}x\\
+            	&= \norm{\varphi}_{\infty}\norm{z}_{L^{1}(\text{supp}(\varphi))}\\
+            	&\leq \norm{\varphi}_{\infty}\norm{\omega^{-\frac{1}{p-1}}}^{\frac{p-1}{p}}_{L^{1}(\text{supp}(\varphi))}\norm{z}_{L^{p}_{\omega}(\Omega)},
+            \end{align*}
+            concluyendo así la continuidad. Por tanto, $F_{\varphi}\in \left[L^{p}_{\omega}(\Omega)\right]'$.
+            \item En lo que sigue $i\in\{1,\dots,N\}$. Sea $\{u_{n}\}_{n\in\mathbb{N}}$ una sucesión de Cauchy en $W^{1,p}_{\omega}(\Omega)$, es directo notar que 
+            \begin{align*}
+            	\norm{u_{n}-u_{m}}_{L^{p}_{\omega}(\Omega)}\leq \norm{u_{n}-u_{m}}_{W^{1,p}_{\omega}(\Omega)} \overset{n,m\to\infty}{\longrightarrow}0 \quad \text{y}\quad \norm{\partial_{i}u_{n}-\partial_{i}u_{m}}_{L^{p}_{\omega}(\Omega)}\leq \norm{u_{n}-u_{m}}_{W^{1,p}_{\omega}(\Omega)} \overset{n,m\to\infty}{\longrightarrow}0.
+            \end{align*}
+            Como $\{u_{n}\}_{n\in\mathbb{N}}$ y $\{\partial_{i}u_{n}\}_{n\in\mathbb{N}}$ son sucesiones de Cauchy en $L^{p}_{\omega}(\Omega)$ y dado que $L^{p}_{\omega}(\Omega)$ es Banach, se deduce que existen $\{v_{j}\}_{j=1}^{N}\subset L^{p}_{\omega}(\Omega)$ y $u\in L^{p}_{\omega}(\Omega)$ tales que 
+            \begin{align*}
+            	\norm{u_{n}-u}_{L_{\omega}^{p}(\Omega)} \overset{n\to\infty}{\longrightarrow}0 \quad \text{y} \quad 	\norm{\partial_{i}u_{n}-v_{i}}_{L_{\omega}^{p}(\Omega)} \overset{n\to\infty}{\longrightarrow}0.
+            \end{align*} 
+            Note que para $n\in\mathbb{N}$, se tiene $\left(\partial_{i}u_{n}-v_{i}\right),\left(u_{n}-u\right)\in L^{p}_{\omega}(\Omega)\subset L_{\text{loc}}^{1}(\Omega)$, con lo cual, para $\varphi\in C_{c}^{\infty}(\Omega)$ 
+            \begin{align*}
+            	\abs{\langle \partial_{i}u_{n} - v_{i},\varphi \rangle} = \abs{\int_{\Omega} \left(\partial_{i}u_{n}(x) - v_{i}(x)\right)\varphi(x)\ \text{d}x} = \abs{F_{\varphi}(\partial_{i}u_{n}-v_{i})}\leq\norm{F_{\varphi}}\norm{\partial_{i}u_{n}-v_{i}}_{L^{p}_{\omega}(\Omega)}\overset{n\to \infty}{\longrightarrow} 0
+            \end{align*}
+            de forma similar
+            \begin{align*}
+            	\abs{\langle u_{n} - u,\varphi \rangle} = \abs{\int_{\Omega} \left(u_{n}(x) - u(x)\right)\varphi(x)\ \text{d}x} = \abs{F_{\varphi}(u_{n}-u)}\leq\norm{F_{\varphi}}\norm{u_{n}-u}_{L^{p}_{\omega}(\Omega)}\overset{n\to \infty}{\longrightarrow} 0
+            \end{align*}
+            es decir,
+            \begin{align*}
+            	\lim_{n\to\infty}\langle \partial_{i}u_{n},\varphi \rangle = \langle v_{i},\varphi \rangle \quad \text{y} \quad \lim_{n\to\infty}\langle u_{n},\varphi \rangle = \langle u,\varphi \rangle
+            \end{align*}
+            con esto
+            \begin{align*}
+            	\langle v_{i},\varphi \rangle = \lim_{n\to\infty}\langle \partial_{i}u_{n},\varphi \rangle = -\lim_{n\to\infty}\langle u_{n},\partial_{i}\varphi \rangle = -\langle u,\partial_{i}\varphi \rangle = \langle \partial_{i}u,\varphi \rangle
+            \end{align*}
+            de esta forma se concluye que $v_{i} = \partial_{i}u$ en $\mathcal{D}'(\Omega)$ y por tanto 
+            \begin{align*}
+            	\norm{u_{n}-u}_{W^{1,p}_{\omega}(\Omega)}\overset{n\to \infty}{\longrightarrow} 0
+            \end{align*}
+            donde $u\in W_{\omega}^{1,p}(\Omega)$. Concluyendo así que $W_{\omega}^{1,p}(\Omega)$ es Banach.
+    	\end{enumerate}
+    \end{proof}
+    \bigskip
+    \begin{problem}[Extensión a órdenes mayores de primera parte del teorema de inyección de Sobolev]
+    	En clase demostramos el caso $m = 1$ de la primera parte del teorema de inclusión de Sobolev \cite[Theorem~6.7(i)]{Tartar}:
+    	%
+    	\begin{equation*}
+    		p \in [1, N) \implies W^{1,p}(R^N) \subset L^r(R^N),
+    		\quad\text{donde}\quad \frac{1}{r} = \frac{1}{p} - \frac{1}{N}.
+    	\end{equation*}
+    	%
+    	Demuestre que este resultado se extiende para $m \in \natural = \{1, 2, \dotsc \}$ en general; esto es, pruebe que
+    	%
+    	\begin{equation*}
+    		p \in \left[1, {\textstyle \frac{N}{m}}\right) \implies W^{m,p}(R^N) \subset L^r(R^N),
+    		\quad\text{donde}\quad \frac{1}{r} = \frac{1}{p} - \frac{m}{N}.
+    	\end{equation*}
+    	%
+    	\emph{Indicación:} Argumente por inducción en $m$.
+    	También, a riesgo de decir algo obvio, notar que el $r$ que se debe obtener es distinto para cada $m$.
+    \end{problem}
+    \begin{proof}[\textcolor{rojo}{Demostración}]
+    	Usando inducción fuerte sobre el orden de derivación. El caso base ya fue demostrado en clases. Por hipótesis de inducción, suponga que se cumple la propiedad para $m\in \mathbb{N}$. Dado $1\leq p < \frac{N}{m+1}$, considere $u\in W^{m+1,p}(R^{N})$ y sea $r\in R$ tal que $\frac{1}{r} = \frac{1}{q} - \frac{1}{N}$ donde $\frac{1}{q} = \frac{1}{p}-\frac{m}{N}$, de aquí es sencillo ver que $q\in\left[1,N\right)$, pues
+    	\begin{align*}
+    		\frac{q-p}{pq} = \frac{m}{N}>0\quad \text{y} \quad \frac{N-q}{qN}>0
+    	\end{align*}
+        Usando la inyección de Sobolev, cuando $m=1$, se tiene que existe $C_{1}>0$ tal que
+        \begin{align}\label{uno}
+        	\norm{u}_{r}\leq C_{1}\norm{u}_{1,q} = C_{1}\left(\sum_{\abs{\gamma}\leq1}\norm{D^{\gamma}u}^{q}_{q}\right)^{\frac{1}{q}}.
+        \end{align}
+        Dado que $\frac{N}{m+1}<\frac{N}{m}$, se tiene que $p\in\left[1,\frac{N}{m}\right)$. Para un multi-indice $\alpha$ de orden 1, es claro que $D^{\alpha}u\in W^{m,p}(R^{N})$, entonces, aplicando la hipótesis de inducción, existe $C_{2}>0$ tal que 
+        \begin{align}\label{dos}
+        	\norm{D^{\alpha}u}_{q} \leq C_{2}\norm{D^{\alpha}u}_{m,p}\leq C_{2}\norm{u}_{m+1,p}.
+        \end{align}
+        Juntando \eqref{uno} y \eqref{dos}, se obtiene 
+        \begin{align*}
+        	\norm{u}_{r} \leq C_{1}\left(\sum_{\abs{\gamma}\leq1} C^{q}_{2}\norm{u}^{q}_{m+1,p}\right)^{\frac{1}{q}} = C_{1}C_{2}N^{\frac{1}{q}}\norm{u}_{m+1,p}, \quad\text{donde}\quad \frac{1}{r} = \frac{1}{p} - \frac{m+1}{N}.
+        \end{align*}
+    entonces $u\in L^{r}(R^{N})$, obteniendo así la inclusión deseada y probando la tesis de inducción.
+    \end{proof}
+    
+
+    
+    \begin{thebibliography}{Tar07}
+    	
+    	\bibitem[Tar07]{Tartar}
+    	Luc Tartar, \emph{An introduction to {S}obolev spaces and interpolation spaces}, Lecture Notes of the Unione Matematica Italiana, vol.~3, Springer, Berlin, 2007. MR~2328004 (2008g:46055).
+    	
+    \end{thebibliography}
+\end{document} 

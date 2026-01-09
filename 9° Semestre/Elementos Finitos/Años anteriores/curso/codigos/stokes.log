@@ -1,0 +1,43 @@
+-- FreeFem++ v4.12 (Tue Dec  6 18:35:04 CET 2022 - git v4.12)
+   file : C:\Users\braya\Desktop\Finitos\Años anteriores\curso\codigos\stokes.edp
+ Load: lg_fem lg_mesh lg_mesh3 eigenvalue
+    1 : /*
+    2 :
+    3 : Solucion del problema de Stokes
+    4 :
+    5 : */
+    6 : // Generando la malla
+    7 : int n=3;
+    8 :  mesh Th=square(10*n,10*n);
+    9 :
+   10 : // Definicion de los espacios para la velocidad y la presion
+   11 :  fespace Hh(Th,P2);  Hh u,v,uu,vv;
+   12 :  fespace Qh(Th,P1);  Qh p,pp;
+   13 :
+   14 : // Datos del problema
+   15 : real nu = 1.0;
+   16 : func f  = 0.0;
+   17 :
+   18 : // Solucion del problema de Stokes
+   19 :  solve stokes([u,v,p],[uu,vv,pp]) =
+   20 :    int2d(Th)(nu*(dx(u)*dx(uu)+dy(u)*dy(uu) + dx(v)*dx(vv)+ dy(v)*dy(vv))
+   21 :                + dx(p)*uu + dy(p)*vv + pp*(dx(u)+dy(v))
+   22 :                -1e-10*p*pp) - int2d(Th)( f*vv)
+   23 :              + on(1,2,4,u=0,v=0) + on(3,u=1,v=0);
+   24 :
+   25 : //Visualizacion de la solucion
+   26 : plot(Th,wait=1);
+   27 : plot(p,dim=2,wait=1);
+   28 : plot([u,v],wait=1);
+   29 :  sizestack + 1024 =2224  ( 1200 )
+ 
+  -- Square mesh : nb vertices  =961 ,  nb triangles = 1800 ,  nb boundary edges 120
+  -- Solve :
+          min -0.20003  max 1
+          min -0.354034  max 0.35405
+          min -163.358  max 150.823
+times: compile 0.049s, execution 2.584s,  mpirank:0
+ ######## We forget of deleting   5463 Nb pointer,   0Bytes  ,  mpirank 0, memory leak =0
+ CodeAlloc : nb ptr  3830,  size :510736 mpirank: 0
+Ok: Normal End
+ try getConsole C:\Users\braya\Desktop\Finitos\Años anteriores\curso\codigos\stokes.edp

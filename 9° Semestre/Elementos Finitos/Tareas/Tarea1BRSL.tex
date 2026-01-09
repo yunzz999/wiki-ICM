@@ -1,0 +1,331 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{stix}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Elementos Finitos}}
+\newcommand{\tarea}{\textbf{Tarea 1}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dy}{\textup{d}y}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\ds}{\textup{d}s}
+\newcommand{\dS}{\textup{d}S}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\Norm}[1]{\lVert#1\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+\renewcommand{\theequation}{\roman{equation}}
+
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Análisis Real I }\\
+	\textbf{Técnicas de Demostración}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}
+		Considere el espacio $V_{h} := \left\{ v\in \mathcal{C}(a,b):\ v\in\mathbb{P}_{1}([x_{i-1},x_{i}]), \text{para}\ i = 1,\dots,d+1,\ v(a) = v(b) = 0\right \}$ y la familia de funciones techo $B := \{\varphi_{1},\varphi_{2},\dots, \varphi_{d}\}$ definidas en clase. Demuestre que $B$ es una base de $V_{h}$.
+	\end{pro}
+    \begin{proof}
+        Sea ver que $B$ es una base, es necesario probar 
+        \begin{itemize}
+        	\item $B$ es linealmente independiente. Sea $\{\alpha_{i}\}^{d}_{i=1}\subset\mathbb{R}$ tal que 
+        	\begin{align*}
+        		\sum_{i=1}^{d}\alpha_{i}\varphi_{i} = \theta,
+        	\end{align*}
+            como $\varphi_{i}(x_{j})=\delta_{ij}$ se tiene que 
+            \begin{align*}
+            	0 =\sum_{i=1}^{d}\alpha_{i}\varphi_{i}(x_{j}) =  \sum_{i=1}^{d}\alpha_{i}\delta_{ij} = a_{j},\ \forall j\in\{1,\dots,d\}.
+            \end{align*}
+             Por tanto, $B$ es linealmente independiente.
+             \item $\langle B \rangle = V_{h}$. Por doble inclusión
+             \begin{itemize}
+             	\item[$(\subseteq)$] Dado $i\in\{1,\dots,d\}$ es inmediato notar que $\varphi_{i}\in V_{h}$. Luego, como $V_{h}$ es un sub espacio vectorial, se tiene que $\langle B \rangle \subseteq V_{h}$.
+             	\item[$(\supseteq)$] Dado $v\in V_{h}$, se define $v_{I}$ como sigue
+             	\begin{align*}
+             		v_{I} = \sum_{i=1}^{d}v(x_{i})\varphi_{i}
+             	\end{align*}
+                A continuación probaremos que $v - v_{I} = \theta$ lo cual probaría la inclusión deseada. Dado $j\in\{0,\dots,d\}$ se tiene
+                \begin{align*}
+                	\left(v - v_{I}\right)(x_{j}) = v(x_{j}) - v_{I}(x_{j}) = v(x_{j}) - \sum_{i=1}^{d}v(x_{i})\varphi_{i}(x_{j}) = v(x_{j}) -  \sum_{i=1}^{d}v(x_{i})\delta_{ij} = v(x_{j}) - v(x_{j}) = 0 
+                \end{align*} 
+                y como $(v - v_{I})\in \mathbb{P}\left[x_{j-1},x_{j}\right]$ se deduce que necesariamente $(v - v_{I})(x) = 0$ para todo $x\in \left[x_{j-1},x_{j}\right]$. Como lo anterior es valido para todo $j\in\{1,\dots,d+1\}$ se deduce que $(v - v_{I}) = \theta$, de esta forma 
+                \begin{align*}
+                	v = \sum_{i=1}^{d}v(x_{i})\varphi_{i}
+                \end{align*}
+                es decir, $v\in \langle B \rangle$. Lo cual prueba que $\langle B \rangle \supseteq V_{h}$.
+
+%             	veamos que existe $\{\beta_{i}\}_{i=1}^{d}\subset\mathbb{R}$ tal que 
+%             	\begin{align*}
+%             		v = \sum_{i=1}^{d} \beta_{i}\varphi_{i}.
+%             	\end{align*} 
+%                Notando que $\varphi_{i}(x_{j}) = \delta_{ij}$, para todo $i,j\in\{1,\dots,d\}$, se deduce
+%                \begin{align*}
+%                	v(x_{j}) = \sum_{i=1}^{d}\beta_{i}\varphi_{i}(x_{j}) = \sum_{i=1}^{d}\beta_{i}\delta_{ij} = \beta_{j}
+%                \end{align*}
+%                 por lo que 
+%                 \begin{align*}
+%                 	v = \sum_{i=1}^{d}v(x_{i})\varphi_{i}
+%                 \end{align*}
+             \end{itemize}
+              Como ambas inclusiones se cumplen se deduce que $\langle B\rangle = V_{h}$.  
+        \end{itemize}
+        Finalmente, se tiene que $B$ es base de $V_{h}$.
+    \end{proof}
+    \begin{pro}
+    	Considere la forma bilineal $\displaystyle a(u_{h},v_{h}) = \int_{a}^{b}u'_{h}v'_{h}\text{d}x$, su matriz $\boldsymbol{A}$ asociada y el espacio $V_{h}$ definido e el Problema 1.
+    	\begin{itemize}
+    		\item[$a)$] Sea $u_{h}\in V_{h}$. Sabemos que existen escalares $\beta_{1},\beta_{2},\dots,\beta_{d}$ tales que $\displaystyle v_{h}(x) = \sum_{j=1}^{d}\beta_{j}\varphi_{j}(x)$. Probar\\ que $\boldsymbol{\beta}^{t}\boldsymbol{A}\boldsymbol{\beta} = \Norm{v'_{h}}^{2}_{L^{2}(a,b)}$, donde $\boldsymbol{\beta}$ es el vector cuyos elementos son los coeficientes $\beta_{j}$.
+    		\item[$b)$] Demostrar que $\boldsymbol{A}$ es simétrica y definida positiva.
+    	\end{itemize}
+    \end{pro}
+    \begin{proof}
+    	\begin{itemize}
+    		\item[$a)$] Dados $\beta_{1},\beta_{2},\dots,\beta_{d}$ tales que 
+    		\begin{align}
+    			v_{h}(x) = \sum_{j=1}^{d}\beta_{j}\varphi_{j}(x),\ \forall x\in(a,b).\label{vh}
+    		\end{align}
+    	    De un calculo directo se tiene que
+    	    \begin{align*}
+    	    	\Norm{v'_{h}}^{2}_{L^{2}(a,b)} = \int_{a}^{b}v'_{h}v'_{h}\text{d}x = a(v_{h},v_{h})
+    	    \end{align*}
+            usando \eqref{vh} y que $a$ es una forma bilineal se tiene
+            \begin{align*}
+            	a(v_{h},v_{h}) &= a\left( \sum_{i=1}^{d}\beta_{i}\varphi_{i},\sum_{j=1}^{d}\beta_{j}\varphi_{j}\right)
+            	               =\sum_{j=1}^{d}\beta_{j}a\left(\sum_{i=1}^{d}\beta_{i}\varphi_{i},\varphi_{j}\right)
+            	               =\sum_{j=1}^{d}\sum_{i=1}^{d}\beta_{j}\beta_{i}a(\varphi_{i},\varphi_{j}) = \sum_{j=1}^{d}\beta_{j}\sum_{i=1}^{d}\frac{a_{ij}}{h}\beta_{i}
+            	               = \boldsymbol{\beta}^{t}\boldsymbol{A}\boldsymbol{\beta}
+            \end{align*}
+            \item[$b)$] Recordando que 
+            \begin{align*}
+            	\boldsymbol{A} = \frac{1}{h}\begin{pmatrix}
+            		2 & -1 &   & \\ 
+            		-1 & \ddots  & \ddots  & \\ 
+            		& \ddots  & \ddots  & -1\\ 
+            		&  & -1 & 2
+            	\end{pmatrix}
+            \end{align*}
+            Es directo notar que $\boldsymbol{A} = \boldsymbol{A}^{t}$. Por otro lado, dado $\boldsymbol{\beta} = \left(\beta_{1},\dots,\beta_{d}\right)^{t}$ un vector  no nulo de $\mathbb{R}^{d}$ fijo pero arbitrario, se tiene que existe una función $\omega_{h}\in V_{h}$ tal que 
+            \begin{align*}
+            	\omega_{h} = \sum_{i=1}^{d}\beta_{i}\varphi_{i}.
+            \end{align*}
+            Luego, por $a)$ se tiene que 
+            \begin{align*}
+            	\boldsymbol{\beta}^{t}\boldsymbol{A}\boldsymbol{\beta} = \Norm{\omega'_{h}}^{2}_{L^{2}(a,b)} > 0. 
+            \end{align*}
+            Como lo anterior es válido para cualquier vector no nulo de $\mathbb{R}^{d}$ se concluye que $\boldsymbol{A}$ es definida positiva.
+            
+     	\end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Considere la ecuación
+    	\begin{align*}
+    		\left\{\begin{aligned}
+    			-(\kappa(x)u'(x))' + \omega u(x) &= f(x),\ x\in]a,b[\\ 
+    			u(a) &= 0,\\ 
+    			u(b) &= 0,
+    		\end{aligned}
+    		\right.
+    	\end{align*}
+        con $f\in L^{2}(a,b)$, $\omega$ y $\kappa$ dados. Asuma que la función $\kappa$ es continua y positiva en $[a,b]$, y $\omega$ es un número positivo.
+        \begin{itemize}
+        	\item[$a)$] Deduzca una formulación variacional apropiada.
+        	\item[$b)$] Demuestre que dicha formulación variacional posee solución única.
+        	\item[$c)$] Escriba la formulación variacional discreta asociada considerando una partición uniforme $\{x_{i}\}_{i=0}^{d+1}$ de tamaño $h$, del intervalo $[0,1]$ y el espacio 
+        	\begin{align*}
+        		V_{h} := \{v\in\mathcal{C}(a,b):\ v\in \mathbb{P}\left(\left[x_{i-1},x_{i}\right]\right), \ \text{para}\ i = 1,\dots,d+1,\ v(a) = v(b) = 0 \}.
+        	\end{align*}
+            \item[$d)$] Escriba el sistema lineal $\boldsymbol{A}\boldsymbol{\alpha} = \boldsymbol{b}$ asociado.
+        \end{itemize}
+    \end{pro}
+    \begin{proof}
+    	\begin{itemize}
+    		\item[$a)$] Testeando la EDO con una función $v\in H_{0}^{1}(a,b)$ se obtiene 
+    		\begin{align}
+    			-\int_{a}^{b}(\kappa(x)u'(x))'v(x)\ \text{d}x + \omega\int_{a}^{b}u(x)v(x)\ \text{d}x = \int_{a}^{b}f(x)v(x)\ \text{d}x.\label{testeo}
+    		\end{align}
+    	    Haciendo integración por partes al primer termino del lado izquierdo de \eqref{testeo} y usando las condiciones de contorno se obtiene 
+    	    \begin{align*}
+    	    	\int_{a}^{b} u'(x)v'(x)\kappa(x)\ \text{d}x +  \omega\int_{a}^{b}u(x)v(x)\ \text{d}x = \int_{a}^{b}f(x)v(x)\ \text{d}x.
+    	    \end{align*}
+            De lo anterior se tiene la forma bilineal $a:H_{0}^{1}(a,b)\times H_{0}^{1}(a,b)\longrightarrow \mathbb{R}$ y el funcional lineal $F:H_{0}^{1}(a,b)\longrightarrow\mathbb{R}$ definidos por
+            \begin{align*}
+            	a(u,v) := \int_{a}^{b} u'(x)v'(x)\kappa(x)\ \text{d}x +  \omega\int_{a}^{b}u(x)v(x)\ \text{d}x
+            \end{align*}
+            y 
+            \begin{align*}
+            	F(v) := \int_{a}^{b}f(x)v(x)\ \text{d}x.
+            \end{align*}
+            La linealidad de $a$ y $F$ es consecuencia directa de que la integral y la derivada son operadores lineales. Finalmente, el problema queda
+            \begin{align*}
+            	\left\{\begin{aligned}
+            		&\text{Hallar}\ u\in H_{0}^{1}(a,b)\  \text{tal que}\\
+            		 &\ \ \ \ \  a(u,v) = F(v)\\ 
+            		&\text{para todo}\ v\in H_{0}^{1}(a,b).
+            	\end{aligned}
+            	\right.
+            \end{align*}
+            \item[$b)$] Para probar existencia unicidad se debe probar 
+            \begin{itemize}
+            	\item[$i)$] $a$ es una forma bilineal acotada.\\
+            	Dados $u,v\in V := H_{0}^{1}(\Omega)$, luego 
+            	\begin{align*}
+            		|a(u,v)| &= \left|\int_{a}^{b} u'(x)v'(x)\kappa(x)\ \text{d}x +  \omega\int_{a}^{b}u(x)v(x)\ \text{d}x\right|\\ &\leq  \left|\int_{a}^{b} u'(x)v'(x)\kappa(x)\ \text{d}x\right| +  \omega\left|\int_{a}^{b}u(x)v(x)\ \text{d}x\right|\\ &\leq \norm{u'}_{L^{2}(a,b)}\norm{v'\kappa}_{L^{2}(a,b)} + \omega\norm{u}_{L^{2}(a,b)}\norm{v}_{L^{2}(a,b)}\\ &\leq M\norm{u'}_{L^{2}(a,b)}\norm{v'}_{L^{2}(a,b)} + \omega\norm{u}_{L^{2}(a,b)}\norm{v}_{L^{2}(a,b)}\\
+            		&\leq M \norm{u}_{H^{1}(a,b)}\norm{v}_{H^{1}(a,b)} + \omega\norm{u}_{H^{1}(a,b)}\norm{v}_{H^{1}(a,b)}\\
+            		&\leq \max\{M,\omega\}\norm{u}_{H^{1}(a,b)}\norm{v}_{H^{1}(a,b)}.
+            	\end{align*}
+                Donde $M$ resulta de usar el hecho que $\kappa$ es continua en un compacto. Así, $a$ es una forma bilineal acotada.
+            	\item[$ii)$] $a$ es coerciva.\\
+            	Dado $v\in V$, luego
+            	\begin{align*}
+            		a(v,v) &=  \int_{a}^{b} v'(x)v'(x)\kappa(x)\ \text{d}x +  \omega\int_{a}^{b}v(x)v(x)\ \text{d}x\\ &\geq m\int_{a}^{b} v'(x)v'(x)\ \text{d}x + \omega\int_{a}^{b}v(x)v(x)\ \text{d}x\\ &\geq \min\{m,\omega\}\norm{v}^{2}_{H^{1}(a,b)}.
+            	\end{align*}
+                Donde $m$ resulta de usar el hecho que $\kappa$ es continua en un compacto.
+                Así $a$ es coreciva.
+            	\item[$iii)$] $F$ es un funcional lineal y acotado.\\
+            	Dado $v\in V$, luego
+            	\begin{align*}
+            		\left|\int_{a}^{b} f(x)v(x)\ \text{d}x\right| \leq \norm{f}_{L^{2}(a,b)}\norm{v}_{L^{2}(a,b)}\leq \norm{f}_{L^{2}(a,b)}\norm{v}_{H^{1}(a,b)}
+            	\end{align*}
+                Así, $F$ es un funcional lineal y acotado.
+            	\item[$iv)$] $\left(H_{0}^{1}(\Omega),\PI{\cdot}{\cdot}\right)$ es un espacio de Hilbert.\\ 
+            	Directo del hecho de que $H_{0}^{1}(\Omega)$ es un subespacio cerrado de $H^{1}(a,b)$.
+            \end{itemize}
+            Finalmente como se cumplen las hipótesis del Lema de Lax-Milgram se deduce que  \begin{align*}
+            	\left\{\begin{aligned}
+            		&\text{Existe un único}\ u\in H_{0}^{1}(a,b)\  \text{tal que}\\
+            		&\ \ \ \ \  a(u,v) = F(v)\\ 
+            		&\text{para todo}\ v\in H_{0}^{1}(a,b).
+            	\end{aligned}
+            	\right.
+            \end{align*}
+            y ademas, 
+            \begin{align*}
+            	\norm{u}_{H^{1}(a,b)}\leq\frac{1}{\min\{m,\omega\}}\norm{F}\leq \frac{1}{\min\{m,\omega\}}\norm{f}_{H^{1}(a,b)}.
+            \end{align*}
+            \item[$c)$] Considerando la partición uniforme del enunciado y el espacio
+            	\begin{align*}
+            	    V_{h} := \{v\in\mathcal{C}(a,b):\ v\in \mathbb{P}\left(\left[x_{i-1},x_{i}\right]\right), \ \text{para}\ i = 1,\dots,d+1,\ v(a) = v(b) = 0 \}.
+                \end{align*}
+                Se tiene el problema discreto
+                \begin{align*}
+                	\left\{\begin{aligned}
+                		&\text{Hallar}\ u_{h}\in V_{h}\  \text{tal que}\\
+                		&\ \ \ \ \  a(u_{h},v_{h}) = F(v_{h})\\ 
+                		&\text{para todo}\ v_{h}\in V_{h}.
+                	\end{aligned}
+                	\right.
+                \end{align*}
+                el cual es equivalente a 
+                \begin{align}\label{problemadiscreto}
+                	\left\{\begin{aligned}
+                		&\text{Hallar}\ u_{h}\in V_{h}\  \text{tal que}\\
+                		&\ \ \ \ \  a(u_{h},\varphi_{j}) = F(\varphi_{j})\\ 
+                		&\text{para todo}\ j\in\{1,\dots,d\}.
+                	\end{aligned}
+                	\right.
+                \end{align}
+            \item[$d)$] Usando que $\{\varphi_{1},\varphi_{2},\dots,\varphi_{d}\}$ es una base de $V_{h}$ se tiene que existe $\boldsymbol{\alpha} = \left(\alpha_{1},\alpha_{2},\dots,\alpha_{d}\right)^{t}\in\mathbb{R}^{d}$ tal que 
+            \begin{align*}
+            	u_{h} = \sum_{i=1}^{d}\alpha_{i}\varphi_{i}
+            \end{align*}
+            insertando esto en \eqref{problemadiscreto} se obtiene el sistema de ecuaciones
+            \begin{align*}
+            	\sum_{i=1}^{d}\alpha_{i}a(\varphi_{i},\varphi_{j}) = F(\varphi_{j})
+            \end{align*}
+            donde la incógnita es $\boldsymbol{\alpha}$ de esta forma la matriz $\boldsymbol{A}$ cumple que $a_{ij} = a(\varphi_{i},\varphi_{j})$ cuando $i,j\in\{1,\dots,d\}$. Notando que $\text{supp}(\varphi_{i})\cap\text{supp}(\varphi_{i+2})=\emptyset$ se deduce que $a_{i,i+l} = 0$ para todo $i\in\{1,\dots,d-l\}$ con $l>1$, de la misma forma se concluye que $a_{i,i-l} = 0$. Por otro lado, para el calculo de los demás coeficientes se procede como sigue
+            \begin{itemize}
+            	\item Cálculo de $a_{i,i}$ con $i\in\{1,\dots,d\}$.
+            	\begin{align*}
+            		a_{i,i}
+            		 &= a(\varphi_{i},\varphi_{i})\\ &= \int_{a}^{b}\varphi'_{i}(x)\varphi'_{i}(x)\kappa(x)\ \text{d}x + \omega\int_{a}^{b}\varphi_{i}(x)\varphi_{i}(x)\ \text{d}x\\ &= \int_{x_{i-1}}^{x_{i}}\varphi'_{i}(x)\varphi'_{i}(x)\kappa(x)\ \text{d}x + \int_{x_{i}}^{x_{i+1}}\varphi'_{i}(x)\varphi'_{i}(x)\kappa(x)\ \text{d}x + \omega\int_{x_{i-1}}^{x_{i}}\varphi_{i}(x)\varphi_{i}(x)\ \text{d}x + \omega\int_{x_{i}}^{x_{i+1}}\varphi_{i}(x)\varphi_{i}(x)\ \text{d}x\\
+            		 &= \int_{x_{i-1}}^{x_{i}}\frac{1}{h^{2}}\kappa(x)\ \text{d}x + \int_{x_{i}}^{x_{i+1}}\frac{1}{h^{2}}\kappa(x)\ \text{d}x + \omega\int_{x_{i-1}}^{x_{i}}\varphi_{i}(x)\varphi_{i}(x)\ \text{d}x + \omega\int_{x_{i}}^{x_{i+1}}\varphi_{i}(x)\varphi_{i}(x)\ \text{d}x\\
+            		 &= \int_{x_{i-1}}^{x_{i}}\frac{1}{h^{2}}\kappa(x)\ \text{d}x + \int_{x_{i}}^{x_{i+1}}\frac{1}{h^{2}}\kappa(x)\ \text{d}x + \omega\int_{x_{i-1}}^{x_{i}}\frac{(x-x_{i})^{2}}{h^{2}}\ \text{d}x + \omega\int_{x_{i}}^{x_{i+1}}\frac{(x_{i+1}-x)^{2}}{h^{2}}\ \text{d}x\\
+            		 &= \int_{x_{i-1}}^{x_{i}}\frac{1}{h^{2}}\kappa(x)\ \text{d}x + \int_{x_{i}}^{x_{i+1}}\frac{1}{h^{2}}\kappa(x)\ \text{d}x + \frac{h}{3}\omega - \frac{h}{3}\omega \\
+            		 &\approx \frac{1}{h}\left[\kappa\left(\frac{x_{i-1}+x_{i}}{2}\right) + \kappa\left(\frac{x_{i}+x_{i+1}}{2}\right)\right] 
+            	\end{align*}
+                 \item Cálculo de $a_{i,i+1}$ con $i\in\{1,\dots,d-1\}$.
+                 \begin{align*}
+                 	a_{i,i+1} &= a(\varphi_{i},\varphi_{i+1})\\
+                 	&= \int_{a}^{b}\varphi'_{i}(x)\varphi'_{i+1}(x)\kappa(x)\ \text{d}x + \omega\int_{a}^{b}\varphi_{i}(x)\varphi_{i+1}(x)\ \text{d}x\\
+                 	&= \int_{x_{i}}^{x_{i+1}}\frac{-1}{h^{2}}\kappa(x)\ \text{d}x + \omega\int_{x_{i}}^{x_{i+1}}\frac{(x_{i+1}-x)}{h}\frac{(x-x_{i+1})}{h}\ \text{d}x\\
+                 	&= \frac{-1}{h^{2}}\int_{x_{i}}^{x_{i+1}}\kappa(x)\ \text{d}x  -\frac{\omega}{h^{2}}\int_{x_{i}}^{x_{i+1}}(x-x_{i+1})^{2}\ \text{d}x\\
+                 	&=  \frac{-1}{h^{2}}\int_{x_{i}}^{x_{i+1}}\kappa(x)\ \text{d}x  - \frac{h\omega}{3}\\
+                 	&\approx \frac{-1}{h}\kappa\left(\frac{x_{i}+x_{i+1}}{2}\right) - \frac{h\omega}{3}
+                 \end{align*} 
+                 \item Cálculo de $a_{i,i-1}$ con $i\in\{2,\dots,d+1\}$.
+                 \begin{align*}
+                 	a_{i,i-1} &= a(\varphi_{i},\varphi_{i-1})\\
+                 	&= \int_{a}^{b}\varphi'_{i}(x)\varphi'_{i-1}(x)\kappa(x)\ \text{d}x + \omega\int_{a}^{b}\varphi_{i}(x)\varphi_{i-1}(x)\ \text{d}x\\
+                 	&= \int_{x_{i-1}}^{x_{i}}\frac{-1}{h^{2}}\kappa(x)\ \text{d}x + \omega\int_{x_{i-1}}^{x_{i}}\frac{(x-x_{i})}{h}\frac{(x_{i}-x)}{h}\ \text{d}x\\
+                 	&= \frac{-1}{h^{2}}\int_{x_{i-1}}^{x_{i}}\kappa(x)\ \text{d}x  -\frac{\omega}{h^{2}}\int_{x_{i-1}}^{x_{i}}(x-x_{i})^{2}\ \text{d}x\\
+                 	&=  \frac{-1}{h^{2}}\int_{x_{i-1}}^{x_{i}}\kappa(x)\ \text{d}x  - \frac{h\omega}{3}\\
+                 	&\approx \frac{-1}{h}\kappa\left(\frac{x_{i-1}+x_{i}}{2}\right) - \frac{h\omega}{3}
+                 \end{align*} 
+            \end{itemize}
+             Las aproximaciones al final se deben al hecho de que se uso la regla del punto medio elemental para aproximar las integrales de la función $\kappa$.
+             Para determinar el vector $\boldsymbol{b}\in\mathbb{R}^{d}$ se procede de forma similar, dado $j\in\{1,\dots,d\}$ luego
+             \begin{align*}
+             	b_{j} &= F(\varphi_{j})\\ &= \int_{a}^{b} f(x)\varphi_{j}(x)\text{d}x\\
+             	&= \int_{x_{j-1}}^{x_{j+1}}f(x)\varphi_{j}(x)\text{d}x\\
+             	&= \int_{x_{j-1}}^{x_{j}}f(x)\frac{x-x_{j}}{h}\text{d}x + \int_{x_{j}}^{x_{j+1}}f(x)\frac{x_{j+1}-x}{h}\text{d}x\\
+             	&\approx \frac{h}{2}\left[f\left(\frac{x_{j}+x_{j-1}}{2}\right) + f\left(\frac{x_{j}+x_{j+1}}{2}\right)\right]
+             \end{align*}
+    	\end{itemize}
+    \end{proof}
+\end{document}

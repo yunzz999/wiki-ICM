@@ -1,0 +1,219 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage[mathscr]{euscript}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Metodo de Galerkin Discontinuo}}
+\newcommand{\tarea}{\textbf{Tarea 3}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Método de Galerkin Discontinuo}\\
+	\textbf{Tarea 3}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}
+		Sea $\mathscr{T}_{h}$ una triangulación de un dominio abierto y acotado $\Omega\subset \mathbb{R}^{d}$, con $d = 2$ ó $3$. Suponga que $\bs{\sigma}\in \left[ H^{1}\left(\mathscr{T}_{h}\right)\right]^{d}$ y $v\in H^{1}\left(\mathscr{T}_{h}\right)$. Demostrar que:
+		\begin{align*}
+			\sum_{T\in\mathscr{T}_{h}}\int_{\partial T}\bs{\sigma}\cdot \textbf{n}\ v = \int_{\mathscr{E}^{i}_{h}}\left(\salto{\bs{\sigma}}\prom{v}+\prom{\bs{\sigma}}\cdot \salto{v}\right) + \int_{\mathscr{E}^{\partial}_{h}}\bs{\sigma}\cdot \textbf{n}\ v,
+		\end{align*}
+	    donde $\mathscr{E}^{i}_{h}$ es el conjunto de lados $(d = 2)$ o caras $(d = 3)$ interiores y $\mathscr{E}^{\partial}_{h}$ es el conjunto de lados/caras de frontera.
+	\end{pro}
+	\begin{proof}
+		En primer lugar notemos que 
+		\begin{align*}
+			\sum_{T\in\mathscr{T}_{h}}\int_{\partial T}\bs{\sigma}\cdot \textbf{n}\ v = \int_{\mathscr{E}^{i}_{h}} \left( \bs{\sigma}^{+}\cdot \textbf{n}^{+}\ v^{+} + \bs{\sigma}^{-}\cdot \textbf{n}^{-}\ v^{-} \right) + \int_{\mathscr{E}^{\partial}_{h}}\bs{\sigma}\cdot \textbf{n}\ v,
+		\end{align*} 
+	    esto ya que las aristas interiores, siempre tocan dos elementos de la triangulación, a diferencia de las aristas de frontera. Además, notemos que $\textbf{n}^{+} + \textbf{n}^{-} = \theta_{\mathbb{R}^{d}}$, considerando esto
+	    \begin{align*}
+	    	\int_{\mathscr{E}^{i}_{h}} \left( \bs{\sigma}^{+}\cdot \textbf{n}^{+}\ v^{+} + \bs{\sigma}^{-}\cdot \textbf{n}^{-}\ v^{-} \right) &= \int_{\mathscr{E}^{i}_{h}} \left( \bs{\sigma}^{+}\cdot \textbf{n}^{+}\ v^{+} + \bs{\sigma}^{-}\cdot \textbf{n}^{-}\ v^{-} + \frac{v^{-}\bs{\sigma}^{+}}{2}\cdot\left(\textbf{n}^{+} + \textbf{n}^{-}\right) + \frac{v^{+}\bs{\sigma}^{-}}{2}\cdot\left(\textbf{n}^{+} + \textbf{n}^{-}\right) \right)\\
+	    	&= \int_{\mathscr{E}^{i}_{h}} \left( \bs{\sigma}^{+}\cdot \textbf{n}^{+}\ v^{+} + \bs{\sigma}^{-}\cdot \textbf{n}^{-}\ v^{-} + \frac{v^{-}\bs{\sigma}^{+}}{2}\cdot\textbf{n}^{+} + \frac{v^{-}\bs{\sigma}^{+}}{2}\cdot\textbf{n}^{-} + \frac{v^{+}\bs{\sigma}^{-}}{2}\cdot\textbf{n}^{+} + \frac{v^{+}\bs{\sigma}^{-}}{2}\cdot\textbf{n}^{-} \right)\\
+	    	&= \int_{\mathscr{E}^{i}_{h}} \left( \frac{\bs{\sigma}^{+}\cdot \textbf{n}^{+}\ v^{+}}{2} + \frac{\bs{\sigma}^{+}\cdot \textbf{n}^{+}\ v^{+}}{2} + \frac{\bs{\sigma}^{-}\cdot \textbf{n}^{-}\ v^{-}}{2} + \frac{\bs{\sigma}^{-}\cdot \textbf{n}^{-}\ v^{-}}{2} + \right.\\ &+\left.  \frac{v^{-}\bs{\sigma}^{+}}{2}\cdot\textbf{n}^{+} + \frac{v^{-}\bs{\sigma}^{+}}{2}\cdot\textbf{n}^{-} + \frac{v^{+}\bs{\sigma}^{-}}{2}\cdot\textbf{n}^{+} + \frac{v^{+}\bs{\sigma}^{-}}{2}\cdot\textbf{n}^{-} \right)\\
+	    	&= \int_{\mathscr{E}^{i}_{h}} \left( \bs{\sigma}^{+}\cdot \textbf{n}^{+}\left(\frac{v^{+}+v^{-}}{2}\right) + \bs{\sigma}^{-}\cdot \textbf{n}^{-}\left(\frac{v^{+}+v^{-}}{2}\right)\right.\\ &+ \left. \frac{1}{2}\bs{\sigma}^{+}\cdot\left(v^{+}\textbf{n}^{+} + v^{-}\textbf{n}^{-}\right) +  \frac{1}{2}\bs{\sigma}^{-}\cdot\left(v^{+}\textbf{n}^{+} + v^{-}\textbf{n}^{-}\right)  \right)\\
+	    	&= \int_{\mathscr{E}^{i}_{h}} \left(\salto{\bs{\sigma}}\prom{v}+\prom{\bs{\sigma}}\cdot \salto{v}\right).
+	    \end{align*}
+        Por tanto
+        \begin{align*}
+        	\sum_{T\in\mathscr{T}_{h}}\int_{\partial T}\bs{\sigma}\cdot \textbf{n}\ v = \int_{\mathscr{E}^{i}_{h}}\left(\salto{\bs{\sigma}}\prom{v}+\prom{\bs{\sigma}}\cdot \salto{v}\right) + \int_{\mathscr{E}^{\partial}_{h}}\bs{\sigma}\cdot \textbf{n}\ v
+        \end{align*}
+	\end{proof}
+    \begin{pro}
+    	Considere el operador divergencia a trozos $\nabla_{h}\cdot:\ H(\textup{div};\mathscr{T}_{h})\longrightarrow L^{2}\left(\Omega\right)$ tal que $\textbf{v}\mapsto \left(\nabla_{h}\cdot \textbf{v}\right)\vert_{K} := \nabla\cdot\left(\textbf{v}\vert_{K}\right)\forall K\in \mathscr{T}_{h}$. Demuestre que
+    	\begin{itemize}
+    		\item[$(a)$] Si $\textbf{v}\in H\left(\textup{div};\Omega\right)$, entonces $\textbf{v}\in H\left(\textup{div};\mathscr{T}_{h}\right)$ y $\nabla_{h}\cdot \textbf{v} = \nabla\cdot \textbf{v}$.
+    		\item[$(b)$] Sea $\textbf{v}\in H(\textup{div};\mathscr{T}_{h})\cap \left[W^{1}_{1}(\mathscr{T}_{h})\right]^{d}$. Entonces $\textbf{v}\in H\left(\textup{div};\Omega\right)$ si y sólo si $\salto{\textbf{v}} = 0,\ \forall e\in \mathscr{E}^{i}_{h}$. 
+    	\end{itemize}
+    \end{pro}
+    \begin{proof}
+    	\begin{itemize}
+    		\item[$(a)$] Sea $\textbf{v}\in \Hdiv$, dado $K\in \mathscr{T}_{h}$ y $\varPhi\in C^{\infty}_{0}(K)$. Entonces 
+    		\begin{align*}
+    			\int_{K}\textbf{v}\cdot \nabla \varPhi = \int_{\Omega} \textbf{v}\cdot \nabla E_{0}\left(\varPhi\right)
+    		\end{align*}
+    	    donde $E_{0}\left(\varPhi\right)$ es la extensión por cero de $\varPhi$ a todo $\Omega$. Dado que $\textbf{v}\in \Hdiv$
+    	    \begin{align*}
+    	    	\int_{\Omega} \textbf{v}\cdot \nabla E_{0}\left(\varPhi\right) = - \int_{\Omega} \nabla\cdot \textbf{v}E_{0}\left(\varPhi\right) = -\int_{K}\left(\nabla\cdot \textbf{v}\right)\vert_{K}\varPhi
+    	    \end{align*} 
+            por otro lado
+            \begin{align*}
+            	\int_{K} \textbf{v}\cdot \nabla \varPhi = \int_{K}\textbf{v}\vert_{K}\cdot \nabla\varPhi = -\int_{K} \nabla\cdot \textbf{v}\vert_{K}\varPhi,
+            \end{align*}
+            esto implica que
+            \begin{align*}
+            	\left(\nabla_{h}\cdot\textbf{v}\right)\vert_{K} := \nabla\cdot \textbf{v}\vert_{K} =  \left(\nabla\cdot\textbf{v}\right)\vert_{K}.
+            \end{align*}
+            Como $K$ era un elemento fijo pero arbitrario de $\mathscr{T}_{h}$ se tiene que 
+            \begin{align*}
+            	\left(\nabla_{h}\cdot\textbf{v}\right) =  \left(\nabla\cdot\textbf{v}\right)
+            \end{align*}
+            usando el hecho que $\left(\nabla\cdot\textbf{v}\right)\in L^{2}\left(\Omega\right)$, se tiene que $\left(\nabla_{h}\cdot\textbf{v}\right)\in L^{2}\left(\Omega\right)$. Por lo tanto $\left(\nabla_{h}\cdot\textbf{v}\right)\vert_{K}\in L^{2}\left(\Omega\right)$ para todo $K\in \mathscr{T}_{h}$, lo que es equivalente a decir que $\textbf{v}\in \Hdivt$.
+            \item[$(b)$] Dado $\textbf{v}\in \Hdivt\cap \left[W^{1}_{1}\left(\mathscr{T}_{h}\right)\right]^{d}$ y $\varPhi\in C^{\infty}_{0}\left(\Omega\right)$
+            \begin{align*}
+            	\int_{\Omega}\textbf{v}\cdot\nabla\varPhi &= \sum_{T\in\mathscr{T}_{h}}\int_{T}\textbf{v}\vert_{T}\cdot\nabla\varPhi\\ 
+            	&=\sum_{T\in\mathscr{T}_{h}}\left(-\int_{T}\left(\nabla\cdot\textbf{v}\vert_{T}\right)\varPhi + \int_{\partial T} \textbf{v}\vert_{T}\cdot \textbf{n}_{T}\varPhi \right)\\
+            	&= \sum_{T\in\mathscr{T}_{h}}\left(-\int_{T}\left(\nabla_{h}\cdot \textbf{v}\right)\vert_{T}\varPhi + \int_{\partial T} \textbf{v}\vert_{T}\cdot \textbf{n}_{T}\varPhi \right)\\
+            	&= -\int_{\Omega}\left(\nabla_{h}\cdot \textbf{v}\right)\varPhi + \sum_{T\in\mathscr{T}_{h}}\int_{\partial T} \textbf{v}\cdot \textbf{n}_{T}\varPhi\\
+            	&= -\int_{\Omega}\left(\nabla_{h}\cdot \textbf{v}\right)\varPhi + \int_{\mathscr{E}^{i}_{h}}\left(\salto{\textbf{v}}\prom{\varPhi}+\prom{\textbf{v}}\cdot \salto{\varPhi}\right) + \int_{\mathscr{E}^{\partial}_{h}}\bs{\sigma}\cdot \textbf{n}\ \varPhi\\
+            	&= -\int_{\Omega}\left(\nabla_{h}\cdot \textbf{v}\right)\varPhi + \int_{\mathscr{E}^{i}_{h}}\salto{\textbf{v}}\varPhi\\
+            	&= -\int_{\Omega}\left(\nabla_{h}\cdot \textbf{v}\right)\varPhi + \sum_{e\in \mathscr{E}^{i}_{h}}\int_{e}\salto{\textbf{v}}\varPhi.
+            \end{align*}
+        Ahora
+        \begin{itemize}
+        	\item[$(\Longrightarrow)$] Supongamos $\textbf{v}\in \Hdiv$. Luego $\textbf{v}\in \Hdivt$ y $\nabla_{h}\cdot \textbf{v} = \nabla\cdot \textbf{v}$. Dado $\varPhi\in C^{\infty}_{0}\left(\Omega\right)$, por la identidad anterior
+        	\begin{align*}
+        		\int_{\Omega}\textbf{v}\cdot\nabla\varPhi &= -\int_{\Omega}\left(\nabla\cdot \textbf{v}\right)\varPhi + \sum_{e\in \mathscr{E}^{i}_{h}}\int_{e}\salto{\textbf{v}}\varPhi\\
+        		&\underset{\textup{IPP}}{=} \int_{\Omega}\textbf{v}\cdot\nabla\varPhi - \int_{\partial\Omega}\textbf{v}\cdot\textbf{n}\varPhi + \sum_{e\in \mathscr{E}^{i}_{h}}\int_{e}\salto{\textbf{v}}\varPhi\\
+        		&= \int_{\Omega}\textbf{v}\cdot\nabla\varPhi + \sum_{e\in \mathscr{E}^{i}_{h}}\int_{e}\salto{\textbf{v}}\varPhi,
+        	\end{align*}
+            de lo anterior se tiene que 
+            \begin{align*}
+            	 \sum_{e\in \mathscr{E}^{i}_{h}}\int_{e}\salto{\textbf{v}}\varPhi = 0,
+            \end{align*}
+            esto vale para cualquier $\varPhi\in C^{\infty}_{0}\left(\Omega\right)$, en particular para $\varPhi_{\hat{e}}\in C^{\infty}_{0}\left(\Omega\right)$ con soporte en $\hat{e}$, donde $\hat{e}$ es una arista interior arbitraria, luego
+            \begin{align*}
+            	\int_{\hat{e}}\salto{\textbf{v}}\varPhi_{\hat{e}} = 0, 
+            \end{align*}
+            luego, usando el hecho que $\varPhi_{\hat{e}}$ es una función test arbitraria con soporte en $\hat{e}$, se deduce que necesariamente $\salto{\textbf{v}}_{e} = 0$ para todo $e\in \mathscr{E}^{i}_{h}$. 
+        	\item[$(\Longleftarrow)$] Supongamos $\salto{\textbf{v}} = 0,\ \forall e\in \mathscr{E}^{i}_{h}$. Usando la identidad demostrada en un principio
+        	\begin{align*}
+        		\int_{\Omega}\textbf{v}\cdot\nabla\varPhi &= -\int_{\Omega}\left(\nabla_{h}\cdot \textbf{v}\right)\varPhi + \sum_{e\in \mathscr{E}^{i}_{h}}\int_{e}\salto{\textbf{v}}\varPhi.
+        	\end{align*}
+            Por hipótesis  $\salto{\textbf{v}}_{e} = 0$ para todo $e\in \mathscr{E}^{i}_{h}$, por tanto
+            \begin{align*}
+            	\int_{\Omega}\textbf{v}\cdot\nabla\varPhi &= -\int_{\Omega}\left(\nabla_{h}\cdot \textbf{v}\right)\varPhi,
+            \end{align*}
+            luego, $\nabla_{h}\cdot \textbf{v}$ es la divergencia distribucional de $\textbf{v}$, es decir $\nabla\cdot \textbf{v} = \nabla_{h}\cdot \textbf{v}$, luego como $\nabla_{h}\cdot \textbf{v}\in L^{2}\left(\Omega\right)$, se tiene que $\nabla\cdot \textbf{v}\in L^{2}\left(\Omega\right)$, por tanto $\textbf{v}\in \Hdiv$.
+        \end{itemize}
+    	\end{itemize}
+    \end{proof}
+    \newpage
+    \begin{pro}
+    	Sean $K\in \mathscr{T}_{h}$ y $v\in \mathbb{P}_{k}(K)$. Probar que existe $C>0$, independiente de $h$, tal que 
+    	\begin{align*}
+    		\norm{v}_{L^{2}(\partial K)} \leq Ch^{-1/2}_{K}\norm{v}_{L^{2}(K)}
+    	\end{align*}
+    \end{pro}
+    \begin{proof}
+    	Sea $K\in \mathscr{T}_{h}$ y $v\in \mathbb{P}_{k}(K)$, ademas consideremos el elemento de referencia 
+    	\begin{align*}
+    		\hat{K} := \left\{ (x_{1},\dots,x_{d})\in\mathbb{R}^{d}: \ \sum_{i=1}^{d}x_{i}\leq 1\right\} .
+    	\end{align*}
+        usando el hecho que el operador traza es continuo, se tiene que existe una constante $C>0$ tal que 
+        \begin{align*}
+        	\norm{\hat{v}}_{L^{2}(\partial\hat{K})} \leq C\norm{\hat{v}}_{H^{1}(\hat{K})}.
+        \end{align*}
+        Como estamos en dimensión finita todas las normas son equivalentes, entonces existe $C_{1},C_{2}>0$ tales que
+        \begin{align*}
+        	C_{1}\norm{\hat{v}}_{L^{2}(\hat{K})} \leq \norm{\hat{v}}_{H^{1}(\hat{K})} \leq C_{2}\norm{\hat{v}}_{L^{2}(\hat{K})}
+        \end{align*}
+        de esta forma 
+        \begin{align*}
+        	\norm{v}_{L^{2}(\partial\hat{K})} \leq M\norm{v}_{L^{2}(\hat{K})},
+        \end{align*}
+        donde $M := CC_{2}>0$.
+        Considere la transformación afín $F:\hat{K}\longrightarrow K$ definida por 
+        \begin{align*}
+        	F(\hat{x}) = \textbf{B}\hat{x} + \bs{b}
+        \end{align*}
+        donde $\bs{B}\in\mathbb{R}^{d\times d}$ y $\bs{b}\in \mathbb{R}^{d\times 1}$, del calculo en varias variables se sabe que 
+        \begin{align*}
+        	\int_{\hat{K}}f(F(\hat{x}))\ \textup{d}\hat{x} = \int_{K} f(x)|\textup{Det}(\bs{B})|^{-1}\ \dx = |\textup{Det}(\bs{B})|^{-1}\int_{K} f(x)\ \dx
+        \end{align*}
+        En particular, para $f = v^{2}$, se tiene que
+        \begin{align*}
+        	\norm{\hat{v}}^{2}_{L^{2}(\hat{K})}= \int_{\hat{K}}v^{2}(F(\hat{x}))\ \textup{d}\hat{x} = |\textup{Det}(\bs{B})|^{-1}\int_{K} v^{2}(x)\ \dx = |\textup{Det}(\bs{B})|^{-1}\norm{v}^{2}_{L^{2}(K)}
+        \end{align*}
+        Considerando $f = 1$, se tiene que
+        \begin{align*}
+        	\int_{\hat{K}}\ \textup{d}\hat{x} = |\textup{Det}(\bs{B})|^{-1}\int_{K}\ \dx \iff |\hat{K}| = |\textup{Det}(\bs{B})|^{-1} |K| \iff \frac{|\hat{K}|}{|K|} = |\textup{Det}(\bs{B})|^{-1}
+        \end{align*}
+        De esta forma
+        \begin{align*}
+        	\norm{\hat{v}}^{2}_{L^{2}(\hat{K})} = \frac{|\hat{K}|}{|K|}\norm{v}^{2}_{L^{2}(K)} \iff \norm{\hat{v}}_{L^{2}(\hat{K})} = \frac{|K|^{-1/2}}{|\hat{K}|^{-1/2}}\norm{v}_{L^{2}(K)}
+        \end{align*}
+        Ademas, dado $F\in \mathscr{E}(K)$ se tiene que
+        \begin{align*}
+        	\norm{v}^{2}_{L^{2}(F)} = h_{F}\norm{\hat{v}}^{2}_{L^{2}(\hat{F})} \leq h_{F}\norm{\hat{v}}^{2}_{L^{2}(\partial\hat{K})} &\leq Mh_{F}\norm{\hat{v}}^{2}_{L^{2}(\hat{K})}\\ &= Mh_{F}\frac{|\hat{K}|}{|K|}\norm{v}^{2}_{L^{2}(K)}\\  &= N h_{F}\frac{1}{|K|}\norm{v}^{2}_{L^{2}(K)}\\ &\leq N h_{K}\frac{1}{|K|}\norm{v}^{2}_{L^{2}(K)}\\ &\leq Nh^{-1}_{K}\norm{v}^{2}_{L^{2}(K)}
+        \end{align*}
+        luego, sumando todas las caras
+        \begin{align*}
+        	\sum_{F\in\mathscr{E}(K)}\norm{v}^{2}_{L^{2}(F)} \leq \sum_{F\in\mathscr{E}(K)}Nh^{-1}_{K}\norm{v}^{2}_{L^{2}(K)} = |\mathscr{E}(K)|Nh^{-1}_{K} \norm{v}^{2}_{L^{2}(K)} = \tilde{C}h^{-1}_{K}\norm{v}^{2}_{L^{2}(K)}
+        \end{align*}
+        esto se puede reescribir como
+        \begin{align*}
+        	\norm{v}_{L^{2}(\partial K)} \leq \tilde{C}h^{-1/2}_{K}\norm{v}^{2}_{L^{2}(K)}
+        \end{align*}
+    \end{proof}
+\end{document}

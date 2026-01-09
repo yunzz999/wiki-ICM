@@ -1,0 +1,502 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{stix}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Sistemas Lineales Dinámicos}}
+\newcommand{\tarea}{\textbf{Tarea 1}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dy}{\textup{d}y}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\ds}{\textup{d}s}
+\newcommand{\dS}{\textup{d}S}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\Norm}[1]{\lVert#1\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+\renewcommand{\theequation}{\roman{equation}}
+
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Análisis Real I }\\
+	\textbf{Técnicas de Demostración}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}
+		Considere el sistema electromecánico ilustrado en la Figura \ref{fig:tarea1}, el cual tiene por objetivo contener un bloque de masa $M$ desplazándose por el eje horizontal. Este es un sistema electromecánico compuesto por un electroimán que produce una fuerza magnética dada por $F_{m}(t) = k_{i}i(t)^2/\left(y(t)+a\right)$, y un sistema mecánico con un resorte y disipador. La masa en la Figura \ref{fig:tarea1} se muestra para la posición $x(t) = l_{0}$. Puede despreciar efectos de roce con la superficie y resistencia del aire.
+		\\~\\
+		Se solicita desarrollar, justificar y comentar todos sus resultados para las siguientes preguntas:
+		\begin{itemize}
+			\item[$(a)$] Encuentre las ecuaciones que describen el comportamiento del sistema electromecánico e identifique el orden del sistema, los parámetros, entradas, perturbaciones, salidas y variables de
+			estado.
+			\item[$(b)$] Clasifique el sistema en lineal/no lineal, continuo/discreto, estático/dinámico, causal/no causal, tiempo invariante/variante, parámetros concentrados/distribuidos.
+			\item[$(c)$] Encuentre una representación lineal del sistema en torno a un punto de operación. Escriba la
+			representación en espacio de estados del sistema linealizado.
+			\item[$(d)$] Simule el sistema usando los modelos no lineal y linealizado para diferentes entradas y/o perturbaciones. Comente respecto a sus resultados y lo que observa de sus curvas entre ambos modelos. Considere los siguientes valores: $R = 0.5\ [\Omega]$, $L = 50\ [mH]$, $a = 2\ [cm]$, $k_{i} = 3\times 10^{-3}\ [(kg\cdot m^{2})/(s^{2}\cdot A^{2})]$, $l_{1} = 50\ [cm]$, $l_{0} = 30\ [cm]$, $M = 250\ [g]$, $k = 24.5\ [kg/s^{2}]$, $d = 1.5\ [kg/s]$.
+			\item[$(e)$] Identifique la variable de estado que tiene la dinámica más rápida. Luego, simplifique las
+			ecuaciones encontradas en $(a)$ asumiendo un sistema estático para la parte relacionada a esta
+			variable de estado. ¿Cómo queda ahora el orden del sistema, los parámetros, entradas, perturbaciones, salidas y variables de estado? Simule el nuevo modelo no lineal y comente sus
+			resultados.
+		\end{itemize}  
+	     \begin{figure}[h!]
+	     	\centering
+	     	\includegraphics[width=0.4\linewidth]{Tarea1}
+	     	\caption{Sistema electromecánico del Problema 1.}				\label{fig:tarea1}
+	     \end{figure} 
+	\end{pro}
+    \begin{proof}[Solución]
+    	Siguiendo las definiciones dadas en clases se obtiene el Cuadro \ref*{tabla}, la cual clasifica las variables del sistema electromecánico descrito en el enunciado.\\
+    	\begin{table}[h]
+    		\centering
+    		\begin{tabular}{|l|c|}
+    			\hline
+    			\multicolumn{2}{ |c| }{Variables del sistema} \\ 
+    			\hline
+    			Variables de entrada & $e(t)$ \\
+    			\hline
+    			Variables de salida & $x(t)$ \\
+    			\hline
+    			Pertubaciones  & No hay dadas las suposiciones del enunciado \\
+    			\hline
+    			Variables de estado & $i(t)$, $x(t)$ y $\dot{x}(t)$ \\
+    			\hline
+    			Parámetros & $R$, $L$, $k_{i}$, $l_{1}$, $l_{0}$, $M$, $k$ y $d$ \\
+    			\hline
+    		\end{tabular}
+    	    \caption{Variables del sistema.}
+    	    \label{tabla}
+    	\end{table}
+        
+    	Teniendo en cuenta lo anterior y con la intención de unificar la notación se definen la función vectorial de estados $\boldsymbol{x}:\mathbb{R}\rightarrow \mathbb{R}^{3}$ y la función escalar de entrada $u:\mathbb{R}\rightarrow \mathbb{R}$ como sigue
+    	
+    	\begin{align*}
+    		\boldsymbol{x}(t) = \left(x_{1}(t),x_{2}(t),x_{3}(t)\right)^{t} := \left( i(t),x(t),\dot{x}(t) \right)^{t} \hspace{1cm} \text{y} \hspace{1cm} u(t) := e(t).
+    	\end{align*}
+        Además, la figura \ref{fig:tarea1} sugiere una relación entre la variable $y(t)$ con la variable $x(t)$, esta es
+        \begin{align*}
+        	y(t) = l_{1}-x(t).
+        \end{align*}
+        Con todo esto ya es posible encontrar las ecuaciones que modelan el sistema. En este problema existe una parte eléctrica y una parte mecánica, para encontrar las ecuaciones se procede como sigue:
+        \begin{itemize}
+        	\item \textbf{Deducciones de las ecuaciones que gobiernan la parte eléctrica}.\\~\\
+        	 La parte eléctrica del sistema al ser un circuito $RLC$, entrega la siguiente ecuación
+        	\begin{align*}
+        		e(t) = Ri(t) + L\Dt{i(t)}
+        	\end{align*}
+        	usando la nueva notación se obtiene 
+        	\begin{align*}
+        		u(t) = Rx_{1}(t) + L \dot{x}_{1}(t) \iff \dot{x}_{1}(t) = - \frac{R}{L}x_{1}(t) +  \frac{1}{L}u(t) 
+        	\end{align*}
+            \item \textbf{Deducciones de las ecuaciones que gobiernan la parte mecánica}.\\~\\
+            De la figura \ref{fig:tarea1} se deduce que hay tres fuerzas que interactúan con la masa $M$ estas son: la fuerza asociada al resorte, al disipador y la fuerza magnética producida por el electroimán. Gracias a la Ley de Hooke, la fuerza asociada al resorte está descrita por la formula
+            \begin{align*}
+            	F_{r}(t) = -k\left(x(t)-l_{0}\right)
+            \end{align*}
+            Por otro lado, la fuerza asociada al disipador está descrita por la formula
+            \begin{align*}
+            	F_{d}(t) = -d\dot{x}(t)
+            \end{align*}  
+            Luego, por la segunda Ley de Newton se deduce 
+            \begin{align*}
+            	m\ddot{x}(t) = \frac{k_{i}i(t)^2}{l_{1} - x(t) + a} -k\left(x(t)-l_{0}\right) -d\dot{x}(t). 
+            \end{align*}
+            Usando la nueva notación se obtiene
+            \begin{align*}
+            	\dot{x}_{3}(t) = \frac{k_{i}x_{1}(t)^2}{M(l_{1} - x_{2}(t) + a)} -\frac{k}{M}\left(x_{2}(t)-l_{0}\right) -\frac{d}{M}x_{3}(t)
+            \end{align*}
+        \end{itemize}
+        Finalmente, juntando ambas ecuaciones y notando que $\dot{x}_{2}(t) = \dot{x}(t) = x_{3}(t)$ se deduce el sistema de EDO's 
+        \begin{align}
+        	\dot{x}_{1}(t) &=  - \frac{R}{L}x_{1}(t) +  \frac{1}{L}u(t),\label{ecuacion1} \\
+        	\dot{x}_{2}(t) &= x_{3}(t),\label{ecuacion2}\\
+        	\dot{x}_{3}(t) &= \frac{k_{i}x_{1}(t)^2}{M(l_{1} - x_{2}(t) + a)} -\frac{k}{M}\left(x_{2}(t)-l_{0}\right) -\frac{d}{M}x_{3}(t).\label{ecuacion3}
+        \end{align}
+        Este sistema se puede reescribir como sigue
+        \begin{align*}
+        	\dot{\boldsymbol{x}} = \boldsymbol{f}\left(\boldsymbol{x},u\right)
+        \end{align*}
+        donde $\boldsymbol{f}:\mathbb{R}^{4}\rightarrow\mathbb{R}^{3}$ es una función vectorial definida por
+        \begin{align*}
+        	\boldsymbol{f}\left(\boldsymbol{x},u\right) := \begin{bmatrix}
+        		f_{1}(\boldsymbol{x},u) \\ 
+        		f_{2}(\boldsymbol{x},u) \\
+        		f_{3}(\boldsymbol{x},u)
+        	\end{bmatrix} = 
+            \begin{bmatrix}
+        		- \frac{R}{L}x_{1} +  \frac{1}{L}u \\ 
+        		x_{3} \\
+        		\frac{k_{i}x_{1}^2}{M(l_{1} - x_{2} + a)} -\frac{k}{M}\left(x_{2}-l_{0}\right) -\frac{d}{M}x_{3}
+        	\end{bmatrix}
+        \end{align*}
+        Si bien las ecuaciones \ref{ecuacion1} y \ref{ecuacion2} son EDO's lineales, la ecuación \ref{ecuacion3} tiene dos componentes no lineales, estas son el termino $x_{1}(t)^2$ y el termino $x_{2}(t)$ en el denominador de la fuerza magnética. Además, se deduce que el sistema es \textbf{continuo}, \textbf{dinámico}, \textbf{causal}, \textbf{invariante} y de parámetros \textbf{concentrados}. \\~\\
+        Para encontrar la representación lineal del sistema, se considera el punto de operación $(\boldsymbol{x}_{0},u_{0},\hat{y}_{0})$\footnote[1]{En esta etapa de la tarea no es necesario encontrar el punto de operación, de momento solo basta con suponer que existe.}. El punto $(\boldsymbol{x}_{0},u_{0})$ se obtiene de resolver la ecuación
+        \begin{align*}
+        	\boldsymbol{f}(\boldsymbol{x}_{0},u_{0}) = \boldsymbol{0}
+        \end{align*}
+        y el punto $\hat{y}_{0}$ se determina a partir de 
+        \begin{align*}
+        	\hat{y}_{0} = h(\boldsymbol{x}_{0},u_{0})
+        \end{align*}
+        donde $\hat{y}$ representa la variable de salida por lo que $ h(\boldsymbol{x},u) = x_{2}$.
+        \newpage
+        La representación lineal del sistema es
+        \begin{align*}
+        	\begin{bmatrix}
+        		\Delta \dot{x}_{1} \\ 
+        		\Delta \dot{x}_{2}\\
+        		\Delta \dot{x}_{3}\\
+        	\end{bmatrix} = \begin{bmatrix}
+        		\frac{\partial f_{1}}{\partial x_{1}} & \frac{\partial f_{1}}{\partial x_{2}} & \frac{\partial f_{1}}{\partial x_{3}}\\~\\
+        		\frac{\partial f_{2}}{\partial x_{1}} & \frac{\partial f_{2}}{\partial x_{2}} & \frac{\partial f_{2}}{\partial x_{3}}\\~\\
+        		\frac{\partial f_{3}}{\partial x_{1}} & \frac{\partial f_{3}}{\partial x_{2}} & \frac{\partial f_{3}}{\partial x_{3}}
+        	\end{bmatrix}_{(\boldsymbol{x}_{0},u_{0})}\begin{bmatrix}
+        		\Delta x_{1} \\ 
+        		\Delta x_{2}\\
+        		\Delta x_{3}\\
+        	\end{bmatrix}\  +\   \begin{bmatrix}
+        		\frac{\partial f_{1}}{\partial u} \\~\\
+        		\frac{\partial f_{2}}{\partial u} \\~\\
+        		\frac{\partial f_{3}}{\partial u} 
+        	\end{bmatrix}_{(\boldsymbol{x}_{0},u_{0})} \Delta u \hspace{0.5cm} \text{y} \hspace{0.5cm} \Delta\hat{y} = \begin{bmatrix}
+        		\frac{\partial h}{\partial x_{1}} & \frac{\partial h}{\partial x_{2}} & \frac{\partial h}{\partial x_{3}}
+        	\end{bmatrix}_{(\boldsymbol{x}_{0},u_{0})}\begin{bmatrix}
+        		\Delta x_{1} \\ 
+        		\Delta x_{2}\\
+        		\Delta x_{3}\\
+        	\end{bmatrix}  + \frac{\partial h}{\partial u}\left|_{(\boldsymbol{x}_{0},u_{0})}\right.\Delta u
+        \end{align*}
+        donde $\boldsymbol{x}_{0} := \left(x^{0}_{1},x^{0}_{2},x^{0}_{3}\right)^{t}$, $\Delta u := u - u_{0}$ y $\Delta x_{i} := x_{i} - x^{0}_{i}$ para todo $i\in\{1,2,3\}$. Ahora se procede a calcular los coeficientes de las matrices, para esto se procede a calcular las derivadas de $\boldsymbol{f}$ y $h$.
+        \begin{itemize}
+        	\item Derivadas de $f_{1}$.
+        	\begin{align*}
+        		\frac{\partial f_{1}}{\partial x_{1}} = -\frac{R}{L},\hspace{0.5cm}
+        		\frac{\partial f_{1}}{\partial x_{2}} = 0,\hspace{0.5cm} \frac{\partial f_{1}}{\partial x_{3}} = 0\hspace{0.5cm}\text{y}\hspace{0.5cm} \frac{\partial f_{1}}{\partial u} = \frac{1}{L}
+        	\end{align*}
+            \item Derivadas de $f_{2}$.
+            \begin{align*}
+            	\frac{\partial f_{2}}{\partial x_{1}} = 0, \hspace{0.5cm} \frac{\partial f_{2}}{\partial x_{2}} = 0,\hspace{0.5cm}
+            	\frac{\partial f_{2}}{\partial x_{3}} = 1\hspace{0.5cm}\text{y}\hspace{0.5cm} \frac{\partial f_{2}}{\partial u} = 0
+            \end{align*}
+            \item Derivadas de $f_{3}$.
+            \begin{align*}
+            	\frac{\partial f_{3}}{\partial x_{1}} = \frac{2k_{i}x_{1}}{M\left(l_{1}-x_{2}+a\right)},\hspace{0.5cm}
+            	\frac{\partial f_{3}}{\partial x_{2}} = \frac{k_{i}x^{2}_{1}}{M\left(l_{1}-x_{2}+a\right)^{2}} - \frac{k}{M},\hspace{0.5cm}
+            	\frac{\partial f_{3}}{\partial x_{3}} = -\frac{d}{M}\hspace{0.5cm}\text{y}\hspace{0.5cm} \frac{\partial f_{3}}{\partial u} = 0
+            \end{align*}
+            \item Derivadas de $h$.
+            \begin{align*}
+            	\frac{\partial h}{\partial x_{1}} = 0, \hspace{0.5cm} \frac{\partial h}{\partial x_{2}} = 1,\hspace{0.5cm}
+            	\frac{\partial h}{\partial x_{3}} = 0\hspace{0.5cm}\text{y}\hspace{0.5cm} \frac{\partial h}{\partial u} = 0
+            \end{align*}
+        \end{itemize}
+        Finalmente
+        \begin{align*}
+        	\begin{bmatrix}
+        		\Delta \dot{x}_{1} \\
+        		\Delta \dot{x}_{2}\\
+        		\Delta \dot{x}_{3}\\
+        	\end{bmatrix} = \begin{bmatrix}
+        		-\frac{R}{L} & 0 & 0\\~\\
+        		0 & 0 & 1\\~\\
+        		\frac{2k_{i}x^{0}_{1}}{M\left(l_{1}-x^{0}_{2}+a\right)} & \frac{k_{i}(x^{0}_{1})^{2}}{M\left(l_{1}-x^{0}_{2}+a\right)^{2}} - \frac{k}{M} & -\frac{d}{M}
+        	\end{bmatrix}\begin{bmatrix}
+        		\Delta x_{1} \\ 
+        		\Delta x_{2}\\
+        		\Delta x_{3}\\
+        	\end{bmatrix}\  +\   \begin{bmatrix}
+        		\frac{1}{L} \\~\\
+        		0 \\~\\
+        		0 
+        	\end{bmatrix}\Delta u \hspace{0.5cm} \text{y} \hspace{0.5cm} \Delta\hat{y} = \begin{bmatrix}
+        		0 & 1 & 0
+        	\end{bmatrix}\begin{bmatrix}
+        		\Delta x_{1} \\ 
+        		\Delta x_{2}\\
+        		\Delta x_{3}\\
+        	\end{bmatrix} 
+        \end{align*}
+        \newpage
+        \textbf{Simulación}
+         \begin{itemize}
+         	\item Sistema Lineal vs no lineal con entrada $u(t) = u_{0}\left(1+2u(t-5) - u(t-10)\right)$.
+         	\begin{figure}[h!]
+         		\centering
+         		\includegraphics[width=0.7\linewidth]{Tarea1P1d}
+         		\caption{Comparación de sistema lineal vs sistema no lineal con $u(t) = u_{0}\left(1+2u(t-5) - u(t-10)\right)$.}
+         		\label{fig:tarea1p1d}
+         	\end{figure}
+            \\
+            De la simulación se observa que la corriente simulada por el sistema no lineal se comporta igual al obtenido por el sistema lineal, esto se debe a que en el sistema original, la EDO que modela a esta variable es una EDO lineal que no depende de las otras variables de estado. Lo anterior se repite con la posición de la masa y es porque la EDO que modela el sistema es lineal, las pequeñas perturbaciones de deben a que en la EDO aparece la variable $x_{3}(t)$. Por otro lado en la velocidad hay discrepancias respecto al sistema lineal y no lineal, esto es ya que la EDO que modela esta variables es altamente no lineal. Respecto al comportamiento del sistema se observa que en ambos casos la corriente aumenta de forma lineal a partir del instante $t = 5$ hasta $t = 10$ donde se mantiene constante, para lo posición ocurre lo mismo, pero para la velocidad ocurre un comportamiento similar a la función de entrada.
+            \newpage
+            \item Sistema Lineal vs no lineal con entrada $u(t) = u_{0} + l_{0}$.
+            \begin{figure}[h!]
+            	\centering
+            	\includegraphics[width=0.7\linewidth]{Tarea1P1dd}
+            	\caption{Comparación de sistema lineal vs sistema no lineal con $u(t) = u_{0} + l_{0}$.}
+            	\label{fig:tarea1p1dd}
+            \end{figure}
+            \\
+            De la simulación se observa que la corriente simulada por el sistema no lineal se comporta igual al obtenido por el sistema lineal, esto se debe a que en el sistema original, la EDO que modela a esta variable es una EDO lineal que no depende de las otras variables de estado. Lo anterior se repite con la posición de la masa y es porque la EDO que modela el sistema es lineal, las pequeñas perturbaciones de deben a que en la EDO aparece la variable $x_{3}(t)$. Por otro lado en la velocidad hay discrepancias respecto al sistema lineal y no lineal, esto es ya que la EDO que modela esta variables es altamente no lineal. Respecto al comportamiento del sistema se observa que la corriente aumenta de forma lineal, de la misma forma que la posición. Por otro lado, para la velocidad se tiene que aumenta bruscamente para luego mantenerse constante.
+         \end{itemize}
+         De las simulaciones se infiere que variable de estado que tiene dinámica mas rápida es la corriente, de aquí, se asume que $\dot{x}_{1}(t) = 0$, lo cual implica que 
+         \begin{align*}
+         	x_{1}(t) = \text{cte} \Longrightarrow x_{1}(t) = \frac{1}{R}u
+         \end{align*}
+         Con lo anterior se deducen las cantidades del sistema
+         \begin{table}[h]
+         	\centering
+         	\begin{tabular}{|l|c|}
+         		\hline
+         		\multicolumn{2}{ |c| }{Variables del sistema} \\ 
+         		\hline
+         		Variables de entrada & $e(t)$ y $i(t)$ \\
+         		\hline
+         		Variables de salida & $x(t)$ \\
+         		\hline
+         		Pertubaciones  & No hay dadas las suposiciones del enunciado \\
+         		\hline
+         		Variables de estado &  $x(t)$ y $\dot{x}(t)$ \\
+         		\hline
+         		Parámetros & $R$, $L$, $k_{i}$, $l_{1}$, $l_{0}$, $M$, $k$ y $d$ \\
+         		\hline
+         	\end{tabular}
+         	\caption{Variables del sistema.}
+         	\label{tabla1}
+         \end{table}
+         \\
+         Con todo lo anterior, el sistema queda
+         \begin{align*}
+         	\dot{x}_{2}(t) &= x_{3}(t)\\
+         	\dot{x}_{3}(t) &= \frac{k_{i}u^{2}}{R^{2}M(l_{1} - x_{2}(t) + a)} -\frac{k}{M}\left(x_{2}(t)-l_{0}\right) -\frac{d}{M}x_{3}(t)
+         \end{align*}
+        \newpage
+         Luego, el sistema linealizado queda
+         \begin{align*}
+         	\begin{bmatrix}
+         		\Delta \dot{x}_{2}\\
+         		\Delta \dot{x}_{3}
+         	\end{bmatrix} = \begin{bmatrix}
+         		0 & 1\\
+         		\frac{k_{i}u_{0}^{2}}{MR^{2}\left(l_{1}-x^{0}_{2}+a\right)^{2}} - \frac{k}{M} & -\frac{d}{M}
+         	\end{bmatrix}\begin{bmatrix}
+         		\Delta x_{2}\\
+         		\Delta x_{3}
+         	\end{bmatrix}
+         \end{align*}
+         con $(x_{2}^{0},x_{3}^{0},u_{0})$ el punto de operación.
+         \\~\\
+         \textbf{Simulación con sistema estático}
+         \begin{itemize}
+         	\item Sistema lineal vs no lineal con entrada $u(t) = l_{0} + u_{0}$.
+         	\begin{figure}[h!]
+         		\centering
+         		\includegraphics[width=0.7\linewidth]{Tarea1P1e}
+         		\caption{Comparación de sistema lineal vs sistema no lineal con $u(t) = u_{0} + l_{0}$.}
+         		\label{fig:tarea1p1e}
+         	\end{figure}
+         	Se observa del grafico la posición permanece constante y por lo que la velocidad se mantiene nula. 
+         \end{itemize}
+    \end{proof}
+
+
+
+
+
+
+
+
+    \newpage
+    \begin{pro}
+    	Considere el sistema descrito por:
+    	\begin{align*}
+    		x\left(kT + T\right) = Ax\left(kT\right) + Bu\left(kT\right),\ \ y\left(kT\right) = Cx\left(kT\right) + Du\left(kT\right)
+    	\end{align*}
+        donde $A = \begin{bmatrix}
+        	0.775 & 8.327\\ 
+        	-0.042 & 0.609
+        \end{bmatrix}$, $B = \begin{bmatrix}
+        0.225 \\ 
+        0.042
+    \end{bmatrix}$, $C = [1\ 0]$ y $D = 0$.\\
+    El cual es un sistema discreto equivalente al sistema continuo de un circuito $RLC$ en serie ilustrado en la Figura \ref{fig:tarea1-2}, en donde el primer estado es $V_{c}\left(kT\right)$ y el segundo estado es $i\left(kT\right)$, con $T = 0.02\ [s]$.
+    \\~\\
+    Se solicita desarrollar, justificar y comentar todos sus resultados para las siguientes preguntas:
+    \begin{itemize}
+    	\item[$(a)$] Obtenga mediante simulación las respuestas de $i\left(kT\right)$ y $V_{c}\left(kT\right)$ para la entrada $e\left(kT\right) = 2u\left(kT-5T\right) + 10r\left(kT-15T\right) - 10r\left(kT-25T\right) - 5r\left(kT-35T\right) + 5r\left(kT - 40T\right)$.
+    	\item[$(b)$] Verifique mediante simulación que el sistema sea lineal, haciendo uso de la señal $e\left(kT\right)$ del punto anterior. Comente sus resultados.
+    	\item[$(c)$] Obtenga las respuestas de $i\left(kT\right)$ y $V_{c}\left(kT\right)$ a entrada impulso, escalón y rampa discretas. Comente para cada caso.
+    \end{itemize}
+     \begin{figure}[h!]
+     	\centering
+     	\includegraphics[width=0.3\linewidth]{Tarea1-2}
+     	\caption[]{$RLC$ del Problema 2.}
+     	\label{fig:tarea1-2}
+     \end{figure}
+    \end{pro}
+    \begin{proof}[Solución]
+    	\begin{itemize}
+    		\item[$(a)$] La siguiente grafica muestra las simulaciones obtenidas
+    		\begin{figure}[h!]
+    			\centering
+    			\includegraphics[width=0.5\linewidth]{Tarea1P2a}
+    			\caption[]{Respuesta del sistema}
+    			\label{fig:tarea1p2a}
+    		\end{figure}
+    	    \\
+    		Se observa que el voltaje y la corriente parten en $0$, esto tiene sentido ya que es razonable pensar que el sistema comienza sin voltaje y sin corriente. Además, tanto la entrada como el voltaje parecen converger a un valor similar, mientras que la corriente oscila hasta el instante $t=2$, donde se empieza a disipar.
+    		\item[$(b)$] Para probar que el sistema es lineal basta con probar que al dividir la señal $e(t)$ en 5 señales y al obtener las respuestas de $i(kT)$ y $V_{c}(kT)$ de cada una de esas 5 entradas, la suma de estas respuestas es igual a calcular la respuesta $i(kT)$ y $V_{c}(kT)$ con la señal $e(t)$. Una estrategia de probar esto es hacer las simulaciones de las 5 respuestas, sumarlas y compararlas con las respuestas originales. Dado que Matlab entrega un vector con valores puntuales de las respuestas, la técnica de comparación será mediante el cálculo de la norma del vector diferencia. Sean $\boldsymbol{x}_{1}$ y $\boldsymbol{x}_{2}$ los vectores respuesta de $i(kt)$ Y $v_{c}(kT)$ que entrega Matlab respectivamente, y sean $\boldsymbol{x}^{S}_{1}$ y $\boldsymbol{x}^{S}_{2}$, los vectores que resultan de superponer los vectores respuesta de $i(kt)$ Y $v_{c}(kT)$ con las 5 señales que descomponen a $e(t)$. Matlab arroja
+    		\begin{align*}
+    			\epsilon_{1} &:= \norm{\boldsymbol{x}_{1} - \boldsymbol{x}^{S}_{1}} = 7.7048\times 10^{-14}\\
+    			 \epsilon_{1} &:= \norm{\boldsymbol{x}_{1} - \boldsymbol{x}^{S}_{1}} = 5.4408\times 10^{-15}
+    		\end{align*}
+    	    estos son ceros computacionales, por lo que se concluye que sistema es lineal.
+    		\item[$(c)$] 
+    		\begin{itemize}
+    			\item Simulación con entrada escalón $u(kT-10T)$.
+    			\begin{figure}[h]
+    				\centering
+    				\includegraphics[width=0.7\linewidth]{Tarea1P2b1}
+    				\caption{Respuesta del sistema con entrada escalón.}
+    				\label{fig:tarea1p2b1}
+    			\end{figure}
+    		    \\
+    		    De la simulación se observa que la entrada escalón hace que el voltaje y la corriente dejen el estado de reposo de forma brusca en el instante $t=0.2$. A partir de este punto el voltaje comienza a oscilar hasta mentarse constante, por otro lado, la corriente tiene un comportamiento similar, con la diferencia que esta termina difuminándose. Lo anterior es consistente con la teoría ya que la función escalón entrega un impulso controlado en un punto dado, para luego mantenerse constante.
+    		    \newpage  
+    			\item Simulación con entrada rampa $r(kT-15T)$.
+    			\begin{figure}[h!]
+    				\centering
+    				\includegraphics[width=0.7\linewidth]{Tarea1P2b2}
+    				\caption{Respuesta del sistema con entrada rampa}
+    				\label{fig:tarea1p2b2}
+    			\end{figure}
+    		    \\
+    		    De la simulación se observa que la entrada rampa hace que el voltaje deje el reposo de forma lineal a partir del instante $t = 0.3$, por lo que no se mantendrá constante a partir de algún punto. En el caso del voltaje hay un cambio brusco del reposo en el instante $t=0.3$ esto se debe a que el termino $B_{2} = 0.042$ es un número relativamente pequeño, lo que hace que el efecto de la entrada rampa sea despreciable para la corriente.
+    			\item Simulación con entrada impulso $\delta(k - 50T)$
+    			\begin{figure}[h!]
+    				\centering
+    				\includegraphics[width=0.7\linewidth]{Tarea1P2b3}
+    				\caption{Respuesta del sistema con entrada impulso.}
+    				\label{fig:tarea1p2b3}
+    			\end{figure}
+    			\\
+    			De la simulación se observa que la entrada impulso hace que el voltaje y la corriente dejen el reposo de forma brusca a partir del instante $t=1$, para luego oscilar hasta volver al reposo. 
+    		\end{itemize}
+    	\end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Se solicita desarrollar, justificar y comentar todos los resultados pata las siguientes preguntas:
+    	\begin{itemize}
+    		\item[$(a)$] Para un sistema lineal invariante en el tiempo cuya respuesta a entrada escalón está dada por $y_{\text{step}}(t) = 2\left(1-e^{-(t/2)}\right)u(t)$. Obtenga la expresión de la respuesta del sistema a entrada impulso. Luego, determine la expresión de la respuesta del sistema si se le aplica la entrada $x(t) = \delta\left(
+    		t-2\right)-u\left(t-4\right)$.
+    		\item[$(b)$] Investigue qué es el efecto de aliasing, y explique cómo se relaciona con los conceptos revisados
+    		en el curso. Puede apoyarse mediante ejemplos.
+    		\item[$(c)$] Obtenga la expresión de la transformada de Laplace de las funciones $f_{1}(t) = \frac{2}{3}r\left(t+3\right) - \frac{4}{3}r\left(t\right) + \frac{2}{3}r\left(t-3\right)$ y $f_{2}(t) = -u\left(t+2\right) + 2u\left(t\right) - u\left(t-2\right)$.
+    	\end{itemize}
+    \end{pro}
+    \begin{proof}[Solución]
+    	\begin{itemize}
+    		\item[$(a)$] 
+    		Dado que el sistema es lineal e invariante en el tiempo, se tiene que la expresión de la respuesta del sistema es 
+    		\begin{align*}
+    			y_{x}(t) = h(t)*x(t)
+    		\end{align*}
+    	    Para determinar $y_{x}(t)$ es necesario conocer $h(t)$, para esto es útil notar que
+    	    \begin{align*}
+    	    	y_{\text{step}}(t) = h(t)*u(t) = \int_{-\infty}^{\tau}h(\tau)\ \text{d}\tau = \lim_{a\to -\infty}\int_{a}^{t}h(\tau)\ \text{d}\tau
+    	    \end{align*}
+            Derivando a ambos lados, suponiendo que la derivada puede entrar en el límite y que $\lim_{a\to -\infty}h(a) = 0$, se obtiene que
+            \begin{align*}
+            	\dot{y}_{\text{step}}(t) = \lim_{a\to -\infty}\left(\Dt{}\int_{a}^{t}h(\tau)\text{d}\tau\right) = \lim_{a\to -\infty}\left(h(t) - h(a)\right) = h(t)
+            \end{align*} 
+            Usando el hecho que $y_{\text{step}}(t) = 2\left(1-e^{-t/2}\right)u(t)$, se llega a que 
+            \begin{align*}
+            	h(t) = \dot{y}_{\text{step}}(t) = \Dt{}\left[2\left(1-e^{-t/2}\right)u(t)\right] = e^{-t/2}u(t) + 2\left(1-e^{-t/2}\right)\delta(t) 
+            \end{align*}
+            Finalmente 
+            \begin{align*}
+            	y_{x}(t) &= h(t)*x(t)\\ 
+            	         &= h(t)*\left[\delta(t-2) - u(t-4)\right]\\ 
+            	         &= h(t)*\delta(t-2) - h(t)*u(t-4)\\
+            	         &= h(t-2) - \left[e^{-t/2}u(t) + 2\left(1-e^{-t/2}\right)\delta(t) \right]*u(t-2)\\
+            	         &= h(t-2) - e^{-t/2}u(t)*u(t-2) + 2\left(1-e^{-t/2}\right)\delta(t)*u(t-2)\\
+            	         &= h(t-2) - \int_{-\infty}^{t-2}e^{-\tau/2}u(\tau)\text{d}\tau + 2\int_{-\infty}^{t-2}(1-e^{-\tau/2})\delta(\tau)\text{d}\tau\\
+            	         &= h(t-2) - \int_{0}^{t-2}e^{-\tau/2}\text{d}\tau + 2\int_{-\infty}^{t-2}(1-e^{-\tau/2})\delta(\tau)\text{d}\tau\\
+            	         &= h(t-2) - \int_{0}^{t-2}e^{-\tau/2}\text{d}\tau + 2(1-e^{0})\\
+            	         &= h(t-2) - \int_{0}^{t-2}e^{-\tau/2}\text{d}\tau\\
+            	         &= h(t-2) +2\left(e^{(t-2)/2}-1\right)
+            \end{align*}
+            \item[$(b)$] El aliasing es un efecto en el cual dos señales continuas distintas resultan indistinguibles cuando se muestrean, esto causa que la señal no pueda ser reconstruida. Un ejemplo de esto sería, considerar dos señales senuidales, con distinta frecuencia, si una sinusoide de frecuencia $f Hz$ es muestreada $s$ veces por segundo, y $s \leq 2f$, entonces las muestras resultantes también serán compatibles con una sinusoide de frecuencia $fm - f$, donde $fm$ es la frecuencia de muestreo.  
+            \item[$(c)$] Para $f_{1}$, gracias a la linealidad de la transformada de Laplace, se obtiene
+            \begin{align*}
+            	F_{1}(s) &= \mathcal{L}\left[f_{1}(t)\right](s)\\ 
+            	         &= \frac{2}{3}\mathcal{L}\left[r\left(t+3\right)\right](s) - \frac{4}{3}\mathcal{L}\left[r\left(t\right)\right](s) + \frac{2}{3}\mathcal{L}\left[r\left(t-3\right)\right](s)\\ 
+            	         &=  \frac{2}{3}\frac{1+3s}{s^{2}} + \left[ -\frac{4}{3} + \frac{2}{3}e^{-3s}\right]\mathcal{L}\left[r\left(t\right)\right](s)\\ 
+            	         &= \frac{2}{3}\frac{1+3s}{s^{2}} +\left[ -\frac{4}{3} + \frac{2}{3}e^{-3s}\right]\mathcal{L}\left[t\right](s)\\ 
+            	         &= \frac{2}{3}\frac{1+3s}{s^{2}} +\left[ -\frac{4}{3} + \frac{2}{3}e^{-3s}\right]\frac{1}{s^{2}}
+            \end{align*}
+            Para $f_{2}$, se procede de forma análoga
+            \begin{align*}
+            	F_{2}(s) &= \mathcal{L}\left[f_{2}(t)\right](s)\\
+            	         &= -\mathcal{L}\left[u(t+2)\right](s) + 2\mathcal{L}\left[u(t)\right](s) - \mathcal{L}\left[u(t-2)\right](s)\\
+            	         &= -\frac{1}{s} + \frac{2}{s}  - \frac{e^{-2s}}{s}\\
+            	         &= \frac{1}{s}-\frac{e^{-2s}}{s}
+            \end{align*}
+    	\end{itemize}
+    \end{proof}
+\end{document}

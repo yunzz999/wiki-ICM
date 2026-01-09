@@ -1,0 +1,1271 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2022.12.27)  21 JUN 2024 01:36
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**./Tarea2SLD.tex
+(Tarea2SLD.tex
+LaTeX2e <2022-06-01> patch level 5
+L3 programming layer <2022-09-28>
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/base\report.cls
+Document Class: report 2021/10/04 v1.4n Standard LaTeX document class
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
+File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count185
+\c@chapter=\count186
+\c@section=\count187
+\c@subsection=\count188
+\c@subsubsection=\count189
+\c@paragraph=\count190
+\c@subparagraph=\count191
+\c@figure=\count192
+\c@table=\count193
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty
+Package: inputenc 2021/02/14 v1.3d Input encoding file
+\inpenc@prehook=\toks16
+\inpenc@posthook=\toks17
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.sty
+Package: babel 2022/10/04 3.81 The Babel package
+\babel@savecnt=\count194
+\U@D=\dimen139
+\l@unhyphenated=\language79
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/babel\txtbabel.def)
+\bbl@readstream=\read2
+\bbl@dirlevel=\count195
+
+*************************************
+* Local config file bblopts.cfg used
+*
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/arabi\bblopts.cfg
+File: bblopts.cfg 2005/09/08 v0.1 add Arabic and Farsi to "declared" options of
+ babel
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/babel-spanish\spanish.l
+df
+Language: spanish.ldf 2021/05/27 v5.0q Spanish support from the babel system
+\es@quottoks=\toks18
+\es@quotdepth=\count196
+Package babel Info: Making " an active character on input line 570.
+Package babel Info: Making . an active character on input line 675.
+Package babel Info: Making < an active character on input line 722.
+Package babel Info: Making > an active character on input line 722.
+))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/babel/locale/es\babel
+-spanish.tex
+Package babel Info: Importing font and identification data for spanish
+(babel)             from babel-es.ini. Reported on input line 11.
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+Package: amsmath 2022/04/08 v2.17n AMS math features
+\@mathmargin=\skip49
+
+For additional information on amsmath, use the `?' option.
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+Package: amstext 2021/08/26 v2.01 AMS text
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks19
+\ex@=\dimen140
+))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen141
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count197
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count198
+\leftroot@=\count199
+LaTeX Info: Redefining \overline on input line 399.
+LaTeX Info: Redefining \colon on input line 410.
+\classnum@=\count266
+\DOTSCASE@=\count267
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box51
+\strutbox@=\box52
+LaTeX Info: Redefining \big on input line 722.
+LaTeX Info: Redefining \Big on input line 723.
+LaTeX Info: Redefining \bigg on input line 724.
+LaTeX Info: Redefining \Bigg on input line 725.
+\big@size=\dimen142
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count268
+LaTeX Info: Redefining \bmod on input line 905.
+LaTeX Info: Redefining \pmod on input line 910.
+LaTeX Info: Redefining \smash on input line 940.
+LaTeX Info: Redefining \relbar on input line 970.
+LaTeX Info: Redefining \Relbar on input line 971.
+\c@MaxMatrixCols=\count269
+\dotsspace@=\muskip16
+\c@parentequation=\count270
+\dspbrk@lvl=\count271
+\tag@help=\toks20
+\row@=\count272
+\column@=\count273
+\maxfields@=\count274
+\andhelp@=\toks21
+\eqnshift@=\dimen143
+\alignsep@=\dimen144
+\tagshift@=\dimen145
+\tagwidth@=\dimen146
+\totwidth@=\dimen147
+\lineht@=\dimen148
+\@envbody=\toks22
+\multlinegap=\skip50
+\multlinetaggap=\skip51
+\mathdisplay@stack=\toks23
+LaTeX Info: Redefining \[ on input line 2953.
+LaTeX Info: Redefining \] on input line 2954.
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amscls\amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks24
+\thm@bodyfont=\toks25
+\thm@headfont=\toks26
+\thm@notefont=\toks27
+\thm@headpunct=\toks28
+\thm@preskip=\skip52
+\thm@postskip=\skip53
+\thm@headsep=\skip54
+\dth@everypar=\toks29
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stmaryrd\stmaryrd.sty
+Package: stmaryrd 1994/03/03 St Mary's Road symbol package
+\symstmry=\mathgroup6
+LaTeX Font Info:    Overwriting symbol font `stmry' in version `bold'
+(Font)                  U/stmry/m/n --> U/stmry/b/n on input line 89.
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\stix.sty
+Package: stix 2018/04/17 v1.1.3-latex STIX fonts support package
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+LaTeX Font Info:    Changing ? sub-encoding to TS1/0 on input line 78.
+)
+Now handling font encoding LS1 ...
+... no UTF-8 mapping file for font encoding LS1
+Now handling font encoding LS2 ...
+... no UTF-8 mapping file for font encoding LS2
+LaTeX Font Info:    Redeclaring symbol font `letters' on input line 76.
+LaTeX Font Info:    Encoding `OML' has changed to `LS1' for symbol font
+(Font)              `letters' in the math version `normal' on input line 76.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> LS1/stix/m/it on input line 76.
+LaTeX Font Info:    Encoding `OML' has changed to `LS1' for symbol font
+(Font)              `letters' in the math version `bold' on input line 76.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> LS1/stix/m/it on input line 76.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 77.
+LaTeX Font Info:    Encoding `OT1' has changed to `LS1' for symbol font
+(Font)              `operators' in the math version `normal' on input line 77.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> LS1/stix/m/n on input line 77.
+LaTeX Font Info:    Encoding `OT1' has changed to `LS1' for symbol font
+(Font)              `operators' in the math version `bold' on input line 77.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> LS1/stix/m/n on input line 77.
+\symbold-operators=\mathgroup7
+LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 79.
+LaTeX Font Info:    Encoding `OMS' has changed to `LS1' for symbol font
+(Font)              `symbols' in the math version `normal' on input line 79.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> LS1/stixscr/m/n on input line 79.
+LaTeX Font Info:    Encoding `OMS' has changed to `LS1' for symbol font
+(Font)              `symbols' in the math version `bold' on input line 79.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> LS1/stixscr/m/n on input line 79.
+\symsymbols2=\mathgroup8
+\symsymbols3=\mathgroup9
+\symsymbols4=\mathgroup10
+\symintegrals=\mathgroup11
+LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 84.
+LaTeX Font Info:    Encoding `OMX' has changed to `LS2' for symbol font
+(Font)              `largesymbols' in the math version `normal' on input line 8
+4.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> LS2/stixex/m/n on input line 84.
+LaTeX Font Info:    Encoding `OMX' has changed to `LS2' for symbol font
+(Font)              `largesymbols' in the math version `bold' on input line 84.
+
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> LS2/stixex/m/n on input line 84.
+\symarrows1=\mathgroup12
+\symarrows2=\mathgroup13
+\symarrows3=\mathgroup14
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  LS1/stix/m/it --> LS1/stix/b/it on input line 88.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  LS1/stix/m/n --> LS1/stix/b/n on input line 89.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  LS1/stixscr/m/n --> LS1/stixscr/b/n on input line 90.
+LaTeX Font Info:    Overwriting symbol font `symbols2' in version `bold'
+(Font)                  LS1/stixfrak/m/n --> LS1/stixfrak/b/n on input line 91.
+
+LaTeX Font Info:    Overwriting symbol font `symbols3' in version `bold'
+(Font)                  LS1/stixbb/m/n --> LS1/stixbb/b/n on input line 92.
+LaTeX Font Info:    Overwriting symbol font `symbols4' in version `bold'
+(Font)                  LS1/stixbb/m/it --> LS1/stixbb/b/it on input line 93.
+LaTeX Font Info:    Overwriting symbol font `integrals' in version `bold'
+(Font)                  LS2/stixcal/m/n --> LS2/stixcal/b/n on input line 94.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  LS2/stixex/m/n --> LS2/stixex/b/n on input line 95.
+LaTeX Font Info:    Overwriting symbol font `arrows1' in version `bold'
+(Font)                  LS1/stixsf/m/n --> LS1/stixsf/b/n on input line 96.
+LaTeX Font Info:    Overwriting symbol font `arrows2' in version `bold'
+(Font)                  LS1/stixsf/m/it --> LS1/stixsf/b/it on input line 97.
+LaTeX Font Info:    Overwriting symbol font `arrows3' in version `bold'
+(Font)                  LS2/stixtt/m/n --> LS2/stixtt/b/n on input line 98.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 99.
+LaTeX Font Info:    Redeclaring math alphabet \mathfrak on input line 102.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 106.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 108.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 109.
+LaTeX Info: Redefining \yen on input line 456.
+LaTeX Info: Redefining \circledR on input line 458.
+LaTeX Info: Redefining \checkmark on input line 460.
+LaTeX Info: Redefining \maltese on input line 461.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 698.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 699.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 700.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 701.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 702.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 703.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 704.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 705.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 707.
+LaTeX Font Info:    Redeclaring math accent \check on input line 708.
+LaTeX Font Info:    Redeclaring math accent \vec on input line 716.
+LaTeX Font Info:    Redeclaring math accent \widehat on input line 728.
+LaTeX Font Info:    Redeclaring math accent \widetilde on input line 729.
+LaTeX Info: Redefining \vdots on input line 1518.
+LaTeX Info: Redefining \cdots on input line 1522.
+LaTeX Font Info:    Redeclaring math symbol \mathsterling on input line 1978.
+LaTeX Info: Redefining \not on input line 2144.
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\euscript.sty
+Package: euscript 2009/06/22 v3.00 Euler Script fonts
+LaTeX Font Info:    Overwriting math alphabet `\EuScript' in version `bold'
+(Font)                  U/eus/m/n --> U/eus/b/n on input line 33.
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\biblatex.sty
+Package: biblatex 2022/07/12 v3.18b programmable bibliographies (PK/MW)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds
+.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.s
+ty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+) (C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
+Package: iftex 2022/02/03 v1.0f TeX engine tests
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+) (C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count275
+) (C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks30
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)) (C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/logreq\logreq.sty
+Package: logreq 2010/08/04 v1.0 xml request logger
+\lrq@indent=\count276
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/logreq\logreq.def
+File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
+))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
+Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+\c@tabx@nest=\count277
+\c@listtotal=\count278
+\c@listcount=\count279
+\c@liststart=\count280
+\c@liststop=\count281
+\c@citecount=\count282
+\c@citetotal=\count283
+\c@multicitecount=\count284
+\c@multicitetotal=\count285
+\c@instcount=\count286
+\c@maxnames=\count287
+\c@minnames=\count288
+\c@maxitems=\count289
+\c@minitems=\count290
+\c@citecounter=\count291
+\c@maxcitecounter=\count292
+\c@savedcitecounter=\count293
+\c@uniquelist=\count294
+\c@uniquename=\count295
+\c@refsection=\count296
+\c@refsegment=\count297
+\c@maxextratitle=\count298
+\c@maxextratitleyear=\count299
+\c@maxextraname=\count300
+\c@maxextradate=\count301
+\c@maxextraalpha=\count302
+\c@abbrvpenalty=\count303
+\c@highnamepenalty=\count304
+\c@lownamepenalty=\count305
+\c@maxparens=\count306
+\c@parenlevel=\count307
+\blx@tempcnta=\count308
+\blx@tempcntb=\count309
+\blx@tempcntc=\count310
+\c@blx@maxsection=\count311
+\blx@maxsegment@0=\count312
+\blx@notetype=\count313
+\blx@parenlevel@text=\count314
+\blx@parenlevel@foot=\count315
+\blx@sectionciteorder@0=\count316
+\blx@sectionciteorderinternal@0=\count317
+\blx@entrysetcounter=\count318
+\blx@biblioinstance=\count319
+\labelnumberwidth=\skip55
+\labelalphawidth=\skip56
+\biblabelsep=\skip57
+\bibitemsep=\skip58
+\bibnamesep=\skip59
+\bibinitsep=\skip60
+\bibparsep=\skip61
+\bibhang=\skip62
+\blx@bcfin=\read3
+\blx@bcfout=\write3
+\blx@langwohyphens=\language80
+\c@mincomprange=\count320
+\c@maxcomprange=\count321
+\c@mincompwidth=\count322
+Package biblatex Info: Trying to load biblatex default data model...
+Package biblatex Info: ... file 'blx-dm.def' found.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\blx-dm.def
+File: blx-dm.def 2022/07/12 v3.18b biblatex localization (PK/MW)
+)
+Package biblatex Info: Trying to load biblatex custom data model...
+Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
+\c@afterword=\count323
+\c@savedafterword=\count324
+\c@annotator=\count325
+\c@savedannotator=\count326
+\c@author=\count327
+\c@savedauthor=\count328
+\c@bookauthor=\count329
+\c@savedbookauthor=\count330
+\c@commentator=\count331
+\c@savedcommentator=\count332
+\c@editor=\count333
+\c@savededitor=\count334
+\c@editora=\count335
+\c@savededitora=\count336
+\c@editorb=\count337
+\c@savededitorb=\count338
+\c@editorc=\count339
+\c@savededitorc=\count340
+\c@foreword=\count341
+\c@savedforeword=\count342
+\c@holder=\count343
+\c@savedholder=\count344
+\c@introduction=\count345
+\c@savedintroduction=\count346
+\c@namea=\count347
+\c@savednamea=\count348
+\c@nameb=\count349
+\c@savednameb=\count350
+\c@namec=\count351
+\c@savednamec=\count352
+\c@translator=\count353
+\c@savedtranslator=\count354
+\c@shortauthor=\count355
+\c@savedshortauthor=\count356
+\c@shorteditor=\count357
+\c@savedshorteditor=\count358
+\c@labelname=\count359
+\c@savedlabelname=\count360
+\c@institution=\count361
+\c@savedinstitution=\count362
+\c@lista=\count363
+\c@savedlista=\count364
+\c@listb=\count365
+\c@savedlistb=\count366
+\c@listc=\count367
+\c@savedlistc=\count368
+\c@listd=\count369
+\c@savedlistd=\count370
+\c@liste=\count371
+\c@savedliste=\count372
+\c@listf=\count373
+\c@savedlistf=\count374
+\c@location=\count375
+\c@savedlocation=\count376
+\c@organization=\count377
+\c@savedorganization=\count378
+\c@origlocation=\count379
+\c@savedoriglocation=\count380
+\c@origpublisher=\count381
+\c@savedorigpublisher=\count382
+\c@publisher=\count383
+\c@savedpublisher=\count384
+\c@language=\count385
+\c@savedlanguage=\count386
+\c@origlanguage=\count387
+\c@savedoriglanguage=\count388
+\c@pageref=\count389
+\c@savedpageref=\count390
+\shorthandwidth=\skip63
+\shortjournalwidth=\skip64
+\shortserieswidth=\skip65
+\shorttitlewidth=\skip66
+\shortauthorwidth=\skip67
+\shorteditorwidth=\skip68
+\locallabelnumberwidth=\skip69
+\locallabelalphawidth=\skip70
+\localshorthandwidth=\skip71
+\localshortjournalwidth=\skip72
+\localshortserieswidth=\skip73
+\localshorttitlewidth=\skip74
+\localshortauthorwidth=\skip75
+\localshorteditorwidth=\skip76
+Package biblatex Info: Trying to load compatibility code...
+Package biblatex Info: ... file 'blx-compat.def' found.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\blx-compat.def
+File: blx-compat.def 2022/07/12 v3.18b biblatex compatibility (PK/MW)
+)
+Package biblatex Info: Trying to load generic definitions...
+Package biblatex Info: ... file 'biblatex.def' found.
+ (C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\biblatex.def
+File: biblatex.def 2022/07/12 v3.18b biblatex compatibility (PK/MW)
+\c@textcitecount=\count391
+\c@textcitetotal=\count392
+\c@textcitemaxnames=\count393
+\c@biburlbigbreakpenalty=\count394
+\c@biburlbreakpenalty=\count395
+\c@biburlnumpenalty=\count396
+\c@biburlucpenalty=\count397
+\c@biburllcpenalty=\count398
+\biburlbigskip=\muskip18
+\biburlnumskip=\muskip19
+\biburlucskip=\muskip20
+\biburllcskip=\muskip21
+\c@smartand=\count399
+)
+Package biblatex Info: Trying to load bibliography style 'numeric'...
+Package biblatex Info: ... file 'numeric.bbx' found.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex/bbx\numeric.bb
+x
+File: numeric.bbx 2022/07/12 v3.18b biblatex bibliography style (PK/MW)
+Package biblatex Info: Trying to load bibliography style 'standard'...
+Package biblatex Info: ... file 'standard.bbx' found.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex/bbx\standard.b
+bx
+File: standard.bbx 2022/07/12 v3.18b biblatex bibliography style (PK/MW)
+\c@bbx:relatedcount=\count400
+\c@bbx:relatedtotal=\count401
+))
+Package biblatex Info: Trying to load citation style 'numeric'...
+Package biblatex Info: ... file 'numeric.cbx' found.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex/cbx\numeric.cb
+x
+File: numeric.cbx 2022/07/12 v3.18b biblatex citation style (PK/MW)
+Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\parencite'.
+Package biblatex Info: Redefining '\footcite'.
+Package biblatex Info: Redefining '\footcitetext'.
+Package biblatex Info: Redefining '\smartcite'.
+Package biblatex Info: Redefining '\supercite'.
+Package biblatex Info: Redefining '\textcite'.
+Package biblatex Info: Redefining '\textcites'.
+Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencites'.
+Package biblatex Info: Redefining '\smartcites'.
+)
+Package biblatex Info: Trying to load configuration file...
+Package biblatex Info: ... file 'biblatex.cfg' found.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\biblatex.cfg
+File: biblatex.cfg 
+)
+Package biblatex Info: Input encoding 'utf8' detected.
+Package biblatex Info: Document encoding is UTF8 ....
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
+Package: expl3 2022-09-28 L3 programming layer (loader) 
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
+tex.def
+File: l3backend-pdftex.def 2022-09-28 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count402
+\l__pdf_internal_box=\box53
+))
+Package biblatex Info: ... and expl3
+(biblatex)             2022-09-28 L3 programming layer (loader) 
+(biblatex)             is new enough (at least 2020/04/06),
+(biblatex)             setting 'casechanger=expl3'.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\blx-case-expl3
+.sty
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xparse\xpars
+e.sty
+Package: xparse 2022-06-22 L3 Experimental document command parser
+)
+Package: blx-case-expl3 2022/07/12 v3.18b expl3 case changing code for biblatex
+
+))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/tcolorbox\tcolorbox.sty
+Package: tcolorbox 2022/06/24 version 5.1.1 text color boxes
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf.sty
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfrcs.st
+y
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
+-common.tex
+\pgfutil@everybye=\toks31
+\pgfutil@tempdima=\dimen149
+\pgfutil@tempdimb=\dimen150
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
+-common-lists.tex))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
+-latex.def
+\pgfutil@abb=\box54
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfrcs.
+code.tex
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf\pgf.revision.tex)
+Package: pgfrcs 2021/05/15 v3.1.9a (3.1.9a)
+))
+Package: pgf 2021/05/15 v3.1.9a (3.1.9a)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgfcore.
+sty
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.c
+fg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 107.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
+File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
+\stockwidth=\dimen151
+\stockheight=\dimen152
+))
+\Gin@req@height=\dimen153
+\Gin@req@width=\dimen154
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/systemlayer\pgfsys.
+sty
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+s.code.tex
+Package: pgfsys 2021/05/15 v3.1.9a (3.1.9a)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+.code.tex
+\pgfkeys@pathtoks=\toks32
+\pgfkeys@temptoks=\toks33
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+filtered.code.tex
+\pgfkeys@tmptoks=\toks34
+))
+\pgf@x=\dimen155
+\pgf@y=\dimen156
+\pgf@xa=\dimen157
+\pgf@ya=\dimen158
+\pgf@xb=\dimen159
+\pgf@yb=\dimen160
+\pgf@xc=\dimen161
+\pgf@yc=\dimen162
+\pgf@xd=\dimen163
+\pgf@yd=\dimen164
+\w@pgf@writea=\write4
+\r@pgf@reada=\read4
+\c@pgf@counta=\count403
+\c@pgf@countb=\count404
+\c@pgf@countc=\count405
+\c@pgf@countd=\count406
+\t@pgf@toka=\toks35
+\t@pgf@tokb=\toks36
+\t@pgf@tokc=\toks37
+\pgf@sys@id@count=\count407
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgf.c
+fg
+File: pgf.cfg 2021/05/15 v3.1.9a (3.1.9a)
+)
+Driver file for pgf: pgfsys-pdftex.def
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+s-pdftex.def
+File: pgfsys-pdftex.def 2021/05/15 v3.1.9a (3.1.9a)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+s-common-pdf.def
+File: pgfsys-common-pdf.def 2021/05/15 v3.1.9a (3.1.9a)
+)))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+ssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfsyssoftpath@smallbuffer@items=\count408
+\pgfsyssoftpath@bigbuffer@items=\count409
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+sprotocol.code.tex
+File: pgfsysprotocol.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
+Package: xcolor 2022/06/12 v2.14 LaTeX color extensions (UK)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 227.
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1353.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1357.
+Package xcolor Info: Model `RGB' extended on input line 1369.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1371.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1372.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1373.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1374.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1375.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1376.
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+e.code.tex
+Package: pgfcore 2021/05/15 v3.1.9a (3.1.9a)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code
+.tex
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathcalc.
+code.tex
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathutil.
+code.tex)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathparse
+r.code.tex
+\pgfmath@dimen=\dimen165
+\pgfmath@count=\count410
+\pgfmath@box=\box55
+\pgfmath@toks=\toks38
+\pgfmath@stack@operand=\toks39
+\pgfmath@stack@operation=\toks40
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.code.tex
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.basic.code.tex)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.trigonometric.code.tex)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.random.code.tex)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.comparison.code.tex)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.base.code.tex)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.round.code.tex)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.misc.code.tex)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.integerarithmetics.code.tex)))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat
+.code.tex
+\c@pgfmathroundto@lastzeros=\count411
+))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfint.code.
+tex)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epoints.code.tex
+File: pgfcorepoints.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@picminx=\dimen166
+\pgf@picmaxx=\dimen167
+\pgf@picminy=\dimen168
+\pgf@picmaxy=\dimen169
+\pgf@pathminx=\dimen170
+\pgf@pathmaxx=\dimen171
+\pgf@pathminy=\dimen172
+\pgf@pathmaxy=\dimen173
+\pgf@xx=\dimen174
+\pgf@xy=\dimen175
+\pgf@yx=\dimen176
+\pgf@yy=\dimen177
+\pgf@zx=\dimen178
+\pgf@zy=\dimen179
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@path@lastx=\dimen180
+\pgf@path@lasty=\dimen181
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epathusage.code.tex
+File: pgfcorepathusage.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@shorten@end@additional=\dimen182
+\pgf@shorten@start@additional=\dimen183
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+escopes.code.tex
+File: pgfcorescopes.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfpic=\box56
+\pgf@hbox=\box57
+\pgf@layerbox@main=\box58
+\pgf@picture@serial@count=\count412
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+egraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgflinewidth=\dimen184
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+etransformations.code.tex
+File: pgfcoretransformations.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@pt@x=\dimen185
+\pgf@pt@y=\dimen186
+\pgf@pt@temp=\dimen187
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+equick.code.tex
+File: pgfcorequick.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eobjects.code.tex
+File: pgfcoreobjects.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epathprocessing.code.tex
+File: pgfcorepathprocessing.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+earrows.code.tex
+File: pgfcorearrows.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfarrowsep=\dimen188
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eshade.code.tex
+File: pgfcoreshade.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@max=\dimen189
+\pgf@sys@shading@range@num=\count413
+\pgf@shadingcount=\count414
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eimage.code.tex
+File: pgfcoreimage.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eexternal.code.tex
+File: pgfcoreexternal.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfexternal@startupbox=\box59
+))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+elayers.code.tex
+File: pgfcorelayers.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+etransparency.code.tex
+File: pgfcoretransparency.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epatterns.code.tex
+File: pgfcorepatterns.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+erdf.code.tex
+File: pgfcorerdf.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+shapes.code.tex
+File: pgfmoduleshapes.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfnodeparttextbox=\box60
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+plot.code.tex
+File: pgfmoduleplot.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfco
+mp-version-0-65.sty
+Package: pgfcomp-version-0-65 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@nodesepstart=\dimen190
+\pgf@nodesepend=\dimen191
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfco
+mp-version-1-18.sty
+Package: pgfcomp-version-1-18 2021/05/15 v3.1.9a (3.1.9a)
+))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/tools\verbatim.sty
+Package: verbatim 2020-07-07 v1.5u LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks41
+\verbatim@line=\toks42
+\verbatim@in@stream=\read5
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/environ\environ.sty
+Package: environ 2014/05/04 v0.3 A new way to define environments
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/trimspaces\trimspaces.s
+ty
+Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
+))
+\tcb@titlebox=\box61
+\tcb@upperbox=\box62
+\tcb@lowerbox=\box63
+\tcb@phantombox=\box64
+\c@tcbbreakpart=\count415
+\c@tcblayer=\count416
+\c@tcolorbox@number=\count417
+\tcb@temp=\box65
+\tcb@temp=\box66
+\tcb@temp=\box67
+\tcb@temp=\box68
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.
+sty
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgffor.st
+y
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfkeys.s
+ty
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+.code.tex))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/pgf/math\pgfmath.sty
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code
+.tex))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor.
+code.tex
+Package: pgffor 2021/05/15 v3.1.9a (3.1.9a)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code
+.tex)
+\pgffor@iter=\dimen192
+\pgffor@skip=\dimen193
+\pgffor@stack=\toks43
+\pgffor@toks=\toks44
+))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z\tikz.code.tex
+Package: tikz 2021/05/15 v3.1.9a (3.1.9a)
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryplothandlers.code.tex
+File: pgflibraryplothandlers.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@plot@mark@count=\count418
+\pgfplotmarksize=\dimen194
+)
+\tikz@lastx=\dimen195
+\tikz@lasty=\dimen196
+\tikz@lastxsaved=\dimen197
+\tikz@lastysaved=\dimen198
+\tikz@lastmovetox=\dimen199
+\tikz@lastmovetoy=\dimen256
+\tikzleveldistance=\dimen257
+\tikzsiblingdistance=\dimen258
+\tikz@figbox=\box69
+\tikz@figbox@bg=\box70
+\tikz@tempbox=\box71
+\tikz@tempbox@bg=\box72
+\tikztreelevel=\count419
+\tikznumberofchildren=\count420
+\tikznumberofcurrentchild=\count421
+\tikz@fig@count=\count422
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+matrix.code.tex
+File: pgfmodulematrix.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfmatrixcurrentrow=\count423
+\pgfmatrixcurrentcolumn=\count424
+\pgf@matrix@numberofcolumns=\count425
+)
+\tikz@expandcount=\count426
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)))
+\c@teo=\count427
+\c@prop=\count428
+\c@pro=\count429
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/lipsum\lipsum.sty
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/l3keys2e\l3k
+eys2e.sty
+Package: l3keys2e 2022-06-22 LaTeX2e option processing using LaTeX3 keys
+)
+Package: lipsum 2021-09-20 v2.7 150 paragraphs of Lorem Ipsum dummy text
+\g__lipsum_par_int=\count430
+\l__lipsum_a_int=\count431
+\l__lipsum_b_int=\count432
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/lipsum\lipsum.ltd.tex))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count433
+\Gm@cntv=\count434
+\c@Gm@tempcnt=\count435
+\Gm@bindingoffset=\dimen259
+\Gm@wd@mp=\dimen260
+\Gm@odd@mp=\dimen261
+\Gm@even@mp=\dimen262
+\Gm@layoutwidth=\dimen263
+\Gm@layoutheight=\dimen264
+\Gm@layouthoffset=\dimen265
+\Gm@layoutvoffset=\dimen266
+\Gm@dimlist=\toks45
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/lastpage\lastpage.sty
+Package: lastpage 2021/09/03 v1.2n Refers to last page's name (HMM; JPG)
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.sty
+Package: fancyhdr 2022/11/09 v4.1 Extensive control of page headers and footers
+
+\f@nch@headwidth=\skip77
+\f@nch@O@elh=\skip78
+\f@nch@O@erh=\skip79
+\f@nch@O@olh=\skip80
+\f@nch@O@orh=\skip81
+\f@nch@O@elf=\skip82
+\f@nch@O@erf=\skip83
+\f@nch@O@olf=\skip84
+\f@nch@O@orf=\skip85
+)
+
+Package biblatex Warning: 'babel/polyglossia' detected but 'csquotes' missing.
+(biblatex)                Loading 'csquotes' recommended.
+
+\@quotelevel=\count436
+\@quotereset=\count437
+LaTeX Font Info:    Trying to load font information for T1+cmss on input line 8
+0.
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/base\t1cmss.fd
+File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+(Tarea2SLD.aux
+LaTeX Info: Redefining \. on input line 9.
+LaTeX Info: Redefining \% on input line 9.
+)
+\openout1 = `Tarea2SLD.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for LS1/stix/m/n on input line 80.
+LaTeX Font Info:    Trying to load font information for LS1+stix on input line 
+80.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls1stix.fd
+File: ls1stix.fd 2015/04/17 v1.1.2-latex STIX LS1 font definitions
+)
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for LS2/stix/m/n on input line 80.
+LaTeX Font Info:    Trying to load font information for LS2+stix on input line 
+80.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls2stix.fd
+File: ls2stix.fd 2015/04/17 v1.1.2-latex STIX LS2 font definitions
+)
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Info: Redefining \. on input line 80.
+LaTeX Info: Redefining \% on input line 80.
+LaTeX Info: Command `\dddot' is already robust on input line 80.
+LaTeX Info: Command `\ddddot' is already robust on input line 80.
+Package biblatex Info: Trying to load language 'spanish'...
+Package biblatex Info: ... file 'spanish.lbx' found.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/biblatex/lbx\spanish.lb
+x
+File: spanish.lbx 2022/07/12 v3.18b biblatex localization (PK/MW)
+)
+Package biblatex Info: Input encoding 'utf8' detected.
+Package biblatex Info: Automatic encoding selection.
+(biblatex)             Assuming data encoding 'utf8'.
+\openout3 = `Tarea2SLD.bcf'.
+
+Package biblatex Info: Trying to load bibliographic data...
+Package biblatex Info: ... file 'Tarea2SLD.bbl' found.
+ (Tarea2SLD.bbl)
+Package biblatex Info: Reference section=0 on input line 80.
+Package biblatex Info: Reference segment=0 on input line 80.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
+ii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count438
+\scratchdimen=\dimen267
+\scratchbox=\box73
+\nofMPsegments=\count439
+\nofMParguments=\count440
+\everyMPshowfont=\toks46
+\MPscratchCnt=\count441
+\MPscratchDim=\dimen268
+\MPnumerator=\count442
+\makeMPintoPDFobject=\count443
+\everyMPtoPDFconversion=\toks47
+)
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
+ase.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.c
+fg
+File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
+))
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(56.9055pt, 483.69687pt, 56.9055pt)
+* v-part:(T,H,B)=(56.9055pt, 731.23584pt, 56.9055pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=483.69687pt
+* \textheight=731.23584pt
+* \oddsidemargin=-15.36449pt
+* \evensidemargin=-15.36449pt
+* \topmargin=-52.36449pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=57.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+Package lastpage Info: Please have a look at the pageslts package at
+(lastpage)             https://www.ctan.org/pkg/pageslts
+(lastpage)             ! on input line 80.
+LaTeX Font Info:    Trying to load font information for LS1+stixscr on input li
+ne 82.
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls1stixscr.fd
+File: ls1stixscr.fd 2015/04/17 v1.1.2-latex STIX script LS1 font definitions
+)
+LaTeX Font Info:    Trying to load font information for LS2+stixex on input lin
+e 82.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls2stixex.fd
+File: ls2stixex.fd 2015/04/17 v1.1.2-latex STIX extentions LS2 font definitions
+
+)
+LaTeX Font Info:    Trying to load font information for U+msa on input line 82.
+
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 82.
+
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Trying to load font information for U+stmry on input line 8
+2.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stmaryrd\ustmry.fd)
+
+LaTeX Font Warning: Font shape `U/stmry/m/n' in size <7.5> not available
+(Font)              size <7> substituted on input line 82.
+
+LaTeX Font Info:    Trying to load font information for LS1+stixfrak on input l
+ine 82.
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls1stixfrak.fd
+File: ls1stixfrak.fd 2015/04/17 v1.1.2-latex STIX fraktur LS1 font definitions
+)
+LaTeX Font Info:    Trying to load font information for LS1+stixbb on input lin
+e 82.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls1stixbb.fd
+File: ls1stixbb.fd 2015/04/17 v1.1.2-latex STIX blackboard LS1 font definitions
+
+)
+LaTeX Font Info:    Trying to load font information for LS2+stixcal on input li
+ne 82.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls2stixcal.fd
+File: ls2stixcal.fd 2015/04/17 v1.1.2-latex STIX calligraphic LS2 font definiti
+ons
+)
+LaTeX Font Info:    Trying to load font information for LS1+stixsf on input lin
+e 82.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls1stixsf.fd
+File: ls1stixsf.fd 2015/04/17 v1.1.2-latex STIX sans-serif LS1 font definitions
+
+)
+LaTeX Font Info:    Trying to load font information for LS2+stixtt on input lin
+e 82.
+
+(C:\Users\braya\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls2stixtt.fd
+File: ls2stixtt.fd 2015/04/17 v1.1.2-latex STIX typewriter LS2 font definitions
+
+)
+<Tarea1.png, id=4, 664.884pt x 449.2785pt>
+File: Tarea1.png Graphic file (type png)
+<use Tarea1.png>
+Package pdftex.def Info: Tarea1.png  used on input line 92.
+(pdftex.def)             Requested size: 193.47578pt x 130.73302pt.
+
+
+LaTeX Font Warning: Font shape `T1/cmss/m/n' in size <7.5> not available
+(Font)              size <7> substituted on input line 121.
+
+[1{C:/Users/braya/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
+
+ <./Tarea1.png>]
+<Tarea1SLD/T2/p1a.png, id=18, 526.96875pt x 395.22656pt>
+File: Tarea1SLD/T2/p1a.png Graphic file (type png)
+<use Tarea1SLD/T2/p1a.png>
+Package pdftex.def Info: Tarea1SLD/T2/p1a.png  used on input line 170.
+(pdftex.def)             Requested size: 241.84843pt x 181.3903pt.
+ [2 <./Tarea1SLD/T2/p1a.png (PNG copy)>]
+<Tarea1SLD/T2/P1b.png, id=22, 526.96875pt x 395.22656pt>
+File: Tarea1SLD/T2/P1b.png Graphic file (type png)
+<use Tarea1SLD/T2/P1b.png>
+Package pdftex.def Info: Tarea1SLD/T2/P1b.png  used on input line 186.
+(pdftex.def)             Requested size: 241.84843pt x 181.3903pt.
+
+Overfull \hbox (44.73549pt too wide) detected at line 196
+[]
+ []
+
+<Tarea1SLD/T2/p1c.png, id=23, 526.96875pt x 395.22656pt>
+File: Tarea1SLD/T2/p1c.png Graphic file (type png)
+<use Tarea1SLD/T2/p1c.png>
+Package pdftex.def Info: Tarea1SLD/T2/p1c.png  used on input line 200.
+(pdftex.def)             Requested size: 241.84843pt x 181.3903pt.
+[3 <./Tarea1SLD/T2/P1b.png (PNG copy)> <./Tarea1SLD/T2/p1c.png (PNG copy)>]
+<Tarea1SLD/T2/P1e.jpg, id=27, 702.625pt x 526.96875pt>
+File: Tarea1SLD/T2/P1e.jpg Graphic file (type jpg)
+<use Tarea1SLD/T2/P1e.jpg>
+Package pdftex.def Info: Tarea1SLD/T2/P1e.jpg  used on input line 209.
+(pdftex.def)             Requested size: 241.84843pt x 181.38628pt.
+
+[4 <./Tarea1SLD/T2/P1e.jpg>]
+
+LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
+(Font)              using `U/stmry/m/n' instead on input line 320.
+
+
+LaTeX Font Warning: Font shape `U/stmry/b/n' in size <7.5> not available
+(Font)              size <7> substituted on input line 320.
+
+[5] 
+AED: lastpage setting LastPage
+[6] (Tarea2SLD.aux
+LaTeX Info: Redefining \sptext on input line 9.
+LaTeX Info: Redefining \. on input line 9.
+LaTeX Info: Redefining \% on input line 9.
+)
+
+LaTeX Font Warning: Size substitutions with differences
+(Font)              up to 0.5pt have occurred.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package logreq Info: Writing requests to 'Tarea2SLD.run.xml'.
+\openout1 = `Tarea2SLD.run.xml'.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 28735 strings out of 475385
+ 561245 string characters out of 2776906
+ 1362963 words of memory out of 3000000
+ 49665 multiletter control sequences out of 15000+600000
+ 509676 words of font info for 109 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 99i,16n,104p,684b,1796s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ <C:\Users\braya\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecss
+1000.pk> <C:\Users\braya\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi60
+0\ecsi1000.pk> <C:\Users\braya\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec
+/dpi600\ecsx1000.pk><C:/Users/braya/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/stix/stix-mathcal.pfb><C:/Users/braya/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/stix/stix-mathex.pfb><C:/Users/braya/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/stix/stix-mathit-bold.pfb><C:/Users/braya/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/stix/stix-mathit.pfb><C:/Users/braya/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/stix/stix-mathrm-bold.pfb><C:/Users/bra
+ya/AppData/Local/Programs/MiKTeX/fonts/type1/public/stix/stix-mathrm.pfb>
+Output written on Tarea2SLD.pdf (6 pages, 459098 bytes).
+PDF statistics:
+ 210 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 38 words of extra memory for PDF output out of 10000 (max. 10000000)
+

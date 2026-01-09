@@ -1,0 +1,28 @@
+/*
+
+Solucion del problema de Stokes
+
+*/
+// Generando la malla
+int n=3;
+ mesh Th=square(10*n,10*n);
+
+// Definicion de los espacios para la velocidad y la presion 
+ fespace Hh(Th,P2);  Hh u,v,uu,vv;
+ fespace Qh(Th,P1);  Qh p,pp;
+
+// Datos del problema
+real nu = 1.0;
+func f  = 0.0;
+
+// Solucion del problema de Stokes
+ solve stokes([u,v,p],[uu,vv,pp]) =
+   int2d(Th)(nu*(dx(u)*dx(uu)+dy(u)*dy(uu) + dx(v)*dx(vv)+ dy(v)*dy(vv))
+               + dx(p)*uu + dy(p)*vv + pp*(dx(u)+dy(v))
+               -1e-10*p*pp) - int2d(Th)( f*vv)
+             + on(1,2,4,u=0,v=0) + on(3,u=1,v=0);
+
+//Visualizacion de la solucion
+plot(Th,wait=1);
+plot(p,dim=2,wait=1);
+plot([u,v],wait=1);

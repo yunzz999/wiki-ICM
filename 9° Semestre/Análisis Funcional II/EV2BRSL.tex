@@ -1,0 +1,291 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{enumitem}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Comandos
+\renewcommand{\natural}{\mathbb{N}}
+\newcommand{\abs}[2][y]{\if#1y\left\fi\lvert#2\if#1y\right\fi\rvert}
+\newcommand{\norm}[2][y]{{\if#1y\left\fi\lVert#2\if#1y\right\fi\rVert}}
+\newcommand{\dd}{\,d}
+\newcommand{\Real}{R}
+\newtheorem{teo}{Teorema}
+\theoremstyle{definition}
+\newtheorem{problem}{\color{azul}{Problema}}
+\renewcommand{\theproblem}{\Alph{problem}}
+\numberwithin{equation}{problem}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Análisis Funcional II}}
+\newcommand{\tarea}{\textbf{Evaluación 1}}
+%\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\textbf{\today}}
+% Titulo
+\title{\color{azul}\textbf{Elementos Finitos}\\
+	\textbf{Tarea 2}}
+\author{\color{azul}\autor}
+\date{\color{azul}}
+\begin{document}
+	\begin{problem}[Mejor constante de una desigualdad de Poincaré]
+		Sea $\Omega$ el intervalo $(0,\pi)$.
+		Para este caso unidimensional, de la demostración de \cite[Lem.~10.2(iii)]{Tartar}, se desprende la siguiente desigualdad de Poincaré:
+		%
+		\begin{equation*}
+			(\forall\,u\in H^1_0(\Omega)) \quad
+			\int_\Omega \abs{u(x)}^2 \dd x \leq \frac{\pi^2}{2} \int_\Omega \abs{u'(x)}^2 \dd x.
+		\end{equation*}
+		%
+		Sin embargo $\pi^2/2 \approx 4.9348022$ es mayor que la mejor constante posible.
+		El objetivo de este problema es calcular \textbf{informalmente} a aquella mejor constante; esto es, a $C^{-1}$, donde
+		%
+		\begin{equation*}
+			C := \inf_{u\in H^1_0(\Omega)\setminus\{0\}} \frac{\int_\Omega \abs{u'(x)}^2 \dd x}{\int_\Omega \abs{u(x)}^2 \dd x}
+			= \inf_{\substack{u\in H^1_0(\Omega)\\\norm{u}_{L^2(\Omega)}=1}} \int_\Omega \abs{u'(x)}^2 \dd x.
+		\end{equation*}
+		%
+		Se puede probar (pero no lo haga aquí) que el ínfimo de arriba en realidad es el correspondiente mínimo; definiendo al funcional objetivo $F \colon H^1_0(\Omega) \to \Real$ y al funcional restricción $G \colon H^1_0(\Omega) \to \Real$ mediante
+		%
+		\begin{equation*}
+			F(u) = \int_\Omega \abs{u'(x)}^2 \dd x \quad\text{y}\quad G(u) = \int_\Omega \abs{u(x)}^2 \dd x - 1,
+		\end{equation*}
+		%
+		la constante $C$ es solución del problema de minimización
+		%
+		\begin{equation}\label{IDM}\tag{\S}
+			C = \min \left\{ F(u) \,\middle|\, u \in H^1_0(\Omega) \text{ tal que } G(u) = 0 \right\}.
+		\end{equation}
+		%
+		\begin{enumerate}[label=\textbf{\theproblem.\Roman{*}.},ref=\theproblem.\Roman{*},parsep=1ex]
+			\item\label{q:GateauxDerivatives} (4 puntos) Sean $DF \colon H^1_0(\Omega) \times H^1_0(\Omega) \to \Real$ y $DG \colon H^1_0(\Omega) \times H^1_0(\Omega) \to \Real$ las derivadas de Gateaux de $F$ y $G$ respectivamente; i.e.,
+			%
+			\begin{equation*}
+				DF(u,v) = \lim_{\epsilon\to 0} \frac{F(u + \epsilon \, v) - F(u)}{\epsilon}
+				\quad\text{y}\quad
+				DG(u,v) = \lim_{\epsilon\to 0} \frac{G(u + \epsilon \, v) - G(u)}{\epsilon}.
+			\end{equation*}
+			%
+			Obtenga fórmulas explícitas para $DF$ y $DG$.
+			\item\label{q:optimalityConditions} (4 puntos) Las condiciones de optimalidad local de primer orden asociadas al problema de minimización con restricciones \eqref{IDM} son:
+			Hallar a un minimizador $u \in H^1_0(\Omega)$ y un multiplicador de Lagrange $\lambda \in \Real$ tal que
+			%
+			\begin{equation}\label{OC}\tag{$\star$}
+				\left\{
+				\begin{array}{c}
+					(\forall\,v\in H^1_0(\Omega)) \quad DF(u,v) - \lambda \, DG(u,v) = 0,\\
+					G(u) = 0.
+				\end{array}
+				\right.
+			\end{equation}
+			%
+			Pruebe que si se tiene un par solución $(u,\lambda)$ de \eqref{OC} en el que la función $u$ es un minimizador global de \eqref{IDM}, entonces $\lambda = C$.
+			\item\label{q:computeMinimizer} (6 puntos) Reconozca a la primera ecuación de \eqref{OC} como la formulación variacional de un problema de autovalores diferencial y calcule su autovalor $\lambda$ más pequeño, que es el $C$ buscado.
+			\textbf{Indicación:} Acepte la interpretación informal $H^1_0(\Omega) = \{ v \in H^1(\Omega) \mid v(0) = v(\pi) = 0 \}$.
+		\end{enumerate}
+	\end{problem}
+    \begin{proof}
+    	\begin{enumerate}[label=\textbf{\theproblem.\Roman{*}.},ref=\theproblem.\Roman{*},parsep=1ex]
+    		\item Dados $\epsilon\neq 0$ y $u,v\in H^{1}_{0}(\Omega)$, se tiene que
+    		\begin{align}
+    			\frac{F\left(u+\epsilon v\right) - F(u)}{\epsilon} &= \frac{\int_{\Omega}\left(u'(x) + \epsilon v'(x)\right)^{2}\ \text{d}x - \int_{\Omega}\abs{u'(x)}^{2}\ \text{d}x}{\epsilon}\nonumber\\ 
+    			&= \frac{\int_{\Omega}\abs{u'(x)}^{2} +2\epsilon u'(x)v'(x) + \epsilon^{2}\abs{v'(x)}^{2} - \abs{u'(x)}^{2}\ \text{d}x}{\epsilon}\nonumber\\
+    			&= 2\int_{\Omega}u'(x)v'(x)\ \text{d}x + \epsilon\int_{\Omega}\abs{v'(x)}^{2}\ \text{d}x\label{diffF}.
+    		\end{align} 
+    	    De forma similar
+    	    \begin{align}
+    	    	\frac{G\left(u+\epsilon v\right) - G(u)}{\epsilon} &= \frac{\int_{\Omega}\left(u(x) + \epsilon v(x)\right)^{2}\ \text{d}x - 1 - \int_{\Omega}\abs{u(x)}^{2}\ \text{d}x + 1}{\epsilon}\nonumber\\ 
+    	    	&= \frac{\int_{\Omega}\abs{u(x)}^{2} +2\epsilon u(x)v(x) + \epsilon^{2}\abs{v(x)}^{2} - \abs{u(x)}^{2}\ \text{d}x}{\epsilon}\nonumber\\
+    	    	&= 2\int_{\Omega}u(x)v(x)\ \text{d}x + \epsilon\int_{\Omega}\abs{v(x)}^{2}\ \text{d}x\label{diffG}.
+    	    \end{align} 
+    	    Tomando límite cuando $\epsilon\to 0$ a la expresión dada en \eqref{diffF} se obtiene
+    	    \begin{align*}
+    	    	DF(u,v) = \lim_{\epsilon\to 0}\frac{F\left(u+\epsilon v\right) - F(u)}{\epsilon} = \lim_{\epsilon\to 0}\left(2\int_{\Omega}u'(x)v'(x)\ \text{d}x + \epsilon\int_{\Omega}\abs{v'(x)}^{2}\ \text{d}x\right) = 2\int_{\Omega}u'(x)v'(x)\ \text{d}x
+    	    \end{align*}
+            Análogamente para la expresión dada en \eqref{diffG}
+            \begin{align*}
+            	DG(u,v) = \lim_{\epsilon\to 0}\frac{G\left(u+\epsilon v\right) - G(u)}{\epsilon} = \lim_{\epsilon\to 0}\left(2\int_{\Omega}u(x)v(x)\ \text{d}x + \epsilon\int_{\Omega}\abs{v(x)}^{2}\ \text{d}x\right) = 2\int_{\Omega}u(x)v(x)\ \text{d}x
+            \end{align*}
+            \item Sea $\left(u,\lambda\right)\in H_{0}^{1}(\Omega)\times R$ una solución de \eqref{OC}, esto es 
+            \begin{align*}
+            	\int_{\Omega}u'(x)v'(x)\ \text{d}x = \lambda \int_{\Omega}u(x)v(x)\ \text{d}x \quad \text{y} \quad \int_{\Omega}\abs{u(x)}^{2}\ \text{d}x = 1,
+            \end{align*}
+            para todo $v\in H_{0}^{1}(\Omega)$. En particular, tomando $v=u$, es claro que
+            \begin{align*}
+            	\int_{\Omega}\abs{u'(x)}^{2}\ \text{d}x = \lambda \int_{\Omega}\abs{u(x)}^{2}\ \text{d}x 
+            \end{align*}
+            Usando la restricción de $u$, se deduce que 
+            \begin{align*}
+            	\lambda = \int_{\Omega}\abs{u'(x)}^{2}\ \text{d}x.
+            \end{align*}
+            Además, $u$ es un minimizador global de \eqref{IDM}, por lo que 
+            \begin{align*}
+            	C = F(u) = \int_{\Omega}\abs{u'(x)}^{2}\ \text{d}x = \lambda.
+            \end{align*}
+            \item Considere el problema de valores de frontera 
+            \begin{equation}\label{PSL}
+            	\left\{
+            	\begin{array}{c}
+            		-u''(x) = \lambda u(x),\\
+            		u(0) = 0, \\
+            		u(\pi) = 0.
+            	\end{array}
+            	\right.
+            \end{equation}
+           Testeando con $v\in H^{1}_{0}(\Omega)$ e integrando por partes, se obtiene el siguiente problema variacional  
+           \begin{equation}\label{WPSL}
+           	\left\{
+           	\begin{array}{c}
+           		\text{Hallar}\ u\in H_{0}^{1}(\Omega)\ \text{tal que} \\~\\
+           		 \int_{\Omega} u'(x)v'(x)\ \text{d}x = \lambda \int_{\Omega}u(x)v(x)\ \text{d}x\\~\\
+           		\text{para todo}\ v\in H_{0}^{1}(\Omega).
+           	\end{array}
+           	\right.
+           \end{equation}
+           Es decir, la primera ecuación descrita en \eqref{OC} es una formulación variacional de un problema diferencial de valores propios. Ahora, para encontrar $\lambda$ es conveniente resolver \eqref{PSL}, lo cual es sencillo usando la teoría de ecuaciones diferenciales ordinarias. En este caso, el polinomio característico asociado a la EDO descrita en \eqref{PSL} es
+           \begin{align}
+           	p(\xi) = \xi^{2} + \lambda
+           \end{align} 
+           como $\lambda>0$, se deduce que las raíces del polinomio característico son $\xi_{1} = \sqrt{\lambda}i$ y $\xi_{2} = -\sqrt{\lambda}i$, por lo que
+           \begin{align*}
+           	u(x) = c_{1}\sen(\sqrt{\lambda}x) + c_{2}\cos(\sqrt{\lambda}x)
+           \end{align*}
+           como $u(0) = 0$, es directo notar que $c_{2} = 0$ y del hecho que $u(\pi) = 0$, se obtiene que 
+           \begin{align*}
+           	\sen(\sqrt{\lambda}\pi) = 0
+           \end{align*}
+           esta ecuación es válida cuando $\lambda_{n} = n^{2}$, para todo $n\in\mathbb{N}$. Con esto, se obtiene la familia de valores propios $\{\lambda_{n}\}_{n\in \mathbb{N}}$. Finalmente $\displaystyle C = \min_{n\in\mathbb{N}}\lambda_{n} = 1$.
+    	\end{enumerate}
+    \end{proof}
+	
+	\bigskip
+	
+	\newcommand{\RP}{\Real_+}
+	\begin{problem}
+		Sea $\RP$ la semirrecta $\{ x \in \Real \mid x > 0 \}$.
+		La semirrecta $\RP$ es un grupo simétrico respecto a la operación producto.
+		Dado $a \in \RP$, definimos a la \emph{$\RP$-traslación por $a$} al mapa $\upsilon_a \colon \RP \to \RP$ definido por $\upsilon_a(x) = x/a$.
+		Sea $w \colon \RP \to \Real$ la función definida por $w(t) := 1/t$.
+		
+		Dado $p \in [1,\infty)$, definimos al espacio de Lebesgue ponderado $L^p_w(\RP) := w^{-1/p} L^p(\RP)$ junto a su norma natural $\norm{u}_{L^p_w(\RP)} := \left( \int_{\RP} \abs{u(t)}^p w(t) \dd t\right)^{1/p}$.
+		Es directo comprobar que $L^p_w(\RP)$ hereda de $L^p(\RP)$ la calidad de espacio de Banach.
+		Definimos también $L^\infty_w(\RP) := L^\infty(\RP)$, con la misma norma.
+		
+		Dadas funciones medibles $f \colon \RP \to \Real$ y $g \colon \RP \to \Real$ definimos a la \emph{$\RP$-convolución entre $f$ y $g$} como la función $f \odot g$ definida por
+		%
+		\begin{equation}\label{RP-convolution}
+			(f \odot g)(x) := \int_{\RP} f(x/y) g(y) w(y) \dd y.
+		\end{equation}
+		%
+		Se puede probar (pero no lo haga aquí) que la $\RP$-convolución $\odot$ es una operación simétrica y que satisface una desigualdad de Young:
+		Si los exponentes $1 \leq p, q, r \leq \infty$ están conectados por $\frac{1}{r} = \frac{1}{p} + \frac{1}{q} - 1$, entonces para todo $f \in L^p_w(\RP)$ y $g \in L^q_w(\RP)$ se tiene que
+		%
+		\begin{equation}\label{RP-Young}
+			\norm{f \odot g}_{L^r_w(\RP)} \leq \norm{f}_{L^p_w(\RP)} \norm{g}_{L^q_w(\RP)}.
+		\end{equation}
+		%
+		\begin{enumerate}[label=\textbf{\theproblem.\Roman{*}.},ref=\theproblem.\Roman{*},parsep=1ex]
+			\item\label{q:Hardy-precursor} Sea $p > 1$ y sea $h_p \colon \RP \to \Real$ la función definida por
+			%
+			\begin{equation*}
+				h_p(t) := \begin{cases}
+					0 & \text{si } 0 < t \leq 1,\\
+					t^{1/p-1} & \text{si } t > 1.
+				\end{cases}
+			\end{equation*}
+			%
+			Pruebe que $h_p \in L^1_w(\RP)$ calculando su norma explícitamente.
+			\item\label{q:Hardy} Sea $p > 1$.
+			Dada cualquier $f$ en el espacio de Lebesgue sin peso $L^p(\RP)$, definimos a la función $F \colon \RP \to \Real$ por
+			%
+			\begin{equation*}
+				F(x) := \frac{1}{x} \int_0^x f(y) \dd y
+			\end{equation*}
+			%
+			Pruebe que $F$ también pertenece al mismo espacio de Lebesgue sin peso $L^p(\RP)$ y satisface la llamada \emph{Desigualdad de Hardy}:
+			%
+			\begin{equation*}
+				\norm{F}_{L^p(\RP)} \leq \frac{p}{p-1} \norm{f}_{L^p(\RP)}.
+			\end{equation*}
+			%
+			\textbf{Indicación obligatoria:}
+			Pruebe y explote que $h_p \odot (w^{-1/p} f) = w^{-1/p} F$.
+		\end{enumerate}
+	\end{problem}
+	\begin{proof}
+		En lo que sigue $p>1$.
+		\begin{enumerate}[label=\textbf{\theproblem.\Roman{*}.},ref=\theproblem.\Roman{*},parsep=1ex]
+			\item De un cálculo directo
+			\begin{align*}
+				\norm{h_{p}}_{L^{1}_{\omega}(\RP)}  = \int_{1}^{+\infty} t^{\frac{1}{p}-1}\frac{1}{t}\ \text{d}t = \int_{1}^{+\infty} t^{\frac{1}{p}-2}\ \text{d}t = \lim_{b\to+\infty} \int_{1}^{b}t^{\frac{1}{p}-2}\ \text{d}t = \lim_{b\to+\infty}\left(\frac{b^{\frac{1-p}{p}}}{\frac{1-p}{p}} - \frac{1}{\frac{1-p}{p}}\right) = \frac{p}{p-1}.
+			\end{align*}
+		\item Sea $f\in L^{p}(\RP)$. Usando la definición de $h_{p}$ y luego de hacer manipulaciones algebraicas, se obtiene la identidad
+		\begin{align*}
+			\left(h_{p}\odot\left(\omega^{-1/p}f\right)\right)(x) &= \int_{\RP} h_{p}\left(\frac{x}{y}\right)\omega^{-1/p}(y)f(y)\omega(y)\ \text{d}y\\ &= \int_{0}^{+\infty} h_{p}\left(\frac{x}{y}\right)f(y)\omega^{\frac{p-1}{p}}(y)\ \text{d}y\\ &= \int_{0}^{x}f(y) \left(\frac{x}{y}\right)^{\frac{1-p}{p}}\left(\frac{1}{y}\right)^{\frac{p-1}{p}}\ \text{d}y\\
+			&= \omega^{-1/p}(x)\frac{1}{x}\int_{0}^{x}f(y)\ \text{d}y\\
+			&= \omega^{-1/p}(x)F(x).
+		\end{align*}
+	    Usando la indicación y la desigualdad de Young con $q = 1$ y $r = p$, se tiene que 
+	    \begin{align}
+	    	\norm{\omega^{-1/p}(x)F(x)}_{L^{p}_{\omega}(\RP)} &= \norm{h_{p}\odot\left(\omega^{-1/p}f\right)}_{L^{p}_{\omega}(\RP)}\nonumber\\ &\leq \norm{h_{p}}_{L^{1}_{\omega}(\RP)}\norm{\omega^{-1/p}f}_{L^{p}_{\omega}(\RP)}\nonumber\\ &= \frac{p}{p-1}\left(\int_{\RP}\abs{\omega^{-1/p}(x)f(x)}^{p}\omega(x)\ \text{d}x\right)^{1/p}\nonumber\\
+	    	&= \frac{p}{p-1}\left(\int_{\RP}\abs{\omega^{-1/p}(x)f(x)}^{p}\omega(x)\ \text{d}x\right)^{1/p}\nonumber\\
+	    	&= \frac{p}{p-1}\norm{f}_{L^{p}(\RP)}\label{E}
+	    \end{align} 
+        Además, es directo notar que
+        \begin{align}
+        	\norm{\omega^{-1/p}(x)F(x)}_{L^{p}_{\omega}(\RP)} = \left(\int_{\RP}\abs{\omega^{-1/p}(x)F(x)}^{p}\right)^{1/p} = \norm{F}_{L^{p}(\RP)}\label{EE}
+        \end{align}
+        Juntando lo obtenido en \eqref{E} y en \eqref{EE} se deduce la desigualdad deseada, y además se deduce que $F$ pertenece al espacio de Lebesgue $L^{p}(\RP)$.
+		\end{enumerate}
+	\end{proof}
+	
+	
+	\begin{thebibliography}{Tar07}
+		
+		\bibitem[Tar07]{Tartar}
+		Luc Tartar, \emph{An introduction to {S}obolev spaces and interpolation spaces}, Lecture Notes of the Unione Matematica Italiana, vol.~3, Springer, Berlin, 2007. MR~2328004 (2008g:46055).
+		
+	\end{thebibliography}
+\end{document} 

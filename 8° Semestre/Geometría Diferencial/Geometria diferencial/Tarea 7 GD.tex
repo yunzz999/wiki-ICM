@@ -1,0 +1,142 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Geometría Diferencial}}
+\newcommand{\tarea}{\textbf{Tarea 7}}
+\newcommand{\fecha}{\textbf{\today}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Geometría Diferencial (525582)}\\
+\textbf{Tarea 7}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+\maketitle
+	\begin{pro}\upshape
+	Sea $M$ una $m$ variedad riemanniana con tensor fundamental $g$. Muestre que para todo $p\in M$ la aplicación
+	\begin{align*}
+		\alpha : T_{p}M  \longrightarrow T^{*}_{p}M
+	\end{align*} 
+	dada por $\alpha_{X}(Y) = G(X,Y)$ resulta un isomorfismo lineal.
+\end{pro}
+\begin{proof}
+	Sea $(\mathcal{U},\varphi_{u})$ una carta local de la variedad $M$, donde $p\in \mathcal{U}$. Con lo anterior se tienen $\{du^{1},\dots,du^{m}\}$ y $\{\frac{\partial}{\partial u^{1}},\dots,\frac{\partial}{\partial u^{m}}\}$ bases locales de $T^{*}_{p}M$ y $T_{p}M$ respectivamente.
+	Para mostrar que la aplicación $\alpha$ es un isomorfismo, probaremos que la aplicación lineal es inyectiva y sobreyectiva.
+	\begin{itemize}
+		\item Inyectividad.
+		La aplicación $\alpha$ definida por
+		\begin{align*}
+			\alpha :\  &T_{p}M  \longrightarrow T^{*}_{p}M\\
+			&X = X^{i}\frac{\partial}{\partial u^{i}} \mapsto \alpha_{X} = g_{ij}(p)X^{i}du^{j}
+		\end{align*}
+		es inyectiva si y solo si $\textup{Ker}(\alpha) = \{\theta_{T^{*}_{p}M}\}$. Sea $X\in \textup{Ker}(\alpha)$, entonces
+		\begin{align*}
+			\alpha_{X} = g_{ij}(p)X^{i}du^{j} = \theta_{T^{*}_{p}M}\iff g_{ij}(p)X^{i} = \theta_{\mathbb{R}^{m}}
+		\end{align*}
+	por lo que demostrar la inyectividad de la aplicación $\alpha$ se reduce a mostrar que el sistema 
+	\begin{align}
+		g_{ij}(p)X^{i} = \theta_{\mathbb{R}^{m}}\label{eq:sis}
+	\end{align}
+    solo admite solución trivial. En este caso, como $M$ es una $m$ variedad riemanniana, se tiene que $G$ es un tensor definido positivo, lo cual es equivalente a afirmar que la matriz $(g_{ij}(p))_{m\times m}$ es una matriz definida positiva y por tanto invertible, por lo que el sistema de ecuaciones homogéneo \eqref{eq:sis} tiene solución única, la cual es $X = \theta_{T_{p}M}$. Así, $\textup{Ker}(\alpha) = \{\theta_{T^{*}_{p}M}\}$ o equivalentemente $\alpha$ es inyectiva.
+		\item Sobreyectividad. 	La aplicación $\alpha$ definida por
+		\begin{align*}
+			\alpha :\  &T_{p}M  \longrightarrow T^{*}_{p}M\\
+			&X = X^{i}\frac{\partial}{\partial u^{i}} \mapsto \alpha_{X} = g_{ij}(p)X^{i}du^{j}
+		\end{align*}
+	 es sobreyectiva si y solo si $\textup{Im}(\alpha) = T^{*}_{p}M$, es decir, para cada elemento $\omega$ de $T^{*}_{p}M$, existe un elemento $X$ de $T_{p}M$ tal que $\alpha_{X} = \omega$. Para mostrar lo anterior, notemos que
+	 \begin{align*}
+	 	\alpha_{X} &: T_{p}M \rightarrow \mathbb{R}\\
+	 	            & Y \mapsto \alpha_{X}(Y) = g_{ij}(p)X^{i}Y^{j}
+	 \end{align*}
+    entonces $\alpha_{X}\in T^{*}_{p}M$ y así
+    \begin{align}
+    	\alpha_{X} = X_{k}du^{k}\label{eq:alpha}
+    \end{align}
+    Si a \eqref{eq:alpha} le aplicamos $Y_{l} = \frac{\partial}{\partial u^{l}}$ con $l\in \{1,\dots,m\}$
+    \begin{align}
+    	\alpha_{X}\left( Y_{l} \right)  = X_{k}du^{k}\left( \frac{\partial}{\partial u^{l}}\right) = X_{k}\delta_{l,k} = X_{l}.\label{eq:alpha1}
+    \end{align}
+    Por otro lado, si tomamos $Y_{l} = \frac{\partial}{\partial u^{l}}$ con $l\in \{1,\dots,m\}$ y $X = X^{i}\frac{\partial}{\partial u^{i}}$, obtenemos
+    \begin{align}
+    	\alpha_{X}(Y_{l}) = G\left(X^{r}\frac{\partial}{\partial u^{r}},\frac{\partial}{\partial u^{l}} \right) &= g_{ij}(p)du^{i}\otimes du^{j} \left(X^{r}\frac{\partial}{\partial u^{r}},\frac{\partial}{\partial u^{l}} \right)\nonumber\\ &= g_{ij}(p)du^{i}\left(X^{r}\frac{\partial}{\partial u^{r}}\right) du^{j}\left( \frac{\partial}{\partial u^{l}} \right)\nonumber\\
+    	 &=g_{ij}(p)X^{r}du^{i}\left(\frac{\partial}{\partial u^{r}}\right) du^{j}\left( \frac{\partial}{\partial u^{l}} \right)\nonumber\\
+    	 &= g_{ij}(p)X^{r}\delta_{i,r}\delta_{j,l}\nonumber\\
+    	 &= g_{rl}(p)X^{r}\label{eq:alpha2}
+    \end{align}
+    juntando \eqref{eq:alpha1} con \eqref{eq:alpha2}, se obtiene
+    \begin{align}
+    	X_{j} = g_{ij}(p)X^{i}\label{eq:sistema}
+    \end{align}
+    Ademas considerando el hecho que la matriz $(g_{ij}(p))$ es invertible y que su inversa es $(g^{ij}(p))$
+    \begin{align*}
+    	X^{i} = g^{ij}(p)X_{j}
+    \end{align*}
+    Por lo tanto el sistema de $m$ ecuaciones y $m$ incógnitas \eqref{eq:sistema} tiene única solución, lo que nos da a entender que hay una relación uno a uno entre las componentes de los elementos de $T_{p}M$ con las componentes de los elementos de $T^{*}_{p}M$, esta relación es posible gracias a la matriz $(g_{ij}(p))$ y a su inversa $(g^{ij}(p))$.
+	\end{itemize}
+    Finalmente como la aplicación lineal (se tiene la linealidad ya que $\alpha$ esta definido por el tensor fundamental) es inyectiva y sobreyectiva, o forma equivalente la aplicación $\alpha$ es un isomorfismo lineal y por tanto $T_{p}M \cong T^{*}_{p}M$.
+\end{proof}
+\begin{pro}\upshape
+	Sea $M$ una $m$ variedad riemanniana con tensor fundamental $g$, esto es, $g = g_{ij}du^{i}\otimes du^{j}$. Asuma que $G$ es el tensor contravariante de orden dos dado por $g$, esto es, para $p\in (\mathcal{U},\varphi_{u})$,
+	\begin{align*}
+		G = g^{kl}\frac{\partial}{\partial u^{k}}\otimes\frac{\partial}{\partial u^{l}}. 
+	\end{align*}
+    Muestre que para $p\in(\mathcal{V},\varphi_{v})$, resulta
+    \begin{align*}
+    	G(dv^{i},dv^{j}) = g^{kl}\left( \frac{\partial v^{i}}{\partial u^{k}}\right) \left( \frac{\partial v^{j}}{\partial u^{l}}\right) 
+    \end{align*}
+\end{pro}
+\begin{proof}
+	Sean $(\mathcal{U},\varphi_{u})$ y $(\mathcal{V},\varphi_{v})$ dos cartas locales de $M$, tales que $p \in \mathcal{U}\cap\mathcal{V}$, donde $\{u^{1},\dots,u^{m}\}$ y $\{v^{1},\cdots,v^{m}\}$ son las coordenadas locales de cada carta respectivamente.
+	Como $\{\frac{\partial}{\partial u^{1}},\dots,\frac{\partial}{\partial u^{m}}\}$ y $\{\frac{\partial}{\partial v^{1}},\dots,\frac{\partial}{\partial v^{m}}\}$ son bases de $T_{p}M$ y por lo demostrado en la tarea $4$, se tiene que 
+	\begin{align*}
+		\frac{\partial}{\partial u^{i}} = \frac{\partial v^{r}}{\partial u^{i}}\frac{\partial}{\partial v^{r}}
+	\end{align*}
+   Por lo tanto
+   \begin{align*}
+   	G = g^{kl}\frac{\partial}{\partial u^{k}}\otimes\frac{\partial}{\partial u^{l}} = g^{kl}\frac{\partial v^{r}}{\partial u^{k}}\frac{\partial}{\partial v^{r}}\otimes \frac{\partial v^{t}}{\partial u^{l}}\frac{\partial}{\partial v^{t}}
+   \end{align*}
+   y así,
+   \begin{align*}
+   	G\left( dv^{i},dv^{j}\right) &= g^{kl}\frac{\partial v^{r}}{\partial u^{k}}\frac{\partial}{\partial v^{r}}\otimes \frac{\partial v^{t}}{\partial u^{l}}\frac{\partial}{\partial v^{t}}\left( dv^{i},dv^{j}\right)\\ &= g^{kl}\left( \frac{\partial v^{r}}{\partial u^{k}}\right) \left(\frac{\partial v^{t}}{\partial u^{l}} \right) \frac{\partial}{\partial v^{r}}\otimes \frac{\partial}{\partial v^{t}}\left( dv^{i},dv^{j}\right)\\ &= g^{kl}\left( \frac{\partial v^{r}}{\partial u^{k}}\right) \left(\frac{\partial v^{t}}{\partial u^{l}} \right) \frac{\partial}{\partial v^{r}}\left( dv^{i}\right) \frac{\partial}{\partial v^{t}}\left(dv^{j}\right)\\
+   	&=  g^{kl}\left( \frac{\partial v^{r}}{\partial u^{k}}\right) \left(\frac{\partial v^{t}}{\partial u^{l}} \right) \delta_{r,i}\delta_{t,j}\\
+   	&= g^{kl}\left( \frac{\partial v^{i}}{\partial u^{k}}\right) \left(\frac{\partial v^{j}}{\partial u^{l}} \right)
+   \end{align*}
+   obteniendo lo que deseábamos mostrar.
+\end{proof}
+\end{document}

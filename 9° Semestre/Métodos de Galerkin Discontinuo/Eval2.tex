@@ -1,0 +1,436 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Metodo de Galerkin Discontinuo}}
+\newcommand{\tarea}{\textbf{Evaluación 2}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+\renewcommand{\theequation}{\roman{equation}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Método de Galerkin Discontinuo}\\
+	\textbf{Tarea 3}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\section*{\underline{Introducción}}
+	Considere la formulación mixta de las ecuaciones de Navier-Stokes
+	\begin{align*}
+		L &= \nabla \bs{u}  &&\textup{en} \ \Omega, \\
+		-\nu \nabla\cdot L + \nabla\cdot\left(\bs{u}\otimes \bs{u} \right) + \nabla p &= \bs{f}  &&\textup{en}\ \Omega,\\
+		\nabla\cdot \bs{u} &= 0  &&\textup{en}\ \Omega,\\
+		\bs{u} &= 0   &&\textup{en}\ \partial\Omega,\\
+		\int_{\Omega} p &= 0,
+	\end{align*}
+	donde $\bs{u}$ es la velocidad, $p$ es la presión, $\nu$ es la viscosidad cinemática y $\bs{f}\in \bs{L^{2}\left(\Omega\right)}$ es la fuerza exterior del cuerpo. El dominio $\Omega\subset\mathbb{R}^{d}$ es un poligono $(d=2)$ o un poliedro $(d=3)$. Mediante un método HDG, se tiene la siguiente formulación discreta: hallar $\left(L_{h},\bs{u}_{h},p_{h},\bs{\hat{u}}_{h}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$ tal que 
+	\begin{align}
+		\Pii{L_{h}}{G}_{\Th} + \Pii{\bs{u}_{h}}{\nabla\cdot G}_{\Th} - \PI{\bs{\hat{u}}_{h}}{G\bs{n}}_{\partial\Th} &= 0,\label{eq:FDHDGA}\\
+		\Pii{\nu L_{h}}{\nabla\bs{v}}_{\Th} - \Pii{\bs{u}_{h}\otimes\bs{\beta}}{\nabla \bs{v}}_{\Th} - \Pii{p_{h}}{\nabla\cdot\bs{v}}_{\Th} - \PI{\nu\hat{L}_{h}\bs{n}-\hat{p}_{h}\bs{n}-\left(\bs{\hat{u}}_{h}\otimes\bs{\beta}\right)\bs{n}}{\bs{v}}_{\partial\Th} &= \Pii{\bs{f}}{\bs{v}}_{\Th},\label{eq:FDHDGB}\\
+		-\Pii{\bs{\hat{u}}_{h}}{\nabla q}_{\Th} + \PI{\bs{\hat{u}}_{h}\cdot \bs{n}}{q}_{\partial\Th} &= 0,\label{eq:FDHDGC}\\
+		\Pii{\nu\hat{L}_{h}\bs{n} - \hat{p}_{h}\bs{n} - \left(\bs{\hat{u}}_{h}\otimes\bs{\beta}\right)\bs{n}}{\bs{\mu}}_{\partial\Th} &= 0.\label{eq:FDHDGD}
+	\end{align}
+	Para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$. Donde,
+	\begin{align*}
+		\left(\nu\hat{L}_{h}-\hat{p}_{h}\right)\bs{n} &:= \nu L_{h}\bs{n} - p_{h}\bs{n} - S\left(\bs{u}_{h} - \bs{\hat{u}}_{h}\right) &&\textup{en}\ \partial\Th,\\
+		S &:= S_{\bs{\beta}} + S_{\bs{n}},\\
+		S_{\bs{\beta}} &:= \max\left(\bs{\beta}\cdot\bs{n},0\right)\textup{Id},\\
+		S_{\bs{n}} &:= \zeta_{n} h^{-1}_{K}\bs{n}\otimes\bs{n}  &&\textup{en}\ \partial\Th,
+	\end{align*} 
+    donde el parámetro de estabilización $\zeta_{n}$ es un número positivo, y $\bs{\beta} = \mathbb{P}(\bs{u}_{h},\bs{\hat{u}}_{h})$ definido en \cite{CAC2017}. Ademas, los espacios donde se define la formulación discreta son:
+    \begin{align*}
+    	G_{h} &:= \{ G\in L^{2}\left(\Omega\right): \ G|_{K}\in P_{k}\left(K\right), \ \forall K\in \Th\},\\
+    	\bs{V}_{h} &:= \{ \bs{v}\in \bs{L^{2}}\left(\Omega\right): \ \bs{v}|_{K}\in \bs{P}_{k}\left(K\right), \ \forall K\in \Th\},\\
+    	Q_{h} &:= \{ p\in L^{2}_{0}\left(\Omega\right): \ p|_{K}\in P_{k}\left(K\right), \ \forall K\in \Th\},\\
+    	\bs{M}_{h} &:= \{\bs{\mu}\in \bs{L^{2}}\left(\mathscr{E}_{h}\right):\ \bs{\mu}|_{F}\in \bs{P}_{k}\left(F\right), \ \forall F\in \mathscr{E}_{h}\},\\
+    	\bs{M}^{\circ}_{h} &:= \{\bs{\mu}\in \bs{M}_{h}: \ \bs{\mu}|_{\partial\Omega} = 0\}.
+    \end{align*}
+    Con el objetivo de tener una ecuación mas compacta, se definen las formas bilineales
+    \begin{align}\label{eq:FDC}
+    	A_{h}\left((\bs{v},\bs{\mu}),G\right) &:= \Pii{\bs{v}}{\nabla\cdot G}_{\Th} - \PI{\bs{\mu}}{G\bs{n}}_{\partial\Th},\\
+    	B_{h}\left((\bs{v},\bs{\mu}),q\right) &:= -\Pii{\bs{v}}{\nabla q}_{\Th} + \PI{q}{\bs{\mu}\cdot\bs{n}}_{\partial\Th},\\
+    	J_{n}\left((\bs{v}_{1},\bs{\mu}_{1}),(\bs{v}_{2},\bs{\mu}_{2})\right) &:= \sum_{K\in\Th}\zeta_{n}h^{-1}_{K}\PI{(\bs{v}_{1}-\bs{\mu}_{1})\cdot\bs{n}}{(\bs{v}_{2}-\bs{\mu}_{2})\cdot\bs{n}}_{\partial K},\\
+    	\mathcal{O}_{h}\left(\bs{\beta};(\bs{v}_{1},\bs{\mu}_{1}),(\bs{v}_{2},\bs{\mu}_{2})\right) &:= -\Pii{\bs{v}_{1}\otimes\bs{\beta}}{\nabla\bs{v}_{2}}_{\Th} + \PI{(\bs{\mu}_{1}\otimes\bs{\beta})\bs{n} + S_{\bs{\beta}}(\bs{v}_{1}-\bs{\mu}_{1})}{\bs{v}_{2}-\bs{\mu}_{2}}_{\partial\Th}.
+    \end{align}
+    Reemplazando esto en la formulación discreta y sumando las cuatro ecuaciones, el problema se puede reescribir como: hallar $\left(L_{h},\bs{u}_{h},p_{h},\bs{\hat{u}}_{h}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$ tal que 
+    \begin{align}
+    	\Pii{L_{h}}{G}_{\Th} &+ A_{h}\left((\bs{u}_{h},\bs{\hat{u}}_{h}),G\right) - A_{h}\left((\bs{v},\bs{\mu}),\nu L_{h}\right) - 	B_{h}\left((\bs{v},\bs{\mu}),p_{h}\right) + B_{h}\left((\bs{u}_{h},\bs{\hat{u}}_{h}),q\right)\nonumber \\  &+ J_{n}\left((\bs{u}_{h},\bs{\hat{u}}_{h}),(\bs{v},\bs{\mu})\right) + \mathcal{O}_{h}\left(\bs{\beta};(\bs{u}_{h},\bs{\hat{u}}_{h}),(\bs{v},\bs{\mu})\right) = \Pii{\bs{f}}{\bs{v}}_{\Th}, \label{eq:FDHDGC}
+    \end{align} 
+   donde $\bs{\beta} = \mathbb{P}(\bs{u}_{h},\bs{\hat{u}}_{h})$, para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$.
+   \newpage
+   \section*{\underline{Existencia y Unicidad}}
+    Estamos interesados en probar la existencia y unicidad de la formulación discreta definida en la introducción, esto se podrá garantizar con el siguiente teorema
+    \begin{teo}\label{teo2}
+    	Si la cantidad $\nu^{-2}\norm{\bs{f}}_{\Omega}$ es lo suficientemente pequeña, el método HDG (\ref*{eq:FDHDGA}-\ref*{eq:FDHDGD}) tiene única solución $\left(L_{h},\bs{u}_{h},p_{h},\bs{\hat{u}}_{h}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$, y ademas
+    	\begin{align*}
+    		||| \left(\bs{u}_{h},\bs{\hat{u}}_{h}\right) |||_{1,h} \leq C\nu^{-1}\norm{\bs{f}}_{\Omega}
+    	\end{align*}
+        para una constante $C$ independiente de $\nu$, la discretización y la solución exacta.
+    \end{teo}
+    \begin{proof}
+    El objetivo de este trabajo será mostrar este teorema usando el teorema del punto fijo de Brower, para esto debemos definir un operador que este definido en espacios los cuales sean compactos y que ademas sea una contracción. Se propone el operador $\mathcal{F}:\bs{Z}_{h}\longrightarrow \bs{Z}_{h}$, donde 
+    \begin{align*}
+    	\bs{Z}_{h} := \{ (\bs{v},\bs{\mu})\in \bs{V}_{h}\times \bs{M}^{\circ}_{h}:\ B_{h}\left((\bs{v},\bs{\mu}),q\right) = 0,\ \forall q\in Q_{h} \}.
+    \end{align*}
+    El operador $\mathcal{F}$ toma elementos $(\bs{w},\bs{\hat{w}})\in Z_{h}$ y lo transforma en un $(\bs{u},\bs{\hat{u}})\in Z_{h}$ el cual es parte de la solución $(L_{\bs{w}},\bs{u},p_{\bs{w}},\bs{\hat{u}})\in  G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$ de 
+    \begin{align*}
+    	\Pii{L_{\bs{w}}}{G}_{\Th} &+ A_{h}\left((\bs{u},\bs{\hat{u}}),G\right) - A_{h}\left((\bs{v},\bs{\mu}),\nu L_{\bs{w}}\right) - 	B_{h}\left((\bs{v},\bs{\mu}),p_{\bs{w}}\right) + B_{h}\left((\bs{u},\bs{\hat{u}}),q\right)\\ &+ J_{n}\left((\bs{u},\bs{\hat{u}}),(\bs{v},\bs{\mu})\right) + \mathcal{O}_{h}\left(\mathbb{P}(\bs{w},\bs{\hat{w}});(\bs{u},\bs{\hat{u}}),(\bs{v},\bs{\mu})\right) = \Pii{\bs{f}}{\bs{v}}_{\Th},
+    \end{align*} 
+    para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$. Notemos que si se tiene $\mathcal{F}(\bs{u}_{h},\bs{\hat{u}}_{h}) = (\bs{u}_{h},\bs{\hat{u}}_{h})$ se obtiene la existencia de la solución discreta del método HDG, si este punto fijo es único se tiene la unicidad. Antes de probar las hipótesis del teorema del punto fijo veamos que $\bs{\mathcal{F}}$ \textbf{esta bien definido}, esto es, el operador es biyectivo, para esto usaremos la alternativa de Fredholm, esto lo podemos hacer ya que el operador se reduce a un sistema de ecuaciones cuadrado. Dado $(\bs{w},\bs{\hat{w}}) := (\bs{0},\bs{0})$ y $\bs{f} := \bs{0}$, se define $\mathcal{F}(\bs{0},\bs{0}) = (\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}})$ tal que $(L_{\bs{0}},\bs{u}_{\bs{0}},p_{\bs{0}},\bs{\hat{u}}_{\bs{0}})\in  G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$ soluciona el sistema
+    \begin{align}
+    	\Pii{L_{\bs{0}}}{G}_{\Th} &+ A_{h}\left((\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}}),G\right) - A_{h}\left((\bs{v},\bs{\mu}),\nu L_{\bs{0}}\right) - 	B_{h}\left((\bs{v},\bs{\mu}),p_{\bs{0}}\right) + B_{h}\left((\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}}),q\right)\nonumber\\ &+ J_{n}\left((\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}}),(\bs{v},\bs{\mu})\right) + \mathcal{O}_{h}\left(\mathbb{P}(\bs{0},\bs{0});(\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}}),(\bs{v},\bs{\mu})\right) = 0,\label{eq:fcero}
+    \end{align} 
+    para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$. En particular, para $G = \nu L_{\bs{0}},\ \bs{v} = \bs{u}_{\bs{0}},\ q = p_{\bs{0}}$ y $\bs{\mu} = \bs{\hat{u}}_{\bs{0}}$ se obtiene 
+    \begin{align*}
+    	\abs{\nu}\norm{L_{\bs{0}}}^{2}_{\Th} + J_{n}\left((\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}}),(\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}})\right) = 0,
+    \end{align*}
+    usando la definición de $J_{n}$ se obtiene
+    \begin{align*}
+    	\abs{\nu}\norm{L_{\bs{0}}}^{2}_{\Th} + \sum_{K\in\Th} \zeta_{n}h^{-1}_{K}\norm{\left(\bs{u}_{\bs{0}} - \bs{\hat{u}}_{\bs{0}}\right)\cdot\bs{n}}^{2}_{\partial K} = 0
+    \end{align*}
+    De aquí se tiene que $L_{\bs{0}} = 0$ en $\Omega$ y $\bs{u}_{\bs{0}} = \bs{\hat{u}}_{\bs{0}}$ en $\partial \Th$. Como $\bs{\hat{u}}_{\bs{0}}\in \bs{M}^{\circ}_{h}$, se tiene que $\bs{u}_{\bs{0}} = \bs{\hat{u}}_{\bs{0}} = \bs{0}$ en $\partial\Omega$, ademas, dado $e\in \mathscr{E}^{i}_{h}$
+    \begin{align*}
+    	\salto{\bs{u}_{\bs{0}}} = \bs{u}_{\bs{0}}^{+}\cdot \bs{n}^{+} +  \bs{u}_{\bs{0}}^{-}\cdot \bs{n}^{-} = \bs{\hat{u}}_{\bs{0}}\cdot \bs{n}^{+} + \bs{\hat{u}}_{\bs{0}}\cdot \bs{n}^{-} = \bs{\hat{u}}_{\bs{0}}\cdot(\bs{n}^{+} + \bs{n}^{-}) = 0,
+    \end{align*}
+    es decir, $\bs{u}_{\bs{0}}$ es continua en $\Omega$. Reemplazando lo obtenido en \ref{eq:fcero} se obtiene
+    \begin{align*}
+    	A_{h}\left((\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}}),G\right) - 	B_{h}\left((\bs{v},\bs{\mu}),p_{\bs{0}}\right) + B_{h}\left((\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}}),q\right) + J_{n}\left((\bs{u}_{\bs{0}},\bs{\hat{u}}_{\bs{0}}),(\bs{v},\bs{\mu})\right)  = 0,
+    \end{align*}
+    esto se puede reescribir como sigue
+    \begin{align*}
+    	\Pii{\bs{u}_{\bs{0}}}{\nabla\cdot G}_{\Th} &- \PI{\bs{\hat{u}}_{\bs{0}}}{G\bs{n}}_{\partial \Th} + \Pii{\bs{v}}{\nabla p_{\bs{0}}}_{\Th} - \PI{p_{\bs{0}}}{\bs{\mu}\cdot\bs{n}}_{\partial\Th} - \Pii{\bs{u}_{\bs{0}}}{\nabla q}_{\Th} + \PI{q}{\bs{\hat{u}}_{\bs{0}}\cdot\bs{n}}_{\partial\Th}\\ &+ \sum_{K\in\Th} \zeta_{n}h^{-1}_{K}\PI{\left(\bs{u}_{\bs{0}} - \bs{\hat{u}}_{\bs{0}}\right)\cdot\bs{n}}{\left(\bs{v}-\bs{\mu}\right)\cdot\bs{n}}_{\partial K} = 0,
+    \end{align*}
+    dado que $\bs{u}_{\bs{0}} = \bs{\hat{u}}_{\bs{0}}$ en $\partial \Th$ se obtiene
+    \begin{align*}
+    	\Pii{\bs{u}_{\bs{0}}}{\nabla\cdot G}_{\Th} - \PI{\bs{\hat{u}}_{\bs{0}}}{G\bs{n}}_{\partial \Th} + \Pii{\bs{v}}{\nabla p_{\bs{0}}}_{\Th} - \PI{p_{\bs{0}}}{\bs{\mu}\cdot\bs{n}}_{\partial\Th} - \Pii{\bs{u}_{\bs{0}}}{\nabla q}_{\Th} + \PI{q}{\bs{\hat{u}}_{\bs{0}}\cdot\bs{n}}_{\partial\Th} = 0,
+    \end{align*}
+    esto se puede reescribir como 
+    \begin{align*}
+    	\sum_{K\in\Th}\left[  \Pii{\bs{u}_{\bs{0}}}{\nabla\cdot G}_{K} - \PI{\bs{\hat{u}}_{\bs{0}}}{G\bs{n}}_{\partial K} + \Pii{\bs{v}}{\nabla p_{\bs{0}}}_{K} - \PI{p_{\bs{0}}}{\bs{\mu}\cdot\bs{n}}_{\partial K} - \Pii{\bs{u}_{\bs{0}}}{\nabla q}_{K} + \PI{q}{\bs{\hat{u}}_{\bs{0}}\cdot\bs{n}}_{\partial K} \right] = 0.
+    \end{align*}
+    \newpage
+    Aplicando integración por partes a $\Pii{\bs{u}_{\bs{0}}}{\nabla\cdot G}_{K}$ con $K\in \Th$ se obtiene
+    \begin{align*}
+    	\sum_{K\in\Th}\left[  -\Pii{G}{\nabla\bs{u}_{\bs{0}}}_{K} + \PI{G\bs{n}}{\bs{u}_{\bs{0}}}_{\partial K} - \PI{\bs{\hat{u}}_{\bs{0}}}{G\bs{n}}_{\partial K} + \Pii{\bs{v}}{\nabla p_{\bs{0}}}_{K} - \PI{p_{\bs{0}}}{\bs{\mu}\cdot\bs{n}}_{\partial K} - \Pii{\bs{u}_{\bs{0}}}{\nabla q}_{K} + \PI{q}{\bs{\hat{u}}_{\bs{0}}\cdot\bs{n}}_{\partial K} \right] = 0,
+    \end{align*}
+    esto se puede reescribir como
+    \begin{align*}
+    	\sum_{K\in\Th}\left[  -\Pii{G}{\nabla\bs{u}_{\bs{0}}}_{K} +  \PI{\bs{u}_{\bs{0}} - \bs{\hat{u}}_{\bs{0}}}{G\bs{n}}_{\partial K} + \Pii{\bs{v}}{\nabla p_{\bs{0}}}_{K} - \PI{p_{\bs{0}}}{\bs{\mu}\cdot\bs{n}}_{\partial K} - \Pii{\bs{u}_{\bs{0}}}{\nabla q}_{K} + \PI{q}{\bs{\hat{u}}_{\bs{0}}\cdot\bs{n}}_{\partial K} \right] = 0,
+    \end{align*}
+    dado que $\bs{u}_{\bs{0}} = \bs{\hat{u}}_{\bs{0}}$ en $\partial \Th$ se obtiene
+     \begin{align*}
+    	\sum_{K\in\Th}\left[  -\Pii{G}{\nabla\bs{u}_{\bs{0}}}_{K} + \Pii{\bs{v}}{\nabla p_{\bs{0}}}_{K} - \PI{p_{\bs{0}}}{\bs{\mu}\cdot\bs{n}}_{\partial K} - \Pii{\bs{u}_{\bs{0}}}{\nabla q}_{K} + \PI{q}{\bs{\hat{u}}_{\bs{0}}\cdot\bs{n}}_{\partial K} \right] = 0,
+    \end{align*}
+    aplicando nuevamente integración por partes, esta vez a $\Pii{\bs{v}}{\nabla p_{\bs{0}}}_{K}$ y $\Pii{\bs{u}_{\bs{0}}}{\nabla q}_{K}$ para todo $K\in \Th$ se llega a
+    \begin{align*}
+    		\sum_{K\in\Th}\left[  -\Pii{G}{\nabla\bs{u}_{\bs{0}}}_{K} - \Pii{\nabla\cdot \bs{v}}{p_{\bs{0}}}_{K} + \Pii{\nabla\cdot \bs{u}_{\bs{0}}}{q}_{K} + \PI{\left(\bs{\mu} - \bs{v}\right)\cdot\bs{n}}{p_{\bs{0}}}_{\partial K} \right] = 0
+    \end{align*}
+    para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$. En particular, para $G = \nabla \bs{u}_{\bs{0}}$, $\bs{v} = \bs{u}_{\bs{0}}$, $q = p_{\bs{0}}$ y $\bs{\mu} = \bs{\hat{u}}_{\bs{0}}$ se obtiene
+    \begin{align*}
+    	-\norm{\nabla\bs{u}_{\bs{0}}}^{2}_{\Th} - \Pii{\nabla\cdot \bs{u}_{\bs{0}}}{p_{\bs{0}}}_{\Th} + \Pii{\nabla\cdot \bs{u}_{\bs{0}}}{p_{\bs{0}}}_{\Th} + \PI{\left(\bs{\hat{u}}_{\bs{0}} - \bs{u}_{\bs{0}}\right)\cdot\bs{n}}{p_{\bs{0}}}_{\partial \Th} = 0,
+    \end{align*}
+    esto es 
+    \begin{align*}
+    	\norm{\nabla\bs{u}_{\bs{0}}}_{\Th} = 0 \iff \nabla\bs{u}_{\bs{0}} = \bs{0} \iff \bs{u}_{\bs{0}}|_{K} = \textup{Cte}_{K}, \forall K\in \Th.
+    \end{align*}
+    Como $\bs{u}_{\bs{0}}$ es continua y ademas se anula en $\partial\Omega$, entonces se tiene que $\bs{u}_{\bs{0}} = \bs{0}$. Nos falta probar que $p_{\bs{0}} = 0$, para esto usemos que
+    \begin{align*}
+    	\sum_{K\in\Th}\left[  -\Pii{G}{\nabla\bs{u}_{\bs{0}}}_{K} - \Pii{\nabla\cdot \bs{v}}{p_{\bs{0}}}_{K} + \Pii{\nabla\cdot \bs{u}_{\bs{0}}}{q}_{K} + \PI{\left(\bs{\mu} - \bs{v}\right)\cdot\bs{n}}{p_{\bs{0}}}_{\partial K} \right] = 0
+    \end{align*}
+    para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$. Como $\nabla \bs{u}_{\bs{0}} = \bs{0}$ se tiene que 
+    \begin{align*}
+    	\sum_{K\in\Th}\left[   - \Pii{\nabla\cdot \bs{v}}{p_{\bs{0}}}_{K} + \PI{\left(\bs{\mu} - \bs{v}\right)\cdot\bs{n}}{p_{\bs{0}}}_{\partial K} \right] = 0
+    \end{align*}
+    para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$. Integrando por partes se obtiene 
+    \begin{align}\label{eq:pql}
+    	\sum_{K\in\Th}\left[   - \Pii{\bs{v}}{\nabla p_{\bs{0}}}_{K} + \PI{\bs{v}\cdot\bs{n}}{p_{\bs{0}}}_{\partial K} + \PI{\left(\bs{\mu} - \bs{v}\right)\cdot\bs{n}}{p_{\bs{0}}}_{\partial K} \right] = 0
+    \end{align}
+    para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$. En particular, para $\bs{\mu} = \bs{0}$ y $\bs{v} = \nabla p_{\bs{0}}$ se obtiene que
+    \begin{align*}
+    	\norm{\nabla p_{\bs{0}}}_{\Th} = 0 \iff  \nabla p_{\bs{0}} = \bs{0} \iff p|_{K} = \textup{Cte}_{K}, \forall K\in \Th,
+    \end{align*}
+    veamos que $p_{\bs{0}}$ es continuo en $\Omega$, para esto usemos \eqref{eq:pql} y el hecho que $ \nabla p_{\bs{0}} = \bs{0}$
+    \begin{align*}
+    	\sum_{K\in\Th}\left[ \PI{\bs{v}\cdot\bs{n}}{p_{\bs{0}}}_{\partial K} + \PI{\left(\bs{\mu} - \bs{v}\right)\cdot\bs{n}}{p_{\bs{0}}}_{\partial K} \right] = 0
+    \end{align*}
+    para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$. Desarrollando se obtiene
+    \begin{align}\label{eq:aa}
+    	\sum_{K\in\Th} \PI{\bs{\mu} \cdot\bs{n}}{p_{\bs{0}}}_{\partial K}  = 0, \ \forall \mu\in \bs{M}^{\circ}_{h}
+    \end{align} 
+    usando la siguiente propiedad
+    \begin{align*}
+    	\sum_{K\in\Th} \PI{\bs{\mu} \cdot\bs{n}}{p_{\bs{0}}}_{\partial K} = \PI{\salto{\bs{\mu}}}{\prom{p_{\bs{0}}}}_{\mathscr{E}^{i}_{h}} + \PI{\prom{\bs{\mu}}}{\salto{p_{\bs{0}}}}_{\mathscr{E}^{\i}_{h}}  + \PI{\bs{\mu}\cdot\bs{n}}{p_{\bs{0}}}_{\mathscr{E}^{\partial}_{h}},  \ \forall \bs{\mu}\in \bs{M}^{\circ}_{h}.
+    \end{align*}
+    Usando el hecho que las funciones en $\bs{M}^{\circ}_{h}$ son continuas respecto a las aristas de la triangulación, se anulan en la frontera de $\Omega$ y usando \eqref{eq:aa} se obtiene que 
+    \begin{align*}
+    	\PI{\bs{\mu}}{\salto{p_{\bs{0}}}}_{\mathscr{E}^{i}_{h}} = 0,\ \forall \bs{\mu}\in \bs{M}^{\circ}_{h},
+    \end{align*} 
+    en particular, para $\hat{e}\in \mathscr{E}^{i}_{h}$ se puede definir
+    \begin{align*}
+    	\bs{\mu} = \begin{cases}
+    		\salto{p_{\bs{0}}}& \text{ si } e = \hat{e} \\ 
+    		0 & \text{ si } e \neq \hat{e} 
+    	\end{cases}
+    \end{align*}
+    luego,
+    \begin{align*}
+    	\norm{\salto{p_{\bs{0}}}}_{\hat{e}} = 0,\ \forall \hat{e}\in \mathscr{E}^{i}_{h} \Longrightarrow \norm{\salto{p_{\bs{0}}}}_{\mathscr{E}^{i}_{h}} = 0 \iff \salto{p_{\bs{0}}} = 0\  \text{en}\ \mathscr{E}^{i}_{h}
+    \end{align*}
+    de aquí se deduce que $p_{\bs{0}}$ es continua en $\Omega$ y por tanto $p_{\bs{0}}(x) = \textup{Cte}$ para todo $x\in \Omega$, dado que $p_{\bs{0}}\in L^{2}_{0}(\Omega)$ y que $0<|\Omega|<+\infty$ se tiene que
+    \begin{align*}
+    	\int_{\Omega}p_{\bs{0}} = 0 \iff p_{\bs{0}}|\Omega| = 0 \Longrightarrow p_{\bs{0}} = 0.
+    \end{align*}
+    Finalmente se deduce que $(L_{\bs{0}},\bs{u}_{\bs{0}},p_{\bs{0}},\bs{\hat{u}}_{\bs{0}}) = (0,\bs{0},0,\bs{0})$, es decir, $\mathcal{F}$ es inyectivo y por alternativa de Fredholm $\mathcal{F}$ es biyectivo y por tanto esta bien definido. Ahora, mostraremos que el operador $\bs{\mathcal{F}}$ \textbf{va de} $\bs{K}_{h}$ \textbf{a} $\bs{K}_{h}$ donde 
+    \begin{align*}
+    	\bs{K}_{h} := \{(\bs{v},\bs{\mu})\in \bs{Z}_{h}:\ |||(\bs{v},\bs{\mu})|||_{1,h}\leq C_{2}C^{2}_{\textup{HDG}} \nu^{-1}\norm{\bs{f}}_{\Omega} \}
+    \end{align*}
+    por la forma del conjunto es fácil ver que es compacto y convexo. Dado $(\bs{w}_{h},\hat{\bs{w}}_{h})\in \bs{Z}_{h}$, luego existe $(\bs{u}_{h},\hat{\bs{u}}_{h})$ tal que $(L_{h},\bs{u}_{h},p_{h},\bs{\hat{u}}_{h})\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$ soluciona \ref{eq:FDHDGC} con $\bs{\beta} = \mathbb{P}(\bs{w}_{h},\hat{\bs{w}}_{h})$, por \textbf{proposición 2.2} de \cite{CAC2017} se tiene 
+    \begin{align*}
+    	|||(\bs{u}_{h},\bs{\hat{u}}_{h})|||_{1,h} \leq C_{\textup{HDG}} \left(\norm{L_{h}}^{2}_{\Th} + \sum_{K\in\Th} h^{-1}_{K}\norm{(\bs{u}_{h} - \bs{\hat{u}}_{h})\cdot \bs{n}}^{2}_{\partial K} \right)^{\frac{1}{2}},
+    \end{align*} 
+    esto se puede reescribir
+    \begin{align*}
+    	\nu|||(\bs{u}_{h},\bs{\hat{u}}_{h})|||^{2}_{1,h} \leq \nu C^{2}_{\textup{HDG}} \left(\norm{L_{h}}^{2}_{\Th} + \sum_{K\in\Th} h^{-1}_{K}\norm{(\bs{u}_{h} - \bs{\hat{u}}_{h})\cdot \bs{n}}^{2}_{\partial K} \right),
+    \end{align*} 
+    ahora, reemplazando $(L_{h},\bs{u}_{h},p_{h},\bs{\hat{u}}_{h})$ en \ref{eq:FDHDGC} y considerando $G = \nu L_{h}$, $\bs{v} = \bs{u}_{h}$, $\bs{\mu} = \bs{\hat{u}}_{h}$ y $q = p_{h}$, se obtiene 
+    \begin{align*}
+    	\Pii{L_{h}}{\nu L_{h}}_{\Th} &+ A_{h}\left((\bs{u}_{h},\bs{\hat{u}}_{h}),\nu L_{h}\right) - A_{h}\left((\bs{u}_{h},\bs{\hat{u}}_{h}),\nu L_{h}\right) - B_{h}\left((\bs{u}_{h},\bs{\hat{u}}_{h}),p_{h}\right) + B_{h}\left((\bs{u}_{h},\bs{\hat{u}}_{h}),p_{h}\right)\\ &+ J_{n}\left((\bs{u}_{h},\bs{\hat{u}}_{h}),(\bs{u}_{h},\bs{\hat{u}}_{h})\right) + \mathcal{O}_{h}\left(\bs{\beta}; (\bs{u}_{h},\bs{\hat{u}}_{h}),(\bs{u}_{h},\bs{\hat{u}}_{h})\right) = \Pii{\bs{f}}{\bs{u}_{h}}_{\Th}, 
+    \end{align*}
+    esto se puede reescribir
+    \begin{align*}
+    	\nu\norm{L_{h}}^{2}_{\Th} + J_{n}\left((\bs{u}_{h},\bs{\hat{u}}_{h}),(\bs{u}_{h},\bs{\hat{u}}_{h})\right) + \mathcal{O}_{h}\left(\bs{\beta}; (\bs{u}_{h},\bs{\hat{u}}_{h}),(\bs{u}_{h},\bs{\hat{u}}_{h})\right) = \Pii{\bs{f}}{\bs{u}_{h}}_{\Th}
+    \end{align*}
+    usando la definición de $J_{n}$ se obtiene
+    \begin{align*}
+    	\nu\norm{L_{h}}^{2}_{\Th} + \sum_{K\in\Th}\zeta_{n}h^{-1}_{K}\norm{(\bs{u}_{h}-\bs{\hat{u}}_{h})\cdot\bs{n}}^{2}_{\partial K} + \mathcal{O}_{h}\left(\bs{\beta}; (\bs{u}_{h},\bs{\hat{u}}_{h}),(\bs{u}_{h},\bs{\hat{u}}_{h})\right) = \Pii{\bs{f}}{\bs{u}_{h}}_{\Th},
+    \end{align*}
+    notemos que $\bs{\beta} = \mathbb{P}(\bs{w}_{h},\hat{\bs{w}}_{h})$, donde $(\bs{w}_{h},\hat{\bs{w}}_{h})\in \bs{Z}_{h}$ por \textbf{proposición 2.1} de \cite{CAC2017} se tiene que 
+    \begin{align*}
+    	\mathbb{P}(\bs{w}_{h},\hat{\bs{w}}_{h})\in \Hdiv \ \textup{y}\ \nabla\cdot\mathbb{P}(\bs{w}_{h},\hat{\bs{w}}_{h}) = 0\ \textup{en}\ \Omega.
+    \end{align*}
+    Así, por \textbf{proposición 3.6} de \cite{CAC2017} como $(\bs{u}_{h},\bs{\hat{u}}_{h})\in \bs{V}_{h}\times\bs{M}_{h}$, entonces
+    \begin{align*}
+    	\mathcal{O}_{h}\left(\bs{\beta}; (\bs{u}_{h},\bs{\hat{u}}_{h}),(\bs{u}_{h},\bs{\hat{u}}_{h})\right) \geq 0
+    \end{align*}
+    recordemos que $\zeta_{n}$ es un termino de estabilización positivo y $\zeta_{n}\gg 1$, de esto se desprende que 
+    \begin{align*}
+    	\nu\norm{L_{h}}^{2}_{\Th} + \nu \sum_{K\in\Th} h^{-1}_{K}\norm{(\bs{u}_{h}-\bs{\hat{u}}_{h})\cdot\bs{n}}^{2}_{\partial K}\leq \Pii{\bs{f}}{\bs{u}_{h}}_{\Th},
+    \end{align*}
+    por Cauchy-Schwarz
+    \begin{align*}
+    	\abs{\Pii{\bs{f}}{\bs{u}_{h}}_{\Th}} \leq \norm{\bs{f}}_{\Omega}\norm{\bs{u}_{h}}_{\Th}
+    \end{align*}
+    juntando todo
+     \begin{align*}
+    	\nu ||| (\bs{u}_{h},\bs{\hat{u}}_{h}) |||^{2}_{1,h}\leq \nu C^{2}_{\textup{HDG}}\left(
+    	\norm{L_{h}}^{2}_{\Th} + \sum_{K\in\Th}h^{-1}_{K}\norm{(\bs{u}_{h}-\bs{\hat{u}}_{h})\cdot\bs{n}}^{2}_{\partial K}  \right)\leq  C^{2}_{\textup{HDG}}\Pii{\bs{f}}{\bs{u}_{h}}_{\Th}\leq  C^{2}_{\textup{HDG}}\norm{\bs{f}}_{\Omega}\norm{\bs{u}_{h}}_{\Th}.
+    \end{align*}
+    Por \textbf{proposición A2} de \cite{CAC2017} para $q = 2$, se tiene que 
+    \begin{align*}
+    	\norm{\bs{u}_{h}}_{\Th} \leq C_{2}|||(\bs{u}_{h},\bs{\hat{u}}_{h}) |||_{1,h},
+    \end{align*}
+    ya que $(\bs{u}_{h},\bs{\hat{u}}_{h})\in V(h)\times\bs{M}^{\circ}_{h}$. Considerando esto se obtiene
+    \begin{align*}
+    	\nu ||| (\bs{u}_{h},\bs{\hat{u}}_{h}) |||^{2}_{1,h}\leq C^{2}_{\textup{HDG}}C_{2}\norm{\bs{f}}_{\Omega}|||(\bs{u}_{h},\bs{\hat{u}}_{h}) |||_{1,h} \iff ||| (\bs{u}_{h},\bs{\hat{u}}_{h}) |||_{1,h}\leq C^{2}_{\textup{HDG}}C_{2}\nu^{-1}\norm{\bs{f}}_{\Omega}
+    \end{align*}
+    luego, $\mathcal{F}(\bs{w}_{h},\hat{\bs{w}}_{h}) = (\bs{u}_{h},\bs{\hat{u}}_{h})\in \bs{K}_{h}$, por tanto usando la sobreyectividad de $\mathcal{F}$ se tiene que es un operador que va de $\bs{K}_{h}$ a $\bs{K}_{h}$. Ahora probemos que $\bs{\mathcal{F}}$ \textbf{es una contracción en} $\bs{K}_{h}$, sean $(\bs{w}_{1},\bs{\hat{w}}_{1}),(\bs{w}_{2},\bs{\hat{w}}_{2})\in \bs{K}_{h}$, luego existen $(\bs{u}_{1},\bs{\hat{u}}_{1}),(\bs{u}_{2},\bs{\hat{u}}_{2})\in \bs{K}_{h}$ tales que $(L_{1},\bs{u}_{1},p_{1},\bs{\hat{u}}_{1}),(L_{2},\bs{u}_{2},p_{2},\bs{\hat{u}}_{2})\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$ solucionan \ref{eq:FDHDGC} con $\bs{\beta}_{1} = \mathbb{P}(\bs{w}_{1},\hat{\bs{w}}_{1})$ y $\bs{\beta}_{2} = \mathbb{P}(\bs{w}_{2},\hat{\bs{w}}_{2})$, si restamos ambas ecuaciones y definimos $\delta_{L} := L_{1} - L_{2}$, $\delta_{\bs{u}} := \bs{u}_{1} - \bs{u}_{2}$, $\delta_{\bs{\hat{u}}} := \bs{\hat{u}}_{1} - \bs{\hat{u}}_{2}$ y $\delta_{p} := p_{1} - p_{2}$ se obtiene
+    \begin{align*}
+    	\Pii{\delta_{L}}{G}_{\Th} &+ A_{h}\left((\delta_{\bs{u}},\delta_{\bs{\hat{u}}}),G\right) - A_{h}\left((\bs{v},\bs{\mu}),\nu\delta_{L}\right) - B_{h}\left((\bs{v},\bs{\mu}),\delta_{p}\right) + B_{h}\left((\delta_{\bs{u}},\delta_{\bs{\hat{u}}}),q\right)\\ &+ J_{n}\left((\delta_{\bs{u}},\delta_{\bs{\hat{u}}}),(\bs{v}, \bs{\mu})\right) + \mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{1},\bs{\hat{w}}_{1});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\bs{v},\bs{\mu})\right) - \mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{2},\bs{\hat{\bs{u}}}_{2}),(\bs{v},\bs{\mu})\right) = 0,
+    \end{align*}
+    para todo $\left(G,\bs{v},q,\bs{\mu}\right)\in G_{h}\times\bs{V}_{h}\times Q_{h}\times \bs{M}^{\circ}_{h}$. En particular para $\left(G,\bs{v},q,\bs{\mu}\right) := \left(\nu\delta_{L},\delta_{\bs{u}},\delta_{p},\delta_{\bs{\hat{u}}}\right)$ se obtiene
+    \begin{align}
+    	\nu \norm{\delta_{L}}^{2}_{\Th} + J_{n}\left((\delta_{\bs{u}},\delta_{\bs{\hat{u}}}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) + \mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{1},\bs{\hat{w}}_{1});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) - \mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{2},\bs{\hat{\bs{u}}}_{2}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) = 0,\label{eq:xdd}
+    \end{align}
+    aplicando \textbf{proposición 2.2} de \cite{CAC2017}, se tiene
+    \begin{align*}
+    	\nu||| (\delta_{\bs{u}},\delta_{\bs{\hat{u}}}) |||^{2}_{1,h} \leq C^{2}_{\textup{HDG}} \nu \left(\norm{\delta_{L}}^{2}_{\Th} + \sum_{K\in\Th}h^{-1}_{K}\norm{(\delta_{\bs{u}}-\delta_{\bs{\hat{u}}})\cdot \bs{n}}^{2}_{\partial K} \right) = C^{2}_{\textup{HDG}} \left(\nu\norm{\delta_{L}}^{2}_{\Th} + \sum_{K\in\Th}\nu h^{-1}_{K}\norm{(\delta_{\bs{u}}-\delta_{\bs{\hat{u}}})\cdot \bs{n}}^{2}_{\partial K} \right) 
+    \end{align*}
+    usando que $\nu\leq\zeta_{n}$ se obtiene que 
+    \begin{align*}
+    	\nu||| (\delta_{\bs{u}},\delta_{\bs{\hat{u}}}) |||^{2}_{1,h}  \leq C^{2}_{\textup{HDG}} \left(\nu\norm{\delta_{L}}^{2}_{\Th} + J_{n}\left((\delta_{\bs{u}},\delta_{\bs{\hat{u}}}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) \right) 
+    \end{align*}
+    de \ref{eq:xdd} se desprende que 
+    \begin{align*}
+    	\nu\norm{\delta_{L}}^{2}_{\Th} + J_{n}\left((\delta_{\bs{u}},\delta_{\bs{\hat{u}}}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) = \mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{2},\bs{\hat{\bs{u}}}_{2}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)-\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{1},\bs{\hat{w}}_{1});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right),
+    \end{align*}
+    luego,
+    \begin{align*}
+    	\nu||| (\delta_{\bs{u}},\delta_{\bs{\hat{u}}}) |||^{2}_{1,h}  &\leq C^{2}_{\textup{HDG}}\left(\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{2},\bs{\hat{\bs{u}}}_{2}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)-\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{1},\bs{\hat{w}}_{1});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) \right)\\
+    	&= C^{2}_{\textup{HDG}}\left(\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{2},\bs{\hat{\bs{u}}}_{2}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)-\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{1},\bs{\hat{w}}_{1});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)\right.\\ &+ \left. \mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) - \mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) \right)\\
+    	&= C^{2}_{\textup{HDG}}\left(\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)-\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{1},\bs{\hat{w}}_{1});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)\right.\\ &+ \left. \mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{2},\bs{\hat{\bs{u}}}_{2}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)  - \mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) \right)\\
+    	&= C^{2}_{\textup{HDG}}\left(\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)-\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{1},\bs{\hat{w}}_{1});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)\right.\\
+    	&-\left.\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\delta_{\bs{u}},\delta_{\bs{\hat{u}}}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right) \right),
+    \end{align*}
+    Por \textbf{proposición 3.6} de \cite{CAC2017} se tiene que 
+    \begin{align*}
+    	\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\delta_{\bs{u}},\delta_{\bs{\hat{u}}}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)\geq 0,
+    \end{align*}
+    así, se deduce que
+    \begin{align*}
+    	\nu||| (\delta_{\bs{u}},\delta_{\bs{\hat{u}}}) |||^{2}_{1,h}  \leq C^{2}_{\textup{HDG}}\left(\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)-\mathcal{O}_{h}\left(\mathbb{P}(\bs{w}_{1},\bs{\hat{w}}_{1});(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1}),(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})\right)\right).
+    \end{align*} 
+    Usando la \textbf{proposición 3.4} de \cite{CAC2017} se tiene que
+    \begin{align*}
+    	\nu||| (\delta_{\bs{u}},\delta_{\bs{\hat{u}}}) |||^{2}_{1,h}  &\leq C^{2}_{\textup{HDG}}C_{\mathcal{O}}\norm{\mathbb{P}(\bs{w}_{2},\bs{\hat{w}}_{2}) - \mathbb{P}(\bs{w}_{1},\bs{\hat{w}}_{1})}_{1,h}\norm{(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1})}_{1,h}\norm{(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})}_{1,h}\\
+    	&= C^{2}_{\textup{HDG}}C_{\mathcal{O}}\norm{\mathbb{P}(\bs{w}_{2}-\bs{w}_{1},\bs{\hat{w}}_{2}-\bs{\hat{w}}_{1})}_{1,h}\norm{(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1})}_{1,h}\norm{(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})}_{1,h}.
+    \end{align*}
+    Por \textbf{proposición 2.1} de \cite{CAC2017}
+    \begin{align*}
+    	\nu||| (\delta_{\bs{u}},\delta_{\bs{\hat{u}}}) |||^{2}_{1,h}  \leq C^{2}_{\textup{HDG}}C_{\mathcal{O}}C_{\textup{stab},1}\norm{(\bs{w}_{2}-\bs{w}_{1},\bs{\hat{w}}_{2}-\bs{\hat{w}}_{1})}_{1,h}\norm{(\bs{u}_{1},\bs{\hat{\bs{u}}}_{1})}_{1,h}\norm{(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})}_{1,h}.
+    \end{align*}
+    Dado que $(\bs{u}_{1},\bs{\hat{u}}_{1})\in\bs{K}_{h}$ se obtiene
+    \begin{align*}
+    	||| (\bs{u}_{1},\bs{\hat{u}}_{1}) |||_{1,h}\leq C^{2}_{\textup{HDG}}C_{2}\nu^{-1}\norm{\bs{f}}_{\Omega}.
+    \end{align*} 
+    Juntando todo se obtiene 
+    \begin{align*}
+    	\nu||| (\delta_{\bs{u}},\delta_{\bs{\hat{u}}}) |||^{2}_{1,h} \leq C^{4}_{\textup{HDG}}C_{2}C_{\mathcal{O}}C_{\textup{stab},1}\nu^{-1}\norm{(\bs{w}_{2}-\bs{w}_{1},\bs{\hat{w}}_{2}-\bs{\hat{w}}_{1})}_{1,h}\norm{\bs{f}}_{\Omega}\norm{(\delta_{\bs{u}},\delta_{\bs{\hat{u}}})}_{1,h},
+    \end{align*}
+    esto se puede reescribir como
+    \begin{align*}
+    	||| (\delta_{\bs{u}},\delta_{\bs{\hat{u}}}) |||_{1,h} \leq C^{4}_{\textup{HDG}}C_{2}C_{\mathcal{O}}C_{\textup{stab},1}\nu^{-2}\norm{\bs{f}}_{\Omega}\norm{(\bs{w}_{2}-\bs{w}_{1},\bs{\hat{w}}_{2}-\bs{\hat{w}}_{1})}_{1,h}.
+    \end{align*}
+    Por tanto, $\mathcal{F}$ es una contracción en $\bs{K}_{h}$ si se tiene que 
+    \begin{align*}
+    	\nu^{-2}\norm{\bs{f}}_{\Omega} < \frac{1}{C_{2}C^{4}_{\textup{HDG}}C_{\mathcal{O}}C_{\textup{stab},1}}.
+    \end{align*}
+    Esto es, si $\nu^{-2}\norm{\bs{f}}_{\Omega}$ es una cantidad pequeña, por teorema del punto fijo, existe un único $(\bs{u}_{h},\bs{\hat{u}}_{h})\in \bs{K}_{h}$ tal que $\mathcal{F}\left(\bs{u}_{h},\bs{\hat{u}}_{h}\right) = (\bs{u}_{h},\bs{\hat{u}}_{h})$, lo cual demuestra el teorema.
+    \end{proof}
+    \begin{prop}
+    	Sea $\bs{\beta}\in\{\bs{v}\in\Hdiv:\ \nabla\cdot\bs{v}=0,\ \bs{v}|_{K}\in\bs{H}^{1}(K),\ \forall K\in\Th \}$. Luego,
+    	\begin{align*}
+    		\mathcal{O}_{h}\left(\bs{\beta};(\bs{v},\bs{\mu}),(\bs{v},\bs{\mu})\right) = \PI{(S_{\bs{\beta}}-\frac{1}{2}\bs{\beta}\cdot\bs{n}\textup{Id})(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th} \geq 0 \hspace{3mm} \forall(\bs{v},\bs{\mu})\in\bs{V}_{h}\times\bs{M}_{h}.
+    	\end{align*}
+    \end{prop}
+    \begin{proof}
+    	Dado $\bs{\beta}\in\{\bs{v}\in\Hdiv:\ \nabla\cdot\bs{v}=0,\ \bs{v}|_{K}\in\bs{H}^{1}(K),\ \forall K\in\Th \}$, se tiene por integración por partes
+    	\begin{align*}
+    		\Pii{\nabla\cdot(\bs{v}\otimes\bs{\beta})}{\bs{v}}_{\Th} = -\Pii{(\bs{v}\otimes\bs{\beta})}{\nabla\bs{v}}_{\Th} + \PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\partial\Th}
+    	\end{align*}
+        Considerando que
+        \begin{align*}
+        	\nabla\cdot(\bs{v}\otimes\bs{\beta}) = \begin{pmatrix}
+        		\sum_{j=1}^{d}\partial_{j}(v_{1}\beta_{j})\\ 
+        		\vdots\\ 
+        		\sum_{j=1}^{d}\partial_{j}(v_{d}\beta_{j})
+        	\end{pmatrix}
+        \end{align*}
+        fijando $i\in\{1,\dots,d\}$ se tiene
+        \begin{align*}
+        	\sum_{j=1}^{d}\partial_{j}(v_{1}\beta_{j}) = \sum_{j=1}^{d}\left[\partial_{j}(v_{i})\beta_{j} + v_{i}\partial_{j}(\beta_{j})\right] = \sum_{j=1}^{d}\partial_{j}(v_{i})\beta_{j} + v_{i}\nabla\cdot\bs{\beta} =  \sum_{j=1}^{d}\partial_{j}(v_{i})\beta_{j}
+        \end{align*}
+        Así
+        \begin{align*}
+        	\Pii{\nabla\cdot(\bs{v}\otimes\bs{\beta})}{\bs{v}}_{\Th} = \Pii{\begin{pmatrix}
+        		\sum_{j=1}^{d}\partial_{j}(v_{1}\beta_{j})\\ 
+        		\vdots\\ 
+        		\sum_{j=1}^{d}\partial_{j}(v_{d}\beta_{j})
+        	\end{pmatrix}}{\begin{pmatrix}
+        	v_{1}\\ 
+        	\vdots\\ 
+        	v_{d}
+        \end{pmatrix}}_{\Th} =  \Pii{\begin{pmatrix}
+        \sum_{j=1}^{d}\partial_{j}(v_{1})\beta_{j}\\ 
+        \vdots\\ 
+        \sum_{j=1}^{d}\partial_{j}(v_{d})\beta_{j}
+    \end{pmatrix}}{\begin{pmatrix}
+    v_{1}\\ 
+    \vdots\\ 
+    v_{d}
+\end{pmatrix}}_{\Th} = \int_{\Th}\sum_{i,j=1}^{d}\beta_{j}v_{i}\partial_{j}(v_{i})
+        \end{align*}
+        de forma similar
+        \begin{align*}
+        	\Pii{(\bs{v}\otimes\bs{\beta})}{\nabla\bs{v}}_{\Th} = \sum_{i,j=1}^{d} v_{i}\beta_{j}\partial_{j}(v_{i}) = \Pii{\nabla\cdot(\bs{v}\otimes\bs{\beta})}{\bs{v}}_{\Th},
+        \end{align*}
+        usando la formula de integración por partes
+        \begin{align*}
+        	\Pii{\nabla\cdot(\bs{v}\otimes\bs{\beta})}{\bs{v}}_{\Th} = \frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\Th}
+        \end{align*}
+        luego, por definición de $\mathcal{O}_{h}$
+        \begin{align*}
+        	\mathcal{O}_{h}\left(\bs{\beta};(\bs{v},\bs{\mu}),(\bs{v},\bs{\mu})\right) &= -\Pii{\bs{v}\otimes\bs{\beta}}{\nabla\bs{v}}_{\Th} + \PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}+S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}\\
+        	&= \Pii{\nabla\cdot(\bs{v}\otimes\bs{\beta})}{\bs{v}}_{\Th} - \PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\partial\Th} + \PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}+S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}\\
+        	&= \frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\Th} - \PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\partial\Th} + \PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}+S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}
+        \end{align*}
+        Como $\bs{\mu}$ es una función univaluada y $\bs{\beta}\in\Hdiv$, se tiene que $\PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th} = 0$. Usando esto
+        \begin{align*}
+        	\mathcal{O}_{h}\left(\bs{\beta};(\bs{v},\bs{\mu}),(\bs{v},\bs{\mu})\right) &= \frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\Th} - \PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\partial\Th} +\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th}-\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th}\\ &+ \PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}+S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}\\
+        	&= \frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\Th} - \PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\partial\Th} +\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th}-\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th}\\ &+ \PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}}{\bs{v}-\bs{\mu}}_{\partial\Th} +  \PI{S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}\\
+        	&= \frac{1}{2}\PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th}-\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\Th} +\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th} -\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th}\\ &+ \PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}}{\bs{v}-\bs{\mu}}_{\partial\Th} +  \PI{S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}\\
+        	&= -\frac{1}{2}\PI{((\bs{v}-\bs{\mu})\otimes\bs{\beta})\bs{n}}{\bs{\mu}}-\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}-\bs{\mu}}_{\partial\Th} 
+        	+ \PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}}{\bs{v}-\bs{\mu}}_{\partial\Th} +  \PI{S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}\\
+        	&= \frac{1}{2}\PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th}-\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}}_{\Th} +\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th} -\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{\mu}}_{\partial\Th}\\ &+ \PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}}{\bs{v}-\bs{\mu}}_{\partial\Th} +  \PI{S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}\\
+        	&= -\frac{1}{2}\PI{((\bs{v}-\bs{\mu})\otimes\bs{\beta})\bs{n}}{\bs{\mu}}-\frac{1}{2}\PI{(\bs{v}\otimes\bs{\beta})\bs{n}}{\bs{v}-\bs{\mu}}_{\partial\Th} \\
+        	&+ \frac{1}{2}\PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}}{\bs{v}-\bs{\mu}}_{\partial\Th} +\frac{1}{2}\PI{(\bs{\mu}\otimes\bs{\beta})\bs{n}}{\bs{v}-\bs{\mu}}_{\partial\Th} +  \PI{S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}\\
+        	&= -\frac{1}{2}\PI{((\bs{v}-\bs{\mu})\otimes\bs{\beta})\bs{n}}{\bs{v}-\bs{\mu}}_{\partial\Th}+  \PI{S_{\bs{\beta}}(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}
+        \end{align*}
+        De aquí se sigue que
+        \begin{align*}
+        	\mathcal{O}_{h}\left(\bs{\beta};(\bs{v},\bs{\mu}),(\bs{v},\bs{\mu})\right) = \PI{(S_{\bs{\beta}}-\frac{1}{2}\bs{\beta}\cdot\bs{n}\textup{Id})(\bs{v}-\bs{\mu})}{\bs{v}-\bs{\mu}}_{\partial\Th}
+        \end{align*}
+        Y por definición de $S_{\bs{\beta}}$ se concluye que $	\mathcal{O}_{h}\left(\bs{\beta};(\bs{v},\bs{\mu}),(\bs{v},\bs{\mu})\right)\geq 0$.
+    \end{proof}
+    \begin{thebibliography}{0}
+    	\bibitem[CAC2017]{CAC2017} Aycil Cesmelioglu, Bernardo Cockburn and Weifeng Qiu, Analysis of a hybridizable discontinuous Galerkin
+    	method for the steady-state incompressible Navier-Stokes equations, Math. Comp. 86 (2017), 1643-1670.
+    \end{thebibliography}
+\end{document}

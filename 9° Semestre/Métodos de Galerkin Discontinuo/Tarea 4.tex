@@ -1,0 +1,235 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage[mathscr]{euscript}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Metodo de Galerkin Discontinuo}}
+\newcommand{\tarea}{\textbf{Tarea 4}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\D}[2]{\frac{\textup{d} #1}{\textup{d}#2}}
+\providecommand{\E}[1]{\mathscr{E}^{#1}_{h}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Método de Galerkin Discontinuo}\\
+	\textbf{Tarea 3}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}
+		Considere la formulación variacional mixta: Dado $f\in L^{2}\left(\Omega\right)$, hallar $(\bs{\sigma},u)\in \textbf{H}\times Q$ tal que
+		\begin{align*}
+			\Pii{\bs{\sigma}}{\bs{\tau}}_{\Omega} - \Pii{\nabla\cdot \bs{\tau}}{u}_{\Omega} &= 0,\\
+			\Pii{\nabla\cdot \bs{\sigma}}{v}_{\Omega} &= \Pii{f}{v}_{\Omega}. 
+		\end{align*} 
+	    $\forall \Pii{\bs{\tau}}{v}\in \textbf{H}\times Q$, donde $\textbf{H}:= \Hdiv$ y $Q := L^{2}(\Omega)$. Esta ecuación se discretiza utilizando el esquema de Galerkin discontinuo $(DG)$: Hallar $\Pii{\bs{\sigma}_{h}}{u_{h}}\in \textbf{H}_{h}\times Q_{h} := \left[\mathbb{P}_{k}\left(\Th\right)\right]^{d}\times \mathbb{P}_{k}(\Th)$ tal que 
+	    \begin{align*}
+	    \Pii{\bs{\sigma}_{h}}{\bs{\tau}_{h}}_{\Th} + \Pii{\nabla u_{h}}{\bs{\tau}_{h}}_{\Th} + \PI{\salto{\bs{\tau}_{h}}}{\prom{\hat{u}_{h}-u_{h}}}_{\E{i}} + \PI{\prom{\bs{\tau}_{h}}}{\salto{\hat{u}_{h}-u_{h}}}_{\E{i}} + \PI{\bs{\tau}_{h}\cdot \textbf{n}}{\hat{u}_{h}-u_{h}}_{\E{\partial}} = 0\\
+	    -\Pii{\bs{\sigma}_{h}}{\nabla v_{h}}_{\Th} + \PI{\prom{\hat{\bs{\sigma}}_{h}}}{\salto{v_{h}}}_{\E{i}} + \PI{\salto{\hat{\bs{\sigma}}_{h}}}{\prom{v_{h}}}_{\E{i}} + \PI{\hat{\bs{\sigma}}_{h}\cdot \textbf{n}}{v_{h}}_{\E{\partial}} = \Pii{f}{v_{h}}_{\Th}
+	    \end{align*}
+    $\forall \Pii{\bs{\tau}_{h}}{v_{h}}\in \textbf{H}_{h}\times Q_{h}$, donde las trazas numéricas se definen de la siguiente manera:
+    \begin{align*}
+    	\hat{u}_{h} := \begin{cases}
+    		\prom{u_{h}} + C_{12}\salto{u_{h}}\cdot \textbf{n} + C_{22}\salto{\bs{\sigma}_{h}} & \text{ en } \E{i} \\ 
+    		0 & \text{ en } \E{\partial}
+    	\end{cases} \\
+        \hat{\bs{\sigma}}_{h} := \begin{cases}
+        	\prom{\bs{\sigma}_{h}} + C_{21}\salto{\bs{\sigma}_{h}}\cdot \textbf{n} + C_{11}\salto{u_{h}} & \text{ en } \E{i} \\ 
+        	\bs{\sigma}_{h} + C_{11}\textbf{n} & \text{ en } \E{\partial}
+        \end{cases}
+    \end{align*}
+    \begin{itemize}
+    	\item[($a$)] Probar que el esquema es consistente.
+    	\item[($b$)] Determinar condiciones sobre $C_{11}$,$C_{12}$,$C_{21}$ y $C_{22}$ que garanticen que este esquema DG tiene
+    	solución única.
+    \end{itemize}
+	\end{pro}
+    \begin{proof}
+    	\begin{itemize}
+    		\item[$(a)$] Sea $(\bs{\sigma},u)\in \bs{H}\times Q$ tal que soluciona la formulación mixta, las trazas numéricas quedan
+    		\begin{align*}
+    			\hat{u} &:= \begin{cases}
+    				u & \text{ en } \E{i} \\ 
+    				0 & \text{ en } \E{\partial}
+    			\end{cases} \\
+    			\hat{\bs{\sigma}} &:= \begin{cases}
+    				\bs{\sigma} & \text{ en } \E{i} \\ 
+    				\bs{\sigma} + C_{11}\textbf{n} & \text{ en } \E{\partial}
+    			\end{cases}
+    		\end{align*}
+    	   luego, dado $\Pii{\bs{\tau}_{h}}{v_{h}}\in \textbf{H}_{h}\times Q_{h}$
+    	   \begin{align*}
+    	   	\Pii{\bs{\sigma}}{\bs{\tau}_{h}}_{\Th} + \Pii{\nabla u}{\bs{\tau}_{h}}_{\Th} + \PI{\salto{\bs{\tau}_{h}}}{\prom{\hat{u}-u}}_{\E{i}} + \PI{\prom{\bs{\tau}_{h}}}{\salto{\hat{u}-u}}_{\E{i}} + \PI{\bs{\tau}_{h}\cdot \textbf{n}}{\hat{u}-u}_{\E{\partial}} &= \Pii{\bs{\sigma}}{\bs{\tau}_{h}}_{\Th} + \Pii{\nabla u}{\bs{\tau}_{h}}_{\Th}\\ &-  \PI{\bs{\tau}_{h}\cdot \textbf{n}}{u}_{\E{\partial}}
+    	   \end{align*}
+           usando integración por partes en la igualdad de la derecha
+           \begin{align*}
+           	\Pii{\bs{\sigma}}{\bs{\tau}_{h}}_{\Th} + \Pii{\nabla u}{\bs{\tau}_{h}}_{\Th} -  \PI{\bs{\tau}_{h}\cdot \textbf{n}}{u}_{\E{\partial}} = \Pii{\bs{\sigma}}{\bs{\tau}_{h}}_{\Th} - \Pii{\nabla\cdot \bs{\tau}_{h}}{u}_{\Th}
+           \end{align*}
+           análogamente para la ecuación dos
+           \begin{align*}
+           	-\Pii{\bs{\sigma}}{\nabla v_{h}}_{\Th} + \PI{\prom{\hat{\bs{\sigma}}}}{\salto{v_{h}}}_{\E{i}} + \PI{\salto{\hat{\bs{\sigma}}}}{\prom{v_{h}}}_{\E{i}} + \PI{\hat{\bs{\sigma}}\cdot \textbf{n}}{v_{h}}_{\E{\partial}} &= -\Pii{\bs{\sigma}}{\nabla v_{h}}_{\Th} +  \PI{\bs{\sigma}\cdot \textbf{n}}{v_{h}}_{\E{\partial}} + C_{11}\PI{\textbf{n}\cdot \textbf{n}}{v_{h}}_{\E{\partial}}\\
+           	&= \Pii{\nabla\cdot\bs{\sigma}}{ v_{h}}_{\Th} +  C_{11}\PI{\textbf{n}\cdot \textbf{n}}{v_{h}}_{\E{\partial}}\\ &= \Pii{\nabla\cdot\bs{\sigma}}{ v_{h}}_{\Th}
+           \end{align*} 
+    \item[$(b)$] Usando la alternativa de Fredholm, considere $f = 0$, luego 
+    	\begin{align*}
+    		\Pii{\bs{\sigma}_{h}}{\bs{\tau}_{h}}_{\Th} + \Pii{\nabla u_{h}}{\bs{\tau}_{h}}_{\Th} + \PI{\salto{\bs{\tau}_{h}}}{\prom{\hat{u}_{h}-u_{h}}}_{\E{i}} + \PI{\prom{\bs{\tau}_{h}}}{\salto{\hat{u}_{h}-u_{h}}}_{\E{i}} + \PI{\bs{\tau}_{h}\cdot \textbf{n}}{\hat{u}_{h}-u_{h}}_{\E{\partial}} = 0\\
+    		-\Pii{\bs{\sigma}_{h}}{\nabla v_{h}}_{\Th} + \PI{\prom{\hat{\bs{\sigma}}_{h}}}{\salto{v_{h}}}_{\E{i}} + \PI{\salto{\hat{\bs{\sigma}}_{h}}}{\prom{v_{h}}}_{\E{i}} + \PI{\hat{\bs{\sigma}}_{h}\cdot \textbf{n}}{v_{h}}_{\E{\partial}} = 0
+    	\end{align*}
+    	$\forall \Pii{\bs{\tau}_{h}}{v_{h}}\in \textbf{H}_{h}\times Q_{h}$, en particular, tomando $\bs{\tau}_{h} = \bs{\sigma}_{h}$ y $v_{h} = u_{h}$ se obtiene
+    	\begin{align*}
+    		\Pii{\bs{\sigma}_{h}}{\bs{\sigma}_{h}}_{\Th} + \Pii{\nabla u_{h}}{\bs{\sigma}_{h}}_{\Th} + \PI{\salto{\bs{\sigma}_{h}}}{\prom{\hat{u}_{h}-u_{h}}}_{\E{i}} + \PI{\prom{\bs{\sigma}_{h}}}{\salto{\hat{u}_{h}-u_{h}}}_{\E{i}} + \PI{\bs{\sigma}_{h}\cdot \textbf{n}}{\hat{u}_{h}-u_{h}}_{\E{\partial}} = 0\\
+    		-\Pii{\bs{\sigma}_{h}}{\nabla u_{h}}_{\Th} + \PI{\prom{\hat{\bs{\sigma}}_{h}}}{\salto{u_{h}}}_{\E{i}} + \PI{\salto{\hat{\bs{\sigma}}_{h}}}{\prom{u_{h}}}_{\E{i}} + \PI{\hat{\bs{\sigma}}_{h}\cdot \textbf{n}}{u_{h}}_{\E{\partial}} = 0,
+    	\end{align*}
+    	sumando ambas ecuaciones
+    	\begin{align*}
+    		\norm{\bs{\sigma}_{h}}^{2}_{\Th} &+ \PI{\salto{\bs{\sigma}_{h}}}{\prom{\hat{u}_{h}-u_{h}}}_{\E{i}} + \PI{\prom{\bs{\sigma}_{h}}}{\salto{\hat{u}_{h}-u_{h}}}_{\E{i}} + \PI{\bs{\sigma}_{h}\cdot \textbf{n}}{\hat{u}_{h}-u_{h}}_{\E{\partial}}\\ &+ \PI{\prom{\hat{\bs{\sigma}}_{h}}}{\salto{u_{h}}}_{\E{i}} + \PI{\salto{\hat{\bs{\sigma}}_{h}}}{\prom{u_{h}}}_{\E{i}} + \PI{\hat{\bs{\sigma}}_{h}\cdot \textbf{n}}{u_{h}}_{\E{\partial}} = 0 
+    	\end{align*}
+    	
+    	
+    	
+    	
+    	
+    \end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Probar que 
+    	\begin{align*}
+    		\Hdiv = \left\{\vec{\sigma}\in\Hdivt:\ \sum_{T\in\mathscr{T}_{h}}\PI{\vec{\sigma}\cdot\vec{n}}{\xi}_{\partial\Th} = 0\ \forall\xi\in M\left(\partial\Th\right) \right\}
+    	\end{align*}
+    \end{pro}
+    \begin{proof}
+    	Por doble inclusión. Sea $\vec{\sigma}\in \Hdiv$ luego, usando el hecho que $\Hdiv\subset\Hdivt$ se deduce $\vec{\sigma}\in\Hdivt$. Dado $\xi\in M\left(\partial\Th\right)$, esto es, existe un $v\in H^{1}_{0}(\Omega)$ tal que $v|_{\partial T} = \xi|_{\partial T}\  \forall T\in\Th$. Luego
+    	\begin{align*}
+    		\sum_{T\in\mathscr{T}_{h}}\PI{\vec{\sigma}\cdot\vec{n}}{\xi}_{\partial\Th} &= \sum_{T\in\mathscr{T}_{h}}\PI{\vec{\sigma}\cdot\vec{n}}{v}_{\partial\Th}\\ &\overset{\textup{IPP}}{=} \sum_{T\in\mathscr{T}_{h}}\left( \int_{T}\nabla\cdot\vec{\sigma} v + \int_{T}\vec{\sigma}\cdot\nabla v \right)\\
+    		&= \sum_{T\in\mathscr{T}_{h}} \int_{T}\nabla\cdot\vec{\sigma} v + \sum_{T\in\mathscr{T}_{h}} \int_{T}\vec{\sigma}\cdot\nabla v \\
+    		&= \int_{\Omega}\nabla_{h}\cdot\vec{\sigma} v +  \int_{\Omega}\vec{\sigma}\cdot\nabla_{h} v\\
+    		&= \int_{\Omega}\nabla\cdot\vec{\sigma} v +  \int_{\Omega}\vec{\sigma}\cdot\nabla v\\
+    		&\overset{\textup{IPP}}{=} \int_{\partial\Omega} \vec{\sigma}\cdot\vec{n}v\\
+    		&= \int_{\partial\Omega} \vec{\sigma}\cdot\vec{n}0\\
+    		&= 0
+    	\end{align*}
+        Así, se tiene
+        \begin{align*}
+        	\vec{\sigma}\in \left\{\vec{\sigma}\in\Hdivt:\ \sum_{T\in\mathscr{T}_{h}}\PI{\vec{\sigma}\cdot\vec{n}}{\xi}_{\partial\Th} = 0\ \forall\xi\in M\left(\partial\Th\right) \right\}.
+        \end{align*}
+        Por otro lado, dado $\vec{\sigma}\in\Hdivt$ tal que
+        \begin{align*}
+        	\sum_{T\in\mathscr{T}_{h}}\PI{\vec{\sigma}\cdot\vec{n}}{\xi}_{\partial\Th} = 0,
+        \end{align*}
+         para todo $\xi\in M\left(\partial\Th\right)$. En particular, para $\psi\in C^{\infty}_{0}(\Omega)\subset H^{1}_{0}(\Omega)$, se tiene que $\psi\in H^{1/2}(\partial \Th)$ para todo $T\in\Th$, de esta forma se tiene que $\xi|_{\partial T} = \psi|_{\partial\Th}$, para todo $T\in \Th$, entonces
+         \begin{align*}
+         	0 &=	\sum_{T\in\mathscr{T}_{h}}\PI{\vec{\sigma}\cdot\vec{n}}{\xi}_{\partial\Th}\\
+         	&= 	\sum_{T\in\mathscr{T}_{h}}\PI{\vec{\sigma}\cdot\vec{n}}{\psi}_{\partial\Th}\\
+         	&\overset{\textup{IPP}}{=} \sum_{T\in\mathscr{T}_{h}} \left(\int_{T}\nabla\cdot\vec{\sigma}\psi + \int_{T}\vec{\sigma}\cdot\nabla\psi\right) \\
+         	&= \int_{\Omega}\nabla_{h}\cdot\vec{\sigma}\psi + \int_{\Omega}\vec{\sigma}\cdot\nabla\psi
+         \end{align*}
+         luego 
+         \begin{align*}
+         	\int_{\Omega}\vec{\sigma}\cdot\nabla\psi = -\int_{\Omega}\nabla_{h}\cdot\vec{\sigma}\psi,\ \forall\psi\in C^{\infty}_{0}(\Omega)
+         \end{align*}
+         de aquí,
+         \begin{align*}
+         \nabla\cdot\vec{\sigma} = \nabla_{h}\cdot\vec{\sigma} \in L^{2}(\Omega)
+         \end{align*}
+        por tanto $\vec{\sigma}\in\Hdiv$
+    \end{proof}
+    \begin{pro}
+    		Considere le problema: Hallar $(\bs{\sigma},u)\in\Hdiv \times L^{2}(\Omega)$ tal que 
+    		\begin{align}\label{eq:aa}
+    			\begin{cases}
+    				\displaystyle\int_{\Omega}\bs{\sigma}\cdot\bs{v} - \int_{\Omega}u\nabla\cdot\bs{v}  &= 0, \\~\\ 
+    			\displaystyle\int_{\Omega}w\nabla\cdot\bs{\sigma} &= 	\displaystyle\int_{\Omega}fw,	 
+    			\end{cases}
+    		\end{align}
+    	para todo $(\bs{v},w)\in\Hdiv\times L^{2}(\Omega)$, y la formulación híbrida: Hallar $(\bs{\sigma},u,\lambda)\in\Hdivt\times L^{2}(\Omega)\times M(\partial\Th)$ tal que
+    	\begin{align}\label{eq:aaa}
+    		\begin{cases}
+    			\displaystyle\int_{\Omega}\bs{\sigma}\cdot\bs{v} - \int_{\Omega}u\nabla\cdot\bs{v} + \sum_{T\in\mathscr{T}_{h}}\PI{\bs{v}\cdot\bs{n}}{\lambda}  &= 0, \\~\\ 
+    			\displaystyle\int_{\Omega}w\nabla\cdot\bs{\sigma} &= 	\displaystyle\int_{\Omega}fw,\\~\\
+    			\displaystyle\sum_{T\in\mathscr{T}_{h}}\PI{\bs{\sigma}\cdot\bs{n}}{\xi}_{\partial\Th} &= 0	 
+    		\end{cases}
+    	\end{align}
+        para todo $(\bs{v},w,\xi)\in\Hdivt\times L^{2}(\Omega)\times M(\partial\Th)$. Demostrar que $(\bs{\sigma},u)$ es solución de \eqref{eq:aa} y $\lambda|_{\partial T} = u|_{\partial T}\ \forall T\in \Th$ sí sólo sí $(\bs{\sigma},u,\lambda)$ es solución de \eqref{eq:aaa}.
+    \end{pro}
+    \begin{proof}
+    	\begin{itemize} Por doble implicación
+    		\item[$(\Longrightarrow)$] Suponga que $(\bs{\sigma},u)$ es solución de \eqref{eq:aa} y $\lambda|_{\partial T} = u|_{\partial T}$ para todo $T\in\Th$. Por la caracterización de $\Hdiv$ se tiene que 
+    		\begin{align*}
+    			\sum_{T\in\mathscr{T}_{h}}\PI{\bs{\sigma}\cdot\bs{n}}{\xi}_{\partial\Th} = 0,\ \forall\xi\in M(\partial\Th)
+    		\end{align*}
+    	    por lo que $\bs{\sigma}$ satisface la tercera ecuación de \eqref{eq:aaa}. Dado que $\Hdiv\subset\Hdivt$ se tiene $\bs{\sigma}\in\Hdivt$, por lo que se satisface la segunda ecuación de \eqref{eq:aaa}. usando el hecho que $\lambda|_{\partial T} = u|_{\partial T}$ para todo $T\in\Th$
+    	    \begin{align*}
+    	    	\displaystyle\int_{\Omega}\bs{\sigma}\cdot\bs{v} - \int_{\Omega}u\nabla\cdot\bs{v} + \sum_{T\in\mathscr{T}_{h}}\PI{\bs{v}\cdot\bs{n}}{\lambda} = \displaystyle\int_{\Omega}\bs{\sigma}\cdot\bs{v} - \int_{\Omega}u\nabla\cdot\bs{v} + \sum_{T\in\mathscr{T}_{h}}\PI{\bs{v}\cdot\bs{n}}{u}_{\partial\Th}
+    	    \end{align*}
+            aplicando integración por partes al lado derecho de la igualdad
+            \begin{align*}
+            	\int_{\Omega}\bs{\sigma}\cdot\bs{v} - \int_{\Omega}u\nabla\cdot\bs{v} + \sum_{T\in\mathscr{T}_{h}}\PI{\bs{v}\cdot\bs{n}}{u}_{\partial\Th} = \int_{\Omega}\bs{\sigma}\cdot\bs{v} - \int_{\Omega}\nabla u\cdot\bs{v}
+            \end{align*}
+            pero $\nabla u = \sigma$ por lo que
+            \begin{align*}
+            	\int_{\Omega}\bs{\sigma}\cdot\bs{v} - \int_{\Omega}u\nabla\cdot\bs{v} + \sum_{T\in\mathscr{T}_{h}}\PI{\bs{v}\cdot\bs{n}}{\lambda} = 0
+            \end{align*}
+            y por tanto se satisface la tercera ecuación de \eqref{eq:aaa}.
+            \item[$(\Longrightarrow)$] Suponga $(\bs{\sigma},u,\lambda)\in\Hdivt\times L^{2}(\Omega)\times M(\partial\Th)$ satisface \eqref{eq:aaa}. Notemos que la ecuación tres de \eqref{eq:aaa} es la caracterización de $\Hdiv$ por lo que $\bs{\sigma}\in \Hdiv$, de la ecuación dos de \eqref{eq:aaa} se tiene directamente que $\bs{\sigma}$ satisface dos de \eqref{eq:aa} pues esta ecuación es valida en $\Hdiv\subset\Hdivt$. Por ultimo, tomando $\xi = \lambda$ se tiene que 
+            \begin{align*}
+            	\sum_{T\in\mathscr{T}_{h}}\PI{\bs{v}\cdot\bs{n}}{\lambda} = 0
+            \end{align*} 
+            ademas, usando que $\Hdiv\subset\Hdivt$ se tiene que
+            \begin{align*}
+            	\int_{\Omega}\bs{\sigma}\cdot\bs{v} - \int_{\Omega}u\nabla\cdot\bs{v} = 0
+            \end{align*}
+            para todo $(\bs{v},w)\in\Hdivt\times L^{2}(\Omega)$.
+    	\end{itemize}
+    \end{proof}
+\end{document}

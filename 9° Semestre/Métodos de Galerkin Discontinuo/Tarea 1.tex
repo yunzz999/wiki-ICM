@@ -1,0 +1,357 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Metodo de Galerkin Discontinuo}}
+\newcommand{\tarea}{\textbf{Tarea 1}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\{\!\{#1\}\!\}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Método de Galerkin Discontinuo}\\
+	\textbf{Tarea 1}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}[\textbf{Desigualdad de Poincaré}]
+		Demostrar que existe $C_{P}>0$ tal que $\norm{v}_{L^{2}(a,b)} \leq \norm{v'}_{L^{2}(a,b)}$ para todo $v\in H^{1}(\Omega)$ que se anula en $a$ o en $b$.
+	\end{pro}
+	\begin{proof}
+		Sea $v\in H^{1}(\Omega)$ tal que solo se anula en $a$ (Si $v$ se anula en $b$ es análogo), por teorema fundamental del calculo
+		\begin{align*}
+			v(t) = \int_{a}^{t} v'(x)\ \dx.
+		\end{align*}
+	    Aplicando valor absoluto
+	    \begin{align*}
+	       \abs{v(t)} = \abs{\int_{a}^{t} v'(x)\ \dx} &\leq \int_{a}^{t} \abs{v'(x)}\ \dx\\ &\leq \int_{a}^{t} \abs{v'(x)}\ \dx + \int_{t}^{b} \abs{v'(x)}\ \dx\\ &= \int_{a}^{b} \abs{v'(x)}\ \dx\\ &\underset{\textup{C-S}}{\leq} \left(\int_{a}^{b} 1\ \dx\right)^{1/2}\left(\int_{a}^{b} \abs{v'(x)}^{2}\ \dx\right)^{1/2}\\
+	       &= \sqrt{b-a}\norm{v'}_{L^{2}(a,b)}
+	    \end{align*}
+        Finalmente, por la monotonía de la integral, y la monotonía de la función $f(x) = x^{2}$
+        \begin{align*}
+        	\norm{v}_{L^{2}(a,b)}^{2} = \int_{a}^{b} \abs{v(t)}^{2}\ \dt \leq \int_{a}^{b}\left(\sqrt{b-a}\norm{v'}_{L^{2}(a,b)}\right)^{2}\ \dt = (b-a)^{2}\norm{v'}^{2}_{L^{2}(a,b)} 
+        \end{align*}
+	\end{proof}
+    \begin{pro}[\textbf{Desigualdad de trazas discreta}].
+    	\begin{itemize}
+    		\item[($a$)] Demostrar que existe $C > 0$, tal que $\abs{v(0)} \leq C\norm{v}_{H^{1}(0,1)}$ para todo $v\in H^{1}([0, 1])$.
+    		\item[($b$)] Demostrar que existe $C > 0$, tal que $\abs{v(0)} \leq C\norm{v}_{L^{2}(0,1)}$ para todo $v\in \mathbb{P}_{k}([0, 1])$.
+    		\item[($c$)] Considere un intervalo $[c,d]$ de longitud $h$. Demostrar que existe $C_{tr}>0$, independiente de $h$, tal que\\ $\abs{v(c)}\leq C_{tr}h^{-1/2}\norm{v}_{L^{2}(c,d)}$ para todo $v\in \mathbb{P}_{k}(c,d)$.
+    	\end{itemize}
+    \end{pro}
+    \begin{proof}
+    	\begin{itemize}
+    		\item[$(a)$] Dado $v\in H^{1}([0,1])$, por teorema fundamental del calculo
+    		\begin{align*}
+    			\abs{v(0)} &= \abs{v(x) - \int_{0}^{x}v'(t)\ \dt}\\
+    			           &\leq \abs{v(x)} + \abs{\int_{0}^{x}v'(t)\ \dt}\\
+    			           &\leq \abs{v(x)} + \int_{0}^{x}\abs{v'(t)}\ \dt\\
+    			           &\leq \abs{v(x)} + \sqrt{x}\left(\int_{0}^{x}\abs{v'(t)}^{2}\ \dt\right)^{1/2}\\
+    			           &\leq \abs{v(x)} + \sqrt{x}\norm{v'}_{L^{2}(0,1)}
+    		\end{align*}
+    	    Elevando al cuadrado y aplicando la desigualdad $2\abs{ab}\leq a^{2} + b^{2}$ para todo $a,b\in \mathbb{R}$, se obtiene
+    	    \begin{align*}
+    	    	\abs{v(0)}^{2} &\leq \left(\abs{v(x)} + \sqrt{x}\norm{v'}_{L^{2}(0,1)}\right)^{2}\\
+    	    	&= \abs{v(x)}^{2} + 2\abs{v(x)}\sqrt{x}\norm{v'}_{L^{2}(0,1)} + x\norm{v'}^{2}_{L^{2}(0,1)}\\
+    	    	&\leq \abs{v(x)}^{2} +\left(\sqrt{x}\norm{v'}_{L^{2}(0,1)}\right)^{2} + \abs{v(x)}^{2} + x\norm{v'}^{2}_{L^{2}(0,1)}\\
+    	    	&= 2\left(\abs{v(x)}^{2} + x\norm{v'}^{2}_{L^{2}(0,1)}\right)
+    	    \end{align*}
+            Usando la monotonía de la integral 
+            \begin{align*}
+            	\abs{v(0)}^{2} = \int_{0}^{1}\abs{v(0)}^{2}\ \dx \leq 2\int_{0}^{1}\abs{v(x)}^{2} + x\norm{v'}^{2}_{L^{2}(0,1)}\ \dx &= 2\left(\norm{v}^{2}_{L^{2}(0,1)} + \frac{\norm{v'}^{2}_{L^{2}(0,1)}}{2}\right)\\ &\leq 2\left(\norm{v}^{2}_{L^{2}(0,1)} + \norm{v'}^{2}_{L^{2}(0,1)}\right) = \norm{v}^{2}_{H^{1}(0,1)}
+            \end{align*}
+            \item[$(b)$] Notemos que $\mathbb{P}_{k}([0,1])$ es un subespacio vectorial de dimensión finita de $H^{1}([0,1])$, dado que las normas en espacios de dimensión finita son equivalentes se tiene que existen constantes $\alpha,\beta\in \mathbb{R}$ tal que 
+            \begin{align*}
+            	\alpha\norm{v}_{L^{2}(0,1)} \leq \norm{v}_{H^{1}(0,1)} \leq \beta\norm{v}_{L^{2}(0,1)}, \ \ \ \forall v\in \mathbb{P}_{k}([0,1])
+            \end{align*}
+            así, por $(a)$ se tiene que para todo $v\in \mathbb{P}_{k}([0,1])$
+            \begin{align*}
+            	\exists C>0: \ \abs{v(0)} \leq C\norm{v}_{H^{1}(0,1)} \leq C\beta \norm{v}_{L^{2}(0,1)} = \hat{C}\norm{v}_{L^{2}(0,1)}
+            \end{align*}
+            \item[$(c)$] Sean $w\in \mathbb{P}_{k}([0,1])$ y $v\in \mathbb{P}_{k}([c,d])$ tales que
+            \begin{align*}
+            	w(x) = v(dx + (1-x)c)
+            \end{align*}
+            donde $w(0) = v(c)$ y por $(c)$, existe una constante positiva $C_{w}$ tal que
+            \begin{align*}
+            	\abs{v(c)} &= \abs{w(0)}\\ &\leq C_{w}\norm{w}_{L^{2}(0,1)}\\ &= C_{w}\sqrt{\int_{0}^{1}\abs{w(x)}^{2}\dx}\\ &= C_{w}\sqrt{\int_{0}^{1}\abs{v(dx+(1-x)c)}^{2}\dx}\\ &= C_{w}\sqrt{\int_{0}^{1}\abs{v(c + hx)}^{2}\dx}  \\ 
+            	&\underbrace{=}_{t = c + hx} C_{w} \sqrt{\int_{c}^{d}\abs{v(t)}^{2}\frac{1}{h}\ \dt}\\ &= C_{w}h^{-1/2}\sqrt{\int_{c}^{d}\abs{v(t)}^{2}\ \dt}\\ &= C_{w}h^{-1/2}\norm{v}_{L^{2}(c,d)}
+            \end{align*}
+    	\end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Sean $\{x_{i}\}_{i=0}^{n+1}$ tal que $a = x_0 < x_1 < \cdots < x_{n+1} = b$. Sean $v,w\in H^{1}(\mathcal{T}_{h})$, donde $\mathcal{T}_{h} := \cup^{n+1}_{i=1}(x_{i-1},x_{i})$. Mostrar que
+    	\begin{align*}
+    		\sum_{i=0}^{n+1} \salto{(vw)(x_{i})} = \sum_{i=1}^{n}\Big( \salto{v(x_{i})}\prom{w(x_{i})} + \prom{v(x_{i})}\salto{w(x_{i})}\Big) + v(b)w(b) - v(a)w(a)
+    	\end{align*} 
+    \end{pro}
+    \begin{proof}
+    	Para probar la identidad, veamos los siguientes casos:
+    	\begin{itemize}
+    		\item[$(1)$] Si $i = 0$
+    		\begin{align*}
+    			\salto{(vw)(x_{0})} = \salto{(vw)(a)} = -(vw)(a) = -v(a)w(a)
+    		\end{align*}
+    	    \item[$(2)$] Si $i = n+1$
+    	    \begin{align*}
+    	    	\salto{(vw)(x_{n+a})} = \salto{(vw)(b)} = (vw)(b) = v(b)w(b)
+    	    \end{align*}
+    	    \item[$(3)$] Si $i\in \{1,\cdots,n\}$
+    	    \begin{align*}
+    	    	\salto{(vw)(x_{i})} &= (vw)(x^{-}_{i}) - (vw)(x^{+}_{i})\\
+    	    	&= v(x^{-}_{i})w(x^{-}_{i}) - v(x^{+}_{i})w(x^{+}_{i}) \\
+    	    	&= \frac{v(x^{-}_{i})w(x^{-}_{i})}{2} + \frac{v(x^{-}_{i})w(x^{-}_{i})}{2} - \frac{v(x^{+}_{i})w(x^{+}_{i})}{2} - \frac{v(x^{+}_{i})w(x^{+}_{i})}{2}\\ &+ \frac{v(x^{-}_{i})w(x^{+}_{i})}{2} - \frac{v(x^{-}_{i})w(x^{+}_{i})}{2} + \frac{v(x^{+}_{i})w(x^{-}_{i})}{2} - 
+    	    	\frac{v(x^{+}_{i})w(x^{-}_{i})}{2}\\
+    	    	&= -\frac{v(x^{+}_{i})w(x^{+}_{i})}{2} + \frac{v(x^{-}_{i})w(x^{+}_{i})}{2} - \frac{v(x^{+}_{i})w(x^{+}_{i})}{2} - \frac{v(x^{-}_{i})w(x^{+}_{i})}{2}\\ 
+    	    	&+ \frac{v(x^{-}_{i})w(x^{-}_{i})}{2} + \frac{v(x^{-}_{i})w(x^{-}_{i})}{2} +
+    	    	\frac{v(x^{+}_{i})w(x^{-}_{i})}{2} - 
+    	    	\frac{v(x^{+}_{i})w(x^{-}_{i})}{2}\\
+    	    	&= \left( \frac{v(x^{-}_{i}) + v(x^{+}_{i})}{2}\right)w(x^{-}_{i}) -  \left( \frac{v(x^{-}_{i}) + v(x^{+}_{i})}{2}\right)w(x^{+}_{i})\\
+    	    	&+ \left(\frac{w(x^{+}_{i}) + w(x^{-}_{i}) }{2}\right)v(x^{-}_{i}) - \left(\frac{w(x^{+}_{i}) + w(x^{-}_{i})}{2}\right)v(x^{+}_{i})\\
+    	    	&= \left(v(x^{-}_{i}) - v(x^{+}_{i})\right)\left(\frac{w(x^{+}_{i}) + w(x^{-}_{i}) }{2}\right) + \left(w(x^{-}_{i}) - w(x^{+}_{i})\right)\left( \frac{v(x^{-}_{i})+v(x^{+}_{i})}{2}\right)\\
+    	    	&= \salto{v(x_{i})}\prom{w(x_{i})} + \prom{v(x_{i})}\salto{w(x_{i})}
+    	    \end{align*}
+    	\end{itemize}
+    Juntando lo obtenido se obtiene 
+    \begin{align*}
+    	\sum_{i=0}^{n+1} \salto{(vw)(x_{i})} = \sum_{i=1}^{n}\Big( \salto{v(x_{i})}\prom{w(x_{i})} + \prom{v(x_{i})}\salto{w(x_{i})}\Big) + v(b)w(b) - v(a)w(a)
+    \end{align*}
+    \end{proof}
+    \begin{pro}
+    	Mostrar que $\displaystyle \norm{v}_{\textup{DG}} := \left( \norm{v'}^{2}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{v(x_{i})}}^{2}  \right)^{1/2}$ es una norma en $V_{h} := \{ v\in L^{2}(a,b):\ v\in \mathbb{P}_{k}(x_{i-1},x_{i}),\ i = 1,\dots,n+1 \}$, donde $v'$ se entiende como la derivada a trozos de $v$.
+    \end{pro}
+    \begin{proof}
+    	$\norm{\cdot}_{\textup{DG}}$ es una norma en $V_{h}$ si se cumple que
+    	\begin{itemize}
+    		\item[$(i)$] $\norm{v}_{\textup{DG}} \geq 0, \ \forall v_{h}\in V_{h}$ y $\norm{v_{h}} = 0 \iff v_{h} = \theta_{V_{h}}$.\\~\\
+    		Sea $v_{h}\in V_{h}$, luego $\abs{v'_{h}(x)\lvert_{[x_{i-1},x_{i}]}}\geq 0$ y $\abs{\salto{v_{h}(x_{i})}}\geq 0$ para todo $i\in\{0,\cdots,n+1\}$, entonces
+    		\begin{align*}
+    			\norm{v_{h}}^{2}_{\textup{DG}} = \norm{v'_{h}}^{2}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2} = \sum_{i=1}^{n+1}\int_{x_{i-1}}^{x_{i}} \abs{v'_{h}(x)\lvert_{[x_{i-1},x_{i}]}}^{2}\ \dx + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2} \geq 0
+    		\end{align*}
+    	    Ahora supongamos que dado $v_{h}\in V_{h}$ se tiene que
+    	    \begin{align*}
+    	    	\norm{v_{h}}^{2}_{\textup{DG}} = 0 \iff \norm{v'_{h}}^{2}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2} = 0
+    	    \end{align*} 
+            Como ambos términos de la suma son no negativos se deduce
+            \begin{align*}
+            	\norm{v'_{h}}^{2}_{L^{2}(a,b)}  = 0 \ \wedge \ \sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2} = 0 &\iff v'_{h} = \theta_{V_{h}}\ \wedge \ \salto{v_{h}(x_{i})} = 0,\  \ \forall i\in\{0,\cdots,n+1  \}\\ &\iff v'_{h} = \theta_{V_{h}}\ \wedge \ v_{h}(a) = v_{h}(b) = 0\ \wedge \ \salto{v_{h}(x_{i})} = 0,\  \ \forall i\in\{1,\cdots,n  \}\ \\ &\iff v_{h} = \theta_{V_{h}}
+            \end{align*}
+            \item[$(ii)$] $\forall \lambda\in \mathbb{R},\ v_{h}\in V_{h}:\ \norm{\lambda v_{h}}_{\textup{DG}} = \abs{\lambda}\norm{v_{h}}_{\textup{DG}}$.\\~\\
+            Dado $ \lambda\in \mathbb{R}$ y $\ v_{h}\in V_{h}$, luego
+            \begin{align*}
+            	\norm{\lambda v_{h}}_{\textup{DG}} = \left( \norm{(\lambda v_{h})'}^{2}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{(\lambda v_{h})(x_{i})}}^{2}  \right)^{1/2} = \left( \norm{\lambda v'_{h}}^{2}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{\lambda v_{h}(x_{i})}}^{2}  \right)^{1/2}
+            \end{align*}
+            Notemos que
+            \begin{align*}
+            	\sum_{i=0}^{n+1}h^{-1}\abs{\salto{\lambda v_{h}(x_{i})}}^{2} &= h^{-1}\abs{\salto{\lambda v_{h}(a)}}^{2} + h^{-1}\abs{\salto{\lambda v_{h}(b)}}^{2} + \sum_{i=1}^{n}h^{-1}\abs{\salto{\lambda v_{h}(x_{i})}}^{2}\\
+            	&= h^{-1}\abs{-\lambda v_{h}(a)}^{2} + h^{-1}\abs{\lambda v_{h}(b)}^{2} + \sum_{i=1}^{n}h^{-1}\abs{\lambda v_{h}(x^{-}_{i}) - \lambda v_{h}(x^{+}_{i})}^{2}\\
+            	&= \abs{\lambda}^{2}\abs{-v_{h}(a)}^{2} + \abs{\lambda}^{2}h^{-1}\abs{ v_{h}(b)}^{2} + \abs{\lambda}^{2}\sum_{i=1}^{n}h^{-1}\abs{v_{h}(x^{-}_{i}) - v_{h}(x^{+}_{i})}^{2}\\
+            	&= \abs{\lambda}^{2}\left( \abs{-v_{h}(a)}^{2} + h^{-1}\abs{ v_{h}(b)}^{2} + \sum_{i=1}^{n}h^{-1}\abs{v_{h}(x^{-}_{i}) - v_{h}(x^{+}_{i})}^{2}\right) \\
+            	&= \abs{\lambda}^{2}\sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2}
+            \end{align*} 
+            Usando esto
+            \begin{align*}
+            	\norm{\lambda v_{h}}_{\textup{DG}} &= \left( \norm{\lambda v'_{h}}^{2}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{\lambda v_{h}(x_{i})}}^{2}  \right)^{1/2}\\ &= \left( \abs{\lambda}^{2}\norm{ v'_{h}}^{2}_{L^{2}(a,b)} + \abs{\lambda}^{2}\sum_{i=0}^{n+1}h^{-1}\abs{\salto{ v_{h}(x_{i})}}^{2}  \right)^{1/2}\\ &= \abs{\lambda} \norm{v_{h}}_{\textup{DG}}
+            \end{align*}
+            \item[$(iii)$] $\forall v_{h},w_{h}\in V_{h}:\ \norm{v_{h} + w_{h}}_{\textup{DG}} \leq \norm{v_{h}}_{\textup{DG}} + \norm{w_{h}}_{\textup{DG}}$\\~\\
+            Sea $v_{h},w_{h}\in V_{h}$, luego
+            \begin{align*}
+            	\norm{v_{h} + w_{h}}_{\DG}^{2} &=  \norm{ (v_{h} + w_{h})'}^{2}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{ (v_{h} + w_{h})(x_{i})}}^{2} \\
+            	&= \norm{ v'_{h} + w'_{h}}^{2}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{ v_{h}(x_{i}) + w_{h}(x_{i})}}^{2}  
+            \end{align*} 
+            Notemos que 
+            \begin{align*}
+            	\sum_{i=0}^{n+1}h^{-1}\abs{\salto{ (v_{h} + w_{h})(x_{i})}}^{2}  &=  \sum_{i=1}^{n}h^{-1}\abs{\salto{ (v_{h} + w_{h})(x_{i})}}^{2} + h^{-1}\abs{\salto{ (v_{h} + w_{h})(x_{0})}}^{2} + h^{-1}\abs{\salto{ (v_{h} + w_{h})(x_{n+1})}}^{2} \\
+            	&= \sum_{i=1}^{n}h^{-1}\abs{\salto{ (v_{h} + w_{h})(x_{i})}}^{2} + h^{-1}\abs{\salto{ (v_{h} + w_{h})(a)}}^{2} + h^{-1}\abs{\salto{ (v_{h} + w_{h})(b)}}^{2} \\
+            	&= \sum_{i=1}^{n}h^{-1}\abs{(v_{h}+w_{h})(x^{-}_{i})- (v_{h}+w_{h})(x^{+}_{i})}^{2} + h^{-1}\abs{-(v_{h} + w_{h})(a)}^{2} +  h^{-1}\abs{(v_{h} + w_{h})(b)}^{2}\\
+            	&= \sum_{i=1}^{n}h^{-1}\abs{v_{h}(x^{-}_{i})+w_{h}(x^{-}_{i})- v_{h}(x^{+}_{i})- w_{h}(x^{+}_{i})}^{2}\\ 
+            	&+ h^{-1}\abs{-v_{h}(a) - w_{h}(a)}^{2} +  h^{-1}\abs{v_{h}(b) + w_{h}(b)}^{2}\\
+            	&= \sum_{i=1}^{n}h^{-1}\abs{v_{h}(x^{-}_{i})- v_{h}(x^{+}_{i}) + w_{h}(x^{-}_{i})- w_{h}(x^{+}_{i})}^{2}\\ 
+            	&+ h^{-1}\abs{-v_{h}(a) - w_{h}(a)}^{2} +  h^{-1}\abs{v_{h}(b) + w_{h}(b)}^{2}\\
+            	&= \sum_{i=1}^{n}h^{-1}\abs{\salto{v_{h}(x_{i})} + \salto{w_{h}(x_{i})}}^{2} + h^{-1}\abs{\salto{v_{h}(a)} + \salto{w_{h}(a)}}^{2} +  h^{-1}\abs{\salto{v_{h}(b)} + \salto{w_{h}(b)}}^{2}\\
+            	&= \sum_{i=0}^{n+1}h^{-1}\abs{\salto{ v_{h}(x_{i}) }+ \salto{w_{h}(x_{i})}}^{2}
+            \end{align*}
+        Usando esto
+        \begin{align*}
+        	\norm{v_{h} + w_{h}}_{\DG}^{2} &= \norm{ v'_{h} + w'_{h}}^{2}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{ v_{h}(x_{i}) }+ \salto{w_{h}(x_{i})}}^{2}\\
+        	&\leq \norm{v'_{h}}^{2} + \norm{w'_{h}}^{2} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{ v_{h}(x_{i}) }}^{2}+ \sum_{i=0}^{n+1}h^{-1}\abs{\salto{w_{h}(x_{i})}}^{2}\\
+        	&= \norm{v'_{h}}^{2}  + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{ v_{h}(x_{i}) }}^{2}+ \norm{w'_{h}}^{2} +  \sum_{i=0}^{n+1}h^{-1}\abs{\salto{w_{h}(x_{i})}}^{2}\\
+        	&= \norm{v_{h}}^{2}_{\DG} + \norm{w_{h}}^{2}_{\DG} 
+        \end{align*}
+        Utilizando la desigualdad $\sqrt{a+b}\leq \sqrt{a} + \sqrt{b}$ que esta definida para todo $a,b\geq0$, se obtiene 
+        \begin{align*}
+        	\norm{v_{h}+w_{h}}_{\DG} \leq \norm{v_{h}}_{\DG} + \norm{w_{h}}_{\DG}
+        \end{align*}
+    	\end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Considere la forma bilineal del método de penalización simétrico 
+    	\begin{align*}
+    		a_{h}(u_{h},v_{h}) &:= \int_{a}^{b} u'_{h}(x)v'_{h}(x)\ \dx - \sum_{i=1}^{n}\Big(\salto{u_{h}(x_{i})}\prom{v'_{h}(x_{i})} + \prom{u'_{h}(x_{i})}\salto{v_{h}(x_{i})}\Big)\\
+    		&-u'_{h}(b)v_{h}(b) + u'_{h}(a)v_{h}(a) - u_{h}(b)v'_{h}(b) + u_{h}(a)v'_{h}(a) + \sum_{i=0}^{n+1}\alpha h^{-1}\salto{u_{h}(x_{i})}\salto{v_{h}(x_{i})},
+    	\end{align*}
+        donde $u'_{h}(x)$ y $v'_{h}(x)$ corresponden a las derivadas a trozos de $u_{h}$ y $v_{h}$, respectivamente. Proviene de
+        aproximar la solución de la ecuación
+        \begin{align}
+        	\left\{\begin{matrix}
+        		-u''(x) = f,\ \ x\in (a,b) \\ 
+        		u(a) = 0,\ u(b) = 0 
+        	\end{matrix}\right.,
+        \end{align}
+        Mostrar que 
+        \begin{itemize}
+        	\item[$(a)$] existe una constante $M>0$, independiente de $h$, tal que $\abs{a_{h}(u_{h},v_{h})}\leq M\norm{u_{h}}_{\DG}\norm{v_{h}}_{\DG}$, $\forall u_{h},v_{h}\in V_{h}$.
+        	\item[$(b)$] existe una constante $M>0$, independiente de $h$, tal que $\abs{a_{h}(u,v_{h})}\leq M\norm{u}_{\DG,\star}\norm{v_{h}}_{\DG}$, para todo $u\in H_{0}^{1}(a,b)\cap H^{2}(\mathcal{T}_{h})$, $v_{h}\in V_{h}$, donde 
+        	\begin{align*}
+        		\norm{u}_{\DG,\star} := \left( \norm{u}^{2}_{\DG} + \sum_{i=0}^{n+1}h\abs{\prom{u'(x_{i})}}^{2} \right)^{1/2}.
+        	\end{align*}
+        \end{itemize}
+    \end{pro}
+    \begin{proof}
+    	\begin{itemize}
+    		\item[$(a)$] dado $u_{h},v_{h}\in V_{h}$, luego\\
+    		\begin{align*}
+    			\abs{a_{h}(u_{h},v_{h})} &\leq \abs{\int_{a}^{b} u'_{h}(x)v'_{h}(x)\ \dx}  + \abs{ \sum_{i=1}^{n}\Big(\salto{u_{h}(x_{i})}\prom{v'_{h}(x_{i})} + \prom{u'_{h}(x_{i})}\salto{v_{h}(x_{i})}\Big)}\\
+    				&+\abs{-u'_{h}(b)v_{h}(b)} + \abs{u'_{h}(a)v_{h}(a)} + \abs{u_{h}(b)v'_{h}(b)} + \abs{u_{h}(a)v'_{h}(a)} + \abs{\sum_{i=0}^{n+1}\alpha h^{-1}\salto{u_{h}(x_{i})}\salto{v_{h}(x_{i})}}\\
+    				&\leq \underbrace{\abs{\int_{a}^{b} u'_{h}(x)v'_{h}(x)\ \dx}}_{T_1}  +  \underbrace{\sum_{i=1}^{n}\abs{\salto{u_{h}(x_{i})}\prom{v'_{h}(x_{i})}}}_{T_2} + \underbrace{\sum_{i=1}^{n}\abs{\prom{u'_{h}(x_{i})}\salto{v_{h}(x_{i})}}}_{T_3}\\
+    				&+\underbrace{\abs{-u'_{h}(b)v_{h}(b)}}_{T_4} + \underbrace{\abs{u'_{h}(a)v_{h}(a)}}_{T_{5}} + \underbrace{\abs{u_{h}(b)v'_{h}(b)}}_{T_{6}} + \underbrace{\abs{u_{h}(a)v'_{h}(a)}}_{T_7} + \underbrace{\sum_{i=0}^{n+1}\alpha h^{-1}\abs{\salto{u_{h}(x_{i})}}\abs{\salto{v_{h}(x_{i})}}}_{T_8}\\	
+    		\end{align*}
+    	    Acotemos cada termino por separado
+    	    \begin{itemize}
+    	    	\item[$1)$] Cota para $T_{1}$. Por Cauchy-Schwarz
+    	    	\begin{align*}
+    	    		\abs{\int_{a}^{b} u'_{h}(x)v'_{h}(x)\ \dx} \leq \norm{u'_{h}}_{L^{2}(a,b)}\norm{v'_{h}}_{L^{2}(a,b)}
+    	    	\end{align*}
+    	    	\item[$2)$] Cota para $T_{2}$ y $T_{3}$. Dado $i\in\{1,\dots,n\}$, se tiene
+    	    	\begin{align*}
+    	    		\abs{\salto{u_{h}(x_{i})}}\abs{\prom{v'_{h}(x_{i})}} = \abs{\salto{u_{h}(x_{i})}}\abs{\frac{v'_{h}(x^{+}_{i})+v'_{h}(x^{-}_{i})}{2}} \leq \frac{1}{2}\abs{\salto{u_{h}(x_{i})}}\left(\abs{v'_{h}(x^{+}_{i})} + \abs{v'_{h}(x^{-}_{i})}\right).
+    	    	\end{align*}
+        	    Por desigualdad de traza
+        	    \begin{itemize}
+        	    	\item $\abs{v'_{h}(x^{+}_{i})} \leq C^{i}_{1}h^{-1/2}\norm{v'}_{L^{2}(x_{i},x_{i+1})}$
+        	    	\item $\abs{v'_{h}(x^{-}_{i})} \leq C^{i}_{2}h^{-1/2}\norm{v'}_{L^{2}(x_{i-1},x_{i})}$
+        	    \end{itemize}
+                Utilizando esto
+                \begin{align*}
+                	\abs{\salto{u_{h}(x_{i})}}\abs{\prom{v'_{h}(x_{i})}} &\leq \frac{1}{2}\abs{\salto{u_{h}(x_{i})}}\left(C^{i}_{1}h^{-1/2}\norm{v'}_{L^{2}(x_{i},x_{i+1})} + C^{i}_{2}h^{-1/2}\norm{v'}_{L^{2}(x_{i-1},x_{i})} \right)\\
+                	&\leq C_{i}h^{-1/2}\abs{\salto{u_{h}(x_{i})}}\left(\norm{v'}_{L^{2}(x_{i},x_{i+1})} + \norm{v'}_{L^{2}(x_{i-1},x_{i})}\right)\\
+                	&= C_{i}h^{-1/2}\abs{\salto{u_{h}(x_{i})}}\norm{v'}_{L^{2}(x_{i-1},x_{i+1})}
+                \end{align*}
+                donde $C_{i} = \max\{C^{i}_{1},C^{i}_{2}\}$. Utilizando lo anterior
+                \begin{align*}
+                	\sum_{i=1}^{n}\abs{\salto{u_{h}(x_{i})}\prom{v'_{h}(x_{i})}} &\leq \sum_{i=1}^{n}C_{i}h^{-1/2}\abs{\salto{u_{h}(x_{i})}}\norm{v'}_{L^{2}(x_{i-1},x_{i+1})}\\ &\leq C\sum_{i=1}^{n}h^{-1/2}\abs{\salto{u_{h}(x_{i})}}\norm{v'}_{L^{2}(x_{i-1},x_{i+1})}\\
+                	&\underset{\textup{C-S}}{\leq} C\left(\sum_{i=1}^{n}h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2}\right)^{1/2}\left(\sum_{i=1}^{n}\norm{v'}^{2}_{L^{2}(x_{i-1},x_{i+1})}\right)^{1/2}\\
+                	&= C\left(\sum_{i=1}^{n}h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2}\right)^{1/2}\norm{v'}_{L^{2}(a,b)}\\
+                	&\leq C\left(\sum_{i=0}^{n+1}h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2}\right)^{1/2}\norm{v'}_{L^{2}(a,b)}
+                \end{align*}
+                donde $C = \max\{C_{1},\dots,C_{n}\}$. Análogamente se tiene 
+                \begin{align*}
+                	\sum_{i=1}^{n}\abs{\prom{u'_{h}(x_{i})}\salto{v_{h}(x_{i})}} \leq N\left(\sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2}\right)^{1/2}\norm{u'}_{L^{2}(a,b)}
+                \end{align*}
+                \item[$3)$] Cota para $T_4$ y $T_{6}$. Por definición de salto
+                \begin{align*}
+                	\abs{u'_{h}(b)v_{h}(b)} = \abs{\salto{v_{h}(b)}}\abs{u'_{h}(b)}
+                \end{align*}
+                por desigualdad de traza
+                \begin{align*}
+                	\abs{u'_{h}(b)} \leq C_{\textup{tr}}h^{-1/2}\norm{u'_{h}}_{L^{2}(x_{n},x_{n+1})} \leq C_{\textup{tr}}h^{-1/2}\norm{u'_{h}}_{L^{2}(a,b)}
+                \end{align*}
+                de esta forma
+                \begin{align*}
+                	\abs{u'_{h}(b)v_{h}(b)} &\leq C^{u}_{\textup{tr}}h^{-1/2}\abs{\salto{v_{h}(b)}}\norm{u'_{h}}_{L^{2}(a,b)}
+                \end{align*}
+                Análogamente
+                \begin{align*}
+                	\abs{v'_{h}(b)u_{h}(b)} \leq C^{v}_{\textup{tr}}h^{-1/2}\abs{\salto{u_{h}(b)}}\norm{v'_{h}}_{L^{2}(a,b)}
+                \end{align*} 
+                \item[$4)$] Cota para $T_{5}$ y $T_{7}$, Por definición de salto
+                \begin{align*}
+                	\abs{u'_{h}(a)v_{h}(a)} = \abs{u'_{h}(a)}\abs{\salto{v_{h}(a)}}
+                \end{align*}
+                Por desigualdad de traza
+                \begin{align*}
+                	\abs{u'_{h}(a)} \leq S^{u}_{\textup{tr}}h^{-1/2}\norm{u'_{h}}_{L^{2}(x_{0},x_{1})} \leq S^{u}_{\textup{tr}}h^{-1/2}\norm{u'_{h}}_{L^{2}(a,b)}
+                \end{align*}
+                de esta forma 
+                \begin{align*}
+                	\abs{u'_{h}(a)v_{h}(a)} \leq S^{u}_{\textup{tr}}h^{-1/2}\norm{u'_{h}}_{L^{2}(a,b)}\abs{\salto{v_{h}(x_{0})}}
+                \end{align*}
+                Análogamente
+                \begin{align*}
+                	\abs{v'_{h}(a)u_{h}(a)} \leq S^{v}_{\textup{tr}}h^{-1/2}\norm{v'_{h}}_{L^{2}(a,b)}\abs{\salto{u_{h}(x_{0})}}
+                \end{align*}
+                \item[$5)$] Cota para $T_8$. Por Cauchy Schwarz en $\mathbb{R}^{n+2}$
+                \begin{align*}
+                	\sum_{i=0}^{n+1}\alpha h^{-1}\abs{\salto{u_{h}(x_{i})}}\abs{\salto{v_{h}(x_{i})}} &= \alpha\sum_{i=0}^{n+1} h^{-1/2}\abs{\salto{u_{h}(x_{i})}}h^{-1/2}\abs{\salto{v_{h}(x_{i})}}\\ &\leq\alpha\left(\sum_{i=0}^{n+1} h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2}\right)^{1/2}\left(\sum_{i=0}^{n+1} h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2}\right)^{1/2}
+                \end{align*}
+    	    \end{itemize}
+            Juntando todo se obtiene
+            \begin{align*}
+            	\abs{a_{h}(u_{h},v_{h})}&\leq \norm{u'_{h}}_{L^{2}(a,b)}\norm{v'_{h}}_{L^{2}(a,b)} + C\left(\sum_{i=0}^{n+1}h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2}\right)^{1/2}\norm{v'}_{L^{2}(a,b)}\\ &+ N\left(\sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2}\right)^{1/2}\norm{u'}_{L^{2}(a,b)} + C^{u}_{\textup{tr}}h^{-1/2}\abs{\salto{v_{h}(b)}}\norm{u'_{h}}_{L^{2}(a,b)}\\ &+ C^{v}_{\textup{tr}}h^{-1/2}\abs{\salto{u_{h}(b)}}\norm{v'_{h}}_{L^{2}(a,b)} + S^{u}_{\textup{tr}}h^{-1/2}\norm{u'_{h}}_{L^{2}(a,b)}\abs{\salto{v_{h}(a)}} + S^{v}_{\textup{tr}}h^{-1/2}\norm{v'_{h}}_{L^{2}(a,b)}\abs{\salto{u_{h}(a)}}\\
+            	&+\alpha\left(\sum_{i=0}^{n+1} h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2}\right)^{1/2}\left(\sum_{i=0}^{n+1} h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2}\right)^{1/2}\\
+            	&\leq L\left[\norm{u'_{h}}_{L^{2}(a,b)}\norm{v'_{h}}_{L^{2}(a,b)} + \left(\sum_{i=0}^{n+1}h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2}\right)^{1/2}\norm{v'}_{L^{2}(a,b)}\right.\\ &+ \left(\sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2}\right)^{1/2}\norm{u'}_{L^{2}(a,b)} + h^{-1/2}\abs{\salto{v_{h}(b)}}\norm{u'_{h}}_{L^{2}(a,b)}\\ &+ h^{-1/2}\abs{\salto{u_{h}(b)}}\norm{v'_{h}}_{L^{2}(a,b)} + h^{-1/2}\norm{u'_{h}}_{L^{2}(a,b)}\abs{\salto{v_{h}(a)}} + h^{-1/2}\norm{v'_{h}}_{L^{2}(a,b)}\abs{\salto{u_{h}(a)}}\\
+            	&+\left.\left(\sum_{i=0}^{n+1} h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2}\right)^{1/2}\left(\sum_{i=0}^{n+1} h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2}\right)^{1/2} \right]\\
+            	&\underset{\textup{C-S}}{\leq}  L \left(4\norm{u'}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2} + h^{-1}\abs{\salto{u_{h}(b)}}^{2} + h^{-1}\abs{\salto{u_{h}(a)}}^{2}\right)^{1/2}\\ &\cdot\left(4\norm{v'}_{L^{2}(a,b)} + \sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2}+ h^{-1}\abs{\salto{v_{h}(b)}}^{2} + h^{-1}\abs{\salto{v_{h}(a)}}^{2}\right)^{1/2}\\
+            	&\leq L \left(4\norm{u'}_{L^{2}(a,b)} + 2\sum_{i=0}^{n+1}h^{-1}\abs{\salto{u_{h}(x_{i})}}^{2} \right)^{1/2} \left(4\norm{v'}_{L^{2}(a,b)} + 2\sum_{i=0}^{n+1}h^{-1}\abs{\salto{v_{h}(x_{i})}}^{2}\right)^{1/2}\\
+            	&\leq M\norm{u}_{\DG}\norm{v}_{\DG}
+            \end{align*}
+            donde $M := 2L$ y $L = \max\{1,C,N,C^{u}_{\textup{tr}},C^{v}_{\textup{tr}},S^{u}_{\textup{tr}},S^{v}_{\textup{tr}},\alpha\}$.
+    	    \item[$(b)$] dado $u\in H_{0}^{1}(a,b)\cap H^{2}(\mathcal{T}_{h})$ y $v_{h}\in V_{h}$. Notemos que de $a)$, se obtiene que existe un $M>0$ tal que 
+    	    \begin{align*}
+    	    	\abs{a_{h}(u,v_{h})}\leq M\norm{u}_{\DG}\norm{v_{h}}_{\DG},
+    	    \end{align*}
+            ademas, 
+            \begin{align*}
+            	\norm{u}^{2}_{\DG} \leq \norm{u}^{2}_{\DG} + \underbrace{\sum_{i=0}^{n+1}h\abs{\salto{u'(x_{i})}}^{2}}_{\geq 0} \Longrightarrow \norm{u}_{\DG} \leq \left( \norm{u}^{2}_{\DG} + \sum_{i=0}^{n+1}h\abs{\salto{u'(x_{i})}}^{2}\right)^{1/2} = \norm{u}_{\DG,\star}
+            \end{align*}
+            Por lo tanto
+            \begin{align*}
+            	\abs{a_{h}(u,v_{h})}\leq M\norm{u}_{\DG,\star}\norm{v_{h}}_{\DG}
+            \end{align*}
+    	\end{itemize}
+    \end{proof}
+\end{document}

@@ -1,0 +1,275 @@
+-- FreeFem++ v4.12 (Tue Dec  6 18:35:04 CET 2022 - git v4.12)
+   file : C:\Users\braya\Desktop\Finitos\Años anteriores\curso\codigos\NS-cavity.edp
+ Load: lg_fem lg_mesh lg_mesh3 eigenvalue
+    1 : /*
+    2 :   Problema de la cavidad 2D para Navier Stokes
+    3 :   usando P2/P1 (Taylor-Hood) y un esquema de Newton
+    4 : */
+    5 :
+    6 : real Reynold = 100.;          // numero de Reynolds del problema
+    7 : real nu      = 1.0/Reynold; // viscosidad del problema
+    8 : int maxiter  = 50;          // Numero maximo de iteraciones del Newton
+    9 : int it;
+   10 :
+   11 : mesh Th=square(10,10);      // malla del dominio Omega:=]0,1[x]0,1[
+   12 :
+   13 : fespace Hh(Th,P2);          // espacio FEM: P2 para la velocidad
+   14 : fespace Qh(Th,P1);          // espacio FEM: P1 para la presion
+   15 :
+   16 : Hh u1,u2,v1,v2,deltau1,deltau2; // declaracion de que variables son P2
+   17 : Qh p,q,deltap;                  // declaracion de que variables son P1
+   18 :
+   19 : macro aa(ux,uy,vx,vy) ( nu*(dx(ux)*dx(vx) + dy(ux)*dy(vx) +  dx(uy)*dx(vy) + dy(uy)*dy(vy)) ) )  // forma bilineal a
+   20 : macro bb(vx,vy,qq) (-qq*(dx(vx)+dy(vy)))                                                      )  // forma bilineal b
+   21 : macro cc(ux,uy,vx,vy,wx,wy) (wx*(ux*dx(vx)+uy*dy(vx)) + wy*(ux*dx(vx)+uy*dy(vy)))             )  // forma trilineal c
+   22 : macro div(vx,vy) (dx(vx)+dy(vy))                                                              )  // divergencia
+   23 :
+   24 : //
+   25 : // Iniciamos el esquema de Newton con una solucion provista por
+   26 : // el problema de Stokes
+   27 : //
+   28 :
+   29 : solve Stokes ([u1,u2,p],[v1,v2,q]) =
+   30 : int2d(Th) (aa(u1,u2,v1,v2)           ( nu*(dx(u1)*dx(v1) + dy(u1)*dy(v1) +  dx(u2)*dx(v2) + dy(u2)*dy(v2)) ) + bb(u1,u2,q)                                                       (-q*(dx(u1)+dy(u2)))
+                   + bb(v1,v2,p)                                                       (-p*(dx(v1)+dy(v2)))
+                                        )
+   31 : + on(1,2,4,u1=0,u2=0)
+   32 : + on(3,u1=1,u2=0);
+   33 :
+   34 : //
+   35 : // Definicion del sistema de Newton a resolver en cada iteracion
+   36 : //
+   37 :
+   38 : problem NS([deltau1,deltau2,deltap],[v1,v2,q],init=it) =
+   39 :  int2d(Th)(aa(deltau1,deltau2,v1,v2)           ( nu*(dx(deltau1)*dx(v1) + dy(deltau1)*dy(v1) +  dx(deltau2)*dx(v2) + dy(deltau2)*dy(v2)) ) + bb(deltau1,deltau2,q)                                                       (-q*(dx(deltau1)+dy(deltau2)))                                                      + bb(v1,v2,deltap)
+                      (-deltap*(dx(v1)+dy(v2)))                                                      - 0.00001*deltap*q) 
+   40 : + int2d(Th)(cc(deltau1,deltau2,u1,u2,v1,v2)                (v1*(deltau1*dx(u1)+deltau2*dy(u1)) + v2*(deltau1*dx(u1)+deltau2*dy(u2)))            )
+   41 : + int2d(Th)(cc(u1,u2,deltau1,deltau2,v1,v2)                (v1*(u1*dx(deltau1)+u2*dy(deltau1)) + v2*(u1*dx(deltau1)+u2*dy(deltau2)))            )
+   42 : + int2d(Th)(aa(u1,u2,v1,v2)           ( nu*(dx(u1)*dx(v1) + dy(u1)*dy(v1) +  dx(u2)*dx(v2) + dy(u2)*dy(v2)) ) +
+bb(u1,u2,q)                                                       (-q*(dx(u1)+dy(u2)))
+                    + bb(v1,v2,p)                                                       (-p*(dx(v1)+dy(v2)))
+                                          + cc(u1,u2,u1,u2,v1,v2)                (v1*(u1*dx(u1)+u2*dy(u1)) + v2*(u1*dx(u1)+u2*dy(u2)))            )
+   43 : + on(1,2,3,4,deltau1=0,deltau2=0);                 // condiciones de frontera nulas para deltau
+   44 :
+   45 : for(it=0; it<maxiter; it++)  // iteraciones del Newton
+   46 : {
+   47 : NS;                          // resolviendo el sistema del Newton
+   48 :
+   49 : u1 =  u1 + deltau1;          //
+   50 : u2 =  u2 + deltau2;          // actualizando las soluciones
+   51 : p  =  p  + deltap;           //
+   52 : };
+   53 : plot(Th,p,fill=1,wait=1);     // Dibujo de la presion
+   54 :  plot(Th,[u1,u2],fill=1);     // Dibujo de la velocidad
+   55 :  sizestack + 1024 =5648  ( 4624 )
+ 
+  -- Square mesh : nb vertices  =121 ,  nb triangles = 200 ,  nb boundary edges 40
+  -- Solve :
+          min -0.184123  max 1
+          min -0.308611  max 0.308471
+          min -0.3303  max 0.672293
+  -- Solve :
+          min -0.171427  max 0.0878581
+          min -0.126684  max 0.137924
+          min -0.0620173  max 0.365622
+  -- Solve :
+          min -0.0134269  max 0.0063519
+          min -0.0126012  max 0.0113234
+          min -0.0073215  max 0.0137229
+  -- Solve :
+          min -0.00228481  max 0.00186417
+          min -0.00259288  max 0.00225168
+          min -0.000752945  max 0.00128136
+  -- Solve :
+          min -0.000691381  max 0.000416537
+          min -0.000418609  max 0.000420259
+          min -0.000137598  max 0.000193908
+  -- Solve :
+          min -0.000254034  max 0.000303721
+          min -0.0001664  max 0.000113057
+          min -3.68731e-05  max 5.64576e-05
+  -- Solve :
+          min -6.90436e-05  max 0.000163148
+          min -8.66477e-05  max 6.89325e-05
+          min -1.86094e-05  max 2.32416e-05
+  -- Solve :
+          min -4.79144e-05  max 5.26967e-05
+          min -3.28754e-05  max 3.41932e-05
+          min -8.70505e-06  max 6.70078e-06
+  -- Solve :
+          min -2.49423e-05  max 1.10071e-05
+          min -8.10224e-06  max 1.36757e-05
+          min -3.94728e-06  max 2.75046e-06
+  -- Solve :
+          min -1.0117e-05  max 6.40926e-06
+          min -5.35884e-06  max 7.00795e-06
+          min -1.58061e-06  max 1.21284e-06
+  -- Solve :
+          min -2.82582e-06  max 3.56816e-06
+          min -2.10726e-06  max 1.93076e-06
+          min -4.73073e-07  max 6.15287e-07
+  -- Solve :
+          min -7.10623e-07  max 1.54137e-06
+          min -1.03446e-06  max 7.00473e-07
+          min -1.94858e-07  max 2.78321e-07
+  -- Solve :
+          min -4.43063e-07  max 5.37198e-07
+          min -4.03785e-07  max 3.33532e-07
+          min -7.59936e-08  max 8.23184e-08
+  -- Solve :
+          min -2.22539e-07  max 1.23432e-07
+          min -8.82411e-08  max 1.13426e-07
+          min -3.5394e-08  max 2.66265e-08
+  -- Solve :
+          min -9.37175e-08  max 5.15203e-08
+          min -4.76372e-08  max 6.46076e-08
+          min -1.51416e-08  max 1.20353e-08
+  -- Solve :
+          min -2.62722e-08  max 2.83865e-08
+          min -1.97498e-08  max 2.05863e-08
+          min -4.21374e-09  max 4.84078e-09
+  -- Solve :
+          min -5.02424e-09  max 1.28249e-08
+          min -8.088e-09  max 4.79012e-09
+          min -1.52929e-09  max 2.19007e-09
+  -- Solve :
+          min -3.43188e-09  max 4.81588e-09
+          min -3.71512e-09  max 2.6796e-09
+          min -6.26332e-10  max 8.06061e-10
+  -- Solve :
+          min -1.74548e-09  max 1.30923e-09
+          min -9.65402e-10  max 9.81838e-10
+          min -2.98103e-10  max 2.40923e-10
+  -- Solve :
+          min -7.24709e-10  max 3.57604e-10
+          min -3.43173e-10  max 5.15688e-10
+          min -1.3491e-10  max 9.35065e-11
+  -- Solve :
+          min -2.50709e-10  max 2.17926e-10
+          min -1.56327e-10  max 1.99154e-10
+          min -3.87718e-11  max 3.4944e-11
+  -- Solve :
+          min -5.89914e-11  max 1.06434e-10
+          min -5.39264e-11  max 4.36036e-11
+          min -1.28847e-11  max 1.62264e-11
+  -- Solve :
+          min -2.42149e-11  max 4.35726e-11
+          min -3.09803e-11  max 2.23395e-11
+          min -4.69622e-12  max 8.1905e-12
+  -- Solve :
+          min -1.32909e-11  max 1.26146e-11
+          min -1.01241e-11  max 9.22385e-12
+          min -3.34958e-12  max 7.91491e-13
+  -- Solve :
+          min -5.91056e-12  max 2.46029e-12
+          min -2.21288e-12  max 3.73203e-12
+          min -1.75162e-12  max 1.69171e-15
+  -- Solve :
+          min -2.33732e-12  max 1.55899e-12
+          min -1.27733e-12  max 1.76492e-12
+          min -1.20025e-12  max -5.1223e-13
+  -- Solve :
+          min -6.3706e-13  max 7.91701e-13
+          min -4.79402e-13  max 4.67311e-13
+          min -2.91303e-12  max -2.66102e-12
+  -- Solve :
+          min -1.62092e-13  max 3.46848e-13
+          min -2.34676e-13  max 1.55618e-13
+          min -2.07143e-12  max -1.96633e-12
+  -- Solve :
+          min -1.02055e-13  max 1.19815e-13
+          min -9.48001e-14  max 7.33215e-14
+          min 1.38827e-12  max 1.42336e-12
+  -- Solve :
+          min -5.01383e-14  max 2.9826e-14
+          min -2.2083e-14  max 2.42902e-14
+          min -2.64682e-12  max -2.63313e-12
+  -- Solve :
+          min -2.04754e-14  max 1.07478e-14
+          min -1.04269e-14  max 1.44947e-14
+          min -4.92724e-13  max -4.86405e-13
+  -- Solve :
+          min -6.05891e-15  max 6.14371e-15
+          min -4.20414e-15  max 4.75114e-15
+          min -2.55755e-12  max -2.55547e-12
+  -- Solve :
+          min -1.26541e-15  max 2.79033e-15
+          min -1.76835e-15  max 1.07536e-15
+          min -1.15353e-12  max -1.15271e-12
+  -- Solve :
+          min -8.52678e-16  max 1.12169e-15
+          min -8.72245e-16  max 8.40696e-16
+          min -1.50305e-12  max -1.50248e-12
+  -- Solve :
+          min -4.45008e-16  max 3.57221e-16
+          min -4.24755e-16  max 3.11205e-16
+          min -4.01969e-13  max -4.01518e-13
+  -- Solve :
+          min -2.55673e-16  max 2.27779e-16
+          min -1.85081e-16  max 2.5587e-16
+          min -2.27781e-12  max -2.27752e-12
+  -- Solve :
+          min -1.86904e-16  max 2.0405e-16
+          min -2.38037e-16  max 2.2235e-16
+          min -3.05293e-13  max -3.04793e-13
+  -- Solve :
+          min -1.90058e-16  max 1.7418e-16
+          min -1.78737e-16  max 2.54905e-16
+          min -1.52366e-12  max -1.52343e-12
+  -- Solve :
+          min -3.18703e-16  max 2.11475e-16
+          min -2.29704e-16  max 3.50837e-16
+          min -5.00506e-13  max -5.00288e-13
+  -- Solve :
+          min -2.77982e-16  max 2.07739e-16
+          min -1.97567e-16  max 2.82721e-16
+          min 1.90243e-13  max 1.90619e-13
+  -- Solve :
+          min -1.9104e-16  max 1.71981e-16
+          min -3.63115e-16  max 2.75782e-16
+          min -1.77869e-12  max -1.77831e-12
+  -- Solve :
+          min -1.58541e-16  max 2.1736e-16
+          min -2.18053e-16  max 3.09635e-16
+          min -4.27738e-13  max -4.27426e-13
+  -- Solve :
+          min -2.20904e-16  max 2.3077e-16
+          min -2.31392e-16  max 1.87953e-16
+          min -9.56964e-13  max -9.56499e-13
+  -- Solve :
+          min -1.91189e-16  max 1.8933e-16
+          min -2.96776e-16  max 2.25981e-16
+          min -5.31027e-13  max -5.30614e-13
+  -- Solve :
+          min -2.10287e-16  max 1.92547e-16
+          min -2.32648e-16  max 2.26394e-16
+          min -1.26048e-12  max -1.25999e-12
+  -- Solve :
+          min -1.8356e-16  max 1.86208e-16
+          min -3.21697e-16  max 2.31286e-16
+          min 8.25592e-13  max 8.26252e-13
+  -- Solve :
+          min -2.30837e-16  max 2.13599e-16
+          min -1.88675e-16  max 2.67494e-16
+          min -1.28037e-12  max -1.28003e-12
+  -- Solve :
+          min -3.26733e-16  max 1.90689e-16
+          min -2.74219e-16  max 2.26118e-16
+          min -2.86411e-13  max -2.86043e-13
+  -- Solve :
+          min -2.45299e-16  max 2.32049e-16
+          min -2.3683e-16  max 2.61777e-16
+          min 6.80145e-13  max 6.80552e-13
+  -- Solve :
+          min -2.04737e-16  max 3.50697e-16
+          min -2.30103e-16  max 3.47681e-16
+          min -9.22952e-13  max -9.22659e-13
+  -- Solve :
+          min -2.96191e-16  max 2.49771e-16
+          min -2.68797e-16  max 3.57497e-16
+          min -2.11831e-13  max -2.11559e-13
+times: compile 0.1s, execution 0.351s,  mpirank:0
+ ######## We forget of deleting   60930 Nb pointer,   0Bytes  ,  mpirank 0, memory leak =0
+ CodeAlloc : nb ptr  4050,  size :526240 mpirank: 0
+Ok: Normal End
+ try getConsole C:\Users\braya\Desktop\Finitos\Años anteriores\curso\codigos\NS-cavity.edp

@@ -1,0 +1,104 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Geometría Diferencial}}
+\newcommand{\tarea}{\textbf{Tarea 8}}
+\newcommand{\fecha}{\textbf{\today}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Geometría Diferencial (525582)}\\
+	\textbf{Tarea 8}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}\upshape
+		Sea $M$ una $m$ variedad suave. Suponga que $M$ admite un cubrimiento por un sistema de coordenadas compatible (esto es, el sistema de coordenadas es compatible con el atlas dado de $M$) de modo que en la intersección de dos abiertos cuales quiera el Jacobiano respectivo, es siempre positivo. Pruebe que la variedad $M$ es orientable.
+	\end{pro}
+	\begin{proof}
+	    Sea $M$ una $m$ variedad suave, entonces admite un atlas diferenciable maximal $\{\left(\mathcal{U}_{\alpha},\varphi_{\alpha} \right) \}_{\alpha\in A}$, de lo anterior, se define $\Sigma := \{\mathcal{U}_{\alpha}\}_{\alpha\in A}$ un cubrimiento por abiertos de $M$. Por otro lado, notemos que las cartas $\left( \mathcal{U}_{\alpha},\varphi_{\alpha}\right) $ con $\alpha\in A$ generan un sistema de coordenadas locales $\{u^{1}_{\alpha},\dots,u^{m}_{\alpha}\}$, considerando lo anterior, se definen las $m$ formas diferenciales exteriores localmente no nulas
+	    \begin{align*}
+	    	\omega_{\alpha}\big|_{\mathcal{U}_{\alpha}} = \omega_{1,\dots,m}^{\alpha}du^{1}_{\alpha}\wedge \dots\wedge du^{m}_{\alpha},\quad \forall \alpha\in A
+	    \end{align*}
+       luego, gracias al siguiente teorema
+       \begin{tcolorbox}[title= \textbf{Teorema Partición de la Unidad},colback=blue!4,colframe=blue!30!black!80,colbacktitle=blue!30!black!80]
+       	Suponga $\Sigma$ es un cubrimiento por abiertos de una variedad suave $M$. Entonces existe una familia de funciones diferenciables $\{g_{\alpha}\}$ en $M$ tales que satisfacen las siguientes condiciones:
+       	\begin{itemize}
+       		\item[$1)$] $0 \leq g_{\alpha} \leq 1$, y $\textup{supp}\ g_{\alpha}$ es compacto para todo $\alpha$. Ademas, existe un conjunto abierto $W_{i}\in \Sigma$ tal que $\textup{supp}\ g_{\alpha} \subset W_{i}$;
+       		\item[$2)$] Para todo punto $p\in M$, existe una vecindad $U$ que intersecta a
+       		$\textup{supp}\ g_{\alpha}$ sólo para un número finito de $\alpha$;
+       		\item[$3)$] $\displaystyle\sum_{\alpha}g_{\alpha} = 1$
+       	\end{itemize}
+       \end{tcolorbox}
+       se tiene la existencia de la familia de funciones diferenciables $\{g_{\alpha}\}$ en $M$, las cuales definen la siguiente $m$ forma diferencial 
+       \begin{align*}
+       	\omega = \sum_{\alpha\in A} g_{\alpha} \omega_{\alpha}.
+       \end{align*}
+       Fijando $\alpha\in A$, es fácil ver que $\textup{supp}\ g_{\alpha}\omega_{\alpha}\subset\textup{supp}\ g_{\alpha}\subset \mathcal{U}_{\alpha}$, por lo tanto $g_{\alpha}(p)\omega_{\alpha}(p)=0$ si $p\notin \mathcal{U}_{\alpha}$. Ademas, si tenemos un punto $p\in \mathcal{U}_{\alpha}$ se tiene que intersecta a $\textup{supp}g_{\alpha_{l}}$ con $l\in \{1,\dots,n\}$ y $n\in \mathbb{N}$. Lo anterior nos permite deducir que si $p\in \mathcal{U}_{\alpha}$, entonces
+       \begin{align*}
+       	\omega(p) = \sum_{l=1}^{n}g_{\alpha_{l}}(p)\omega_{\alpha_{l}}(p)
+       \end{align*}
+       Esto nos dice que la $m$ forma $\omega$ esta bien definida, pues para cada $p\in M$ se tiene que $\omega$ resulta de una suma finita de $m$ formas. Sin perdida de la generalidad, supongamos que $p\in \textup{supp}g_{\alpha_{l}}$, entonces $p\in \mathcal{U}_{\alpha_{l}}$, para todo $l\in \{1,\dots,n\}$ ( Si lo anterior no ocurre, es decir, existe un $k\in \{1,\dots,n\}$ tal que $p\notin \textup{supp}g_{\alpha_{k}}$, entonces $g_{\alpha_{k}}(p)\omega_{\alpha_{k}}(p) = 0$ y por tanto
+       \begin{align*}
+       	\omega(p) = \sum_{l=1}^{n-1}g_{\alpha_{l}}(p)\omega_{\alpha_{l}}(p).
+       \end{align*}
+       Notemos que necesariamente debe existir un $\alpha\in A$ tal que $p\in \textup{supp}g_{\alpha}$, pues de lo contrario podríamos encontrar una vecindad lo suficientemente pequeña $B$ tal que esta vecindad no es intersectada por ningún $\textup{supp}g_{\alpha}$). 
+       Por lo que $\mathcal{U}_{\alpha_{i}}\cap\mathcal{U}_{\alpha_{j}}\neq\emptyset$ para todo $i,j\in\{1,\dots,n\}$, luego
+       \begin{align*}
+       	\omega_{\alpha_{i}}\big|_{\mathcal{U}_{\alpha_i}\cap\mathcal{U}_{\alpha_j}} &= \omega_{1,\dots,m}^{i}du^{1}_{\alpha_{i}}\wedge \dots\wedge du^{m}_{\alpha_{i}}\\
+       	&= \omega_{1,\dots,m}^{\alpha_{i}} \frac{\partial u^{1}_{\alpha_{i}}}{\partial u^{k}_{\alpha_{j}}}du^{k}_{j}\wedge\cdots\wedge\frac{\partial u^{m}_{\alpha_{i}}}{\partial u^{k}_{\alpha_{j}}}du^{k}_{\alpha_{j}}\\
+       	&=\left| J_{\mathcal{U}_{\alpha_{j}}\mathcal{U}_{\alpha_{i}}} \right|  \omega_{1,\dots,m}^{i}du^{1}_{\alpha_{j}}\wedge \dots\wedge du^{m}_{\alpha_{j}}
+       \end{align*}
+       Esto nos permite concluir que 
+       \begin{align*}
+       	\omega(p) &=\left[  g_{\alpha_{1}}(p)\omega_{1,\dots,m}^{1}(p) +  \left| J_{\mathcal{U}_{\alpha_{1}}\mathcal{U}_{\alpha_{2}}} (u_{1})\right|g_{\alpha_{2}}(p)\omega_{1,\dots,m}^{2}(p) + \dots +\left| J_{\mathcal{U}_{\alpha_{1}}\mathcal{U}_{\alpha_{n}}} (u_{1})\right| g_{\alpha_{n}}(p)\omega_{1,\dots,m}^{n}(p)  \right] du^{1}_{\alpha_{1}}\wedge \dots\wedge du^{m}_{\alpha_{1}}\\
+       	&= \omega_{1,\dots,m}(p)du^{1}_{\alpha_{1}}\wedge \dots\wedge du^{m}_{\alpha_{1}}
+       \end{align*}
+       como $\left| J_{\mathcal{U}_{\alpha_{1}}\mathcal{U}_{\alpha_{i}}}(u_{1}) \right| >0$ y $\textup{supp}q_{\alpha_{i}}\omega_{\alpha_{i}}\subset \mathcal{U}_{\alpha_{i}}$ con $i\in\{1,\dots,n\}$, entonces $\omega(p) \neq 0$. Dado que $p$ era un elemento fijo pero arbitrario de $M$, entonces se tiene que $\omega$ es una $m$ forma diferencial exterior no nula en $M$, lo que implica la orientabilidad de la variedad $M$.
+	\end{proof}
+
+
+
+
+
+
+
+\end{document}

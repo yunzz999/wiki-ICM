@@ -1,0 +1,313 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{stix}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{\color{azul}{Problema}}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Sistemas Lineales Dinámicos}}
+\newcommand{\tarea}{\textbf{Tarea 3}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dy}{\textup{d}y}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\ds}{\textup{d}s}
+\newcommand{\dS}{\textup{d}S}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\Norm}[1]{\lVert#1\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+\renewcommand{\theequation}{\roman{equation}}
+
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Análisis Real I }\\
+	\textbf{Técnicas de Demostración}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}
+		Considere el sistema electromecánico en la Fig. \ref{fig:tarea1}. En la Tarea $1$ Pregunta $1.c$ se encontró una representación lineal de este sistema en torno a un punto de operación. Utilice este modelo para desarrollar, justificar y comentar todos sus resultados en las siguiente preguntas:
+		\begin{itemize}
+			\item[$(a)$] Grafique el Diagrama de Bode Exacto y Asintótico de la F. de T. $h(s)$ del sistema e indique en estos las frecuencias de interés. Utilice el rango $0.1 \left[rad/s\right]$ a $100 \left[rad/s\right]$.
+			\item[$(b)$] Para la entrada $e(t) = e_{0}u(t) + \sin\left(1\cdot 2\pi f_{0}t\right) - 1/5\sin\left(10\cdot 2\pi f_{0}t\right)$ determine - a partir del Bode Exacto - la atenuación/amplificación y atraso/adelanto para las componentes asociadas a $f_{0}$ y $10f_{0}$, y la atenuación/amplificación de la componente DC, con $T_{0} = 1000[ms] = 1/f_{0}$. Utilice estos resultados para generar la expresión en estado estacionario $(S.S.)$ de $x(t)$. Grafique $x_{ss}(t)$ y $e(t)$.
+			\item[$(c)$] Simule el sistema continuo con entrada como la indicada en $(b)$ y compare los resultados con los calculados en $(b)$. Asegúrese de estar en $(S.S.)$ en $t = 0$. 
+			\item[$(d)$] Obtenga una F. de T. $h(z)$ equivalente discreta de $h(s)$ utilizando $T = 0.025$.
+			\item[$(e)$] Grafique el Diagrama de Bode de la F. de T. del sistema discreto $h(z)$. Utilice el rango $0.1[rad/s]\leq \Omega \leq \pi/T[rad/s]$. Comente que efecto ocurriría con el D. de B. para frecuencias que sean mayores a $\pi/T[rad/s]$.
+			\item[$(f)$] Para entrada $e(kT) = e_{0}u(kT) + \sin\left(2\pi f_{0}kT\right) - 1/5\sin\left(10\cdot 2\pi f_{0}kT\right)$ determine la atenuación/amplificación y atraso/adelanto para las componentes asociadas a $f_{0}$ y $10f_{0}$, y la atenuación/amplificación de la componente DC. Utilice estos resultados para generar la expresión en estado estacionario $(S.S.)$ de $x\left(kT\right)$. Grafique $x_{ss}(kT)$ y $e(kT)$.
+			\item[$(g)$] Simule el sistema equivalente discreto con la entrada como la indicada en $(f)$ y que compare los resultados con los calculados en $(f)$ y en $(c)$. Asegúrese de estar en $S.S.$ en $t=0$.
+		\end{itemize}
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.4\linewidth]{Tarea1}
+			\caption{Sistema electromecánico del Problema 1}
+			\label{fig:tarea1}
+		\end{figure}
+	\end{pro}
+    \begin{proof}[\textcolor{rojo}{Solución}]
+    	\begin{itemize}
+    		\item[$(a)$] En la Fig.\ref{fig:p1a} se puede apreciar el diagrama de bode asociado a la función de transferencia 
+    		
+    		\begin{figure}[h]
+    			\centering
+    			\includegraphics[width=0.5\linewidth]{Tarea1SLD/T3/P1a}
+    			\caption{Diagrama de Bode.}
+    			\label{fig:p1a}
+    		\end{figure}
+    		Las frecuencias de interés son los tres polos, uno real y dos complejos. Los polos se pueden identificar en el diagrama de Bode analizando los cambios en las pendientes de las rectas tangentes a la curva, en este caso, las frecuencias de interés son $1.5\ [Hz]$ y $9\ [Hz]$.
+    		\item[$(b)$] En primer lugar, es claro notar que la señal $e(t)$ se puede descomponer de la forma
+    		\begin{align*}
+    			e(t) = e_{1}(t) + e_{2}(t) + e_{3}(t),
+    		\end{align*}
+    	   donde $e_{1}(t) := e_{0}u(t)$, $e_{2}(t) := \sin\left(1\cdot 2\pi f_{0}t\right)$ y $e_{3}(t) := -\frac{1}{5}\sin\left(10\cdot 2\pi f_{0}t\right)$. Luego, la expresión en estado estacionario de $x_{ss}(t)$ esta dada por
+    	   \begin{align*}
+    	   	x_{ss}(t) := A_{1}e_{0}u(t) + A_{2}\sin\left(1\cdot 2\pi f_{0}t + \phi_{1}\right) - 1/5A_{3}\sin\left(10\cdot 2\pi f_{0}t + \phi_{2}\right),
+    	   \end{align*}
+           donde $A_{1},\ A_{2},\ A_{3},\ \phi_{1}$ y $\phi_{2}$ son constantes a determinar mediante el diagrama de Bode. Gracias a lo hecho en MATLAB, se tiene la expresión en estado estacionario
+    		\begin{figure}[h]
+    			\centering
+    			\includegraphics[width=0.5\linewidth]{Tarea1SLD/T3/P1b}
+    			\caption{Entrada y salida de la señal.}
+    			\label{fig:p1b}
+    		\end{figure}
+    		De las gráficas, se observa, que tanto para $f_{0}$ como $10f_{0}$ se produce una atenuación para las
+    		componentes asociadas a estas frecuencias y para la componente DC. Claramente los valores
+    		disminuyen por lo que la magnitud es más pequeña. Además, en todos los casos la Fase sufre un
+    		atraso o retardo, es decir, los cortes se generan en valores más pequeños que los originales.
+    		\item[$(c)$] Al simular el sistema continuo con la entrada de la pregunta anterior se obtiene la siguiente gráfica.
+    		\begin{figure}[h]
+    			\centering
+    			\includegraphics[width=0.5\linewidth]{Tarea1SLD/T3/P1b}
+    			\caption{Entrada y salida de la señal.}
+    			\label{fig:p1cb}
+    		\end{figure}
+    	    Esta grafica es idéntica a la obtenida en el ítem anterior, pues el sistema lineal solo amplifica y desfasa la entrada.
+    	    \newpage 
+    	    
+    	    \begin{figure}[h]
+    	    	\centering
+    	    	\includegraphics[width=0.5\linewidth]{Tarea1SLD/T3/P1c}
+    	    	\caption{Comparación en S.S.}
+    	    	\label{fig:p1c}
+    	    \end{figure}
+    	    Por la gráfica de comparación de las salidas, se puede ver que hay diferencias en un comienzo en cuanto a las magnitudes. Luego, hay un punto a lo largo del tiempo, donde estos valores se comienzan a parecer, se llega a una similitud. Pero, al observar la
+    	    salida continua v/s entrada, hay comportamientos en magnitudes muy distintas a los largo del tiempo.
+    	    \item[$(d)$] Por lo hecho anteriormente se sabe que $h(s)$ tiene tres polos y no tiene ceros. Si $s_{1},\ s_{2}$ y $s_{3}$, son los polos de $h(s)$, donde $s_{3} = \bar{s}_{2}$, entonces
+    	    \begin{align*}
+    	    	h(s) = \frac{\xi}{\left(s-s_{1}\right)\left(s-s_{2}\right)\left(s-s_{3}\right)}
+    	    \end{align*}
+    	    denotando $z_{1} := e^{s_{1}T}$, $z_{2} := e^{s_{2}T}$ y $z_{2} := e^{s_{3}T}$, por la teoría, también se sabe que hay una relación entre los polos y ceros de $h(s)$ con los polos y ceros de $h(z)$, en este caso
+    	    \begin{align*}
+    	    	h(z) = \frac{\xi}{\left(z-z_{1}\right)\left(z-z_{2}\right)\left(z-z_{3}\right)}
+    	    \end{align*}
+            donde $\xi$ es una constante a determinar, dado que, $h(s)|_{s=0} = h(z)|_{z=1}$, se deduce que 
+            \begin{align*}
+            	h(z) = \frac{\left(1-z_{1}\right)\left(1-z_{2}\right)\left(1-z_{3}\right)}{\left(z-z_{1}\right)\left(z-z_{2}\right)\left(z-z_{3}\right)}
+            \end{align*}
+    	    \item[$(e)$] La siguiente gráfica presenta el diagrama de Bode de $h(s)$ y $h(z)$:
+    	    \begin{figure}[h]
+    	    	\centering
+    	    	\includegraphics[width=0.5\linewidth]{Tarea1SLD/T3/P1e}
+    	    	\caption[]{Diagrama de bode.}
+    	    	\label{fig:p1e}
+    	    \end{figure}
+    	    Con respecto a la recta vertical, esta corresponde a la frecuencia angular de
+    	    Nyquist. Cerca de dicha frecuencia se produce el fenómeno de aliasing. El
+    	    aliasing ocurre cuando frecuencias superiores a la frecuencia de Nyquist se
+    	    doblan o se reflejan en la banda de frecuencias permitidas. En otras palabras,
+    	    componentes de alta frecuencia que están por encima de la frecuencia de
+    	    Nyquist se representan incorrectamente como componentes de frecuencia más
+    	    baja. Esto resulta en distorsión o información errónea en la señal discretizada.
+    	    Por este motivo, cerca de la línea negra en el gráfico observamos que la
+    	    representación discreta de la función de transferencia continua, deja de ser
+    	    una representación correcta en la vecindad de la frecuencia de Nyquist.
+    	    \item[$(f)$] Siguiendo la misma estrategia que lo hecho en $(b)$ se obtiene la grafica
+    	    \begin{figure}[h]
+    	    	\centering
+    	    	\includegraphics[width=0.5\linewidth]{Tarea1SLD/T3/P1f}
+    	    	\caption{Entrada y salida de la señal.}
+    	    	\label{fig:p1f}
+    	    \end{figure}
+    	    Al igual que en el caso continuo, se puede ver que los valores en la magnitud disminuyen. Además, se puede ver que existe un retardo en las frecuencias. Esto ocurre para las componentes
+    	    asociadas a $f_{0}$, $10f_{0}$ y DC. 
+    	\end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Se solicita desarrollar y comentar todos sus resultados para las siguientes preguntas:
+    	\begin{itemize}
+    		\item[$(a)$] Determine si el siguiente sistema es estable internamente y entrada/salida:
+    		\begin{align*}
+    			x(kT+T) = \begin{bmatrix}
+    				0 & 1\\
+    				-4 & -3
+    			\end{bmatrix}x(kT) + \begin{bmatrix}
+    			0\\
+    			1
+    		\end{bmatrix}u(kT),\quad y(kT) = \begin{bmatrix}
+    		1 & 0
+    	\end{bmatrix}x(kT)
+    		\end{align*}
+    	   \item[$(b)$] Identifique la F. de T. $h(z)$ del sistema en $(a)$. Determine, usando el criterio de Routh-Hurwitz, los valores de $k$ tales que la F. de T. dada por $\frac{kh(z)}{1+kh(z)}$ representa un sistema estable.
+    	   \item[$(c)$] Dé un ejemplo de un sistema continuo estable entrada/salida pero inestable internamente.
+    	\end{itemize}
+    \end{pro}
+    \begin{proof}[\textcolor{rojo}{Solución}]
+    	\begin{itemize}
+    		\item[$(a)$] En primer lugar, es necesario obtener lo valores propios de la matriz
+    		\begin{align*}
+    			 \begin{bmatrix}
+    				0 & 1\\
+    				-4 & -3
+    			\end{bmatrix}
+    		\end{align*}
+    		estos se obtienen de calcular las raíces de su polinomio característico, el cual en este caso es
+    		\begin{align*}
+    			p(\lambda) = \lambda^{2} + 3\lambda + 4 = \left(\lambda + \frac{3}{2}\right)^{2} + \frac{7}{4},
+    		\end{align*}
+    	    este polinomio tiene raíces $\lambda_{1} = -\frac{3}{2} + \frac{\sqrt{7}}{2}i$ y  $\lambda_{2} = -\frac{3}{2} - \frac{\sqrt{7}}{2}i$, las cuales cumplen que
+    	    \begin{align*}
+    	    	\abs{\lambda_{1}} = \abs{\lambda_{2}} = 2>1
+    	    \end{align*}
+    	    con esto se tiene que el sistema no es estable internamente. Para analizar el otro tipo de estabilidad, primero se debe obtener los polos de la función de transferencia $h(z)$, para esto
+    	    \begin{align*}
+    	    	h(z) = [1\ 0]\begin{bmatrix}
+    	    		z & -1\\
+    	    		4 & z+3
+    	    	\end{bmatrix}^{-1}\begin{bmatrix}
+    	    		0\\
+    	    		1
+    	    	\end{bmatrix} = \frac{1}{z(z+3) + 4}[1\ 0]\begin{bmatrix}
+    	    		z+3 & 1\\
+    	    		-4 & z
+    	    	\end{bmatrix}\begin{bmatrix}
+    	    		0\\
+    	    		1
+    	    	\end{bmatrix} = \frac{1}{z(z+3) + 4} = \frac{1}{z^{2}+3z + 4},
+    	    \end{align*}
+            entonces $z_{1} = -\frac{3}{2} + \frac{\sqrt{7}}{2}i$ y $z_{2} = \bar{z}_{1}$ son los polos de $h(z)$, los cuales cumplen que 
+            \begin{align*}
+            	\abs{z_{1}} = \abs{z_{2}} = 2>1.
+            \end{align*}
+            Por lo que el sistema tampoco es estable entrada/salida.
+            \item[$(b)$] De la parte $(a)$ se dedujo que
+            \begin{align*}
+            	h(z) =  \frac{1}{z^{2}+3z + 4}
+            \end{align*}
+            luego, para $k\in\mathbb{R}$ a determinar 
+            \begin{align*}
+            	\frac{kh(z)}{1+kh(z)} = \frac{\frac{k}{z^{2}+3z + 4}}{1+\frac{k}{z^{2}+3z + 4}} = \frac{\frac{k}{z^{2}+3z + 4}}{\frac{z^{2}+3z + 4 + k}{z^{2}+3z + 4}} = \frac{k}{z^{2}+3z + 4 + k}
+            \end{align*}
+            ahora, igualando a cero lo obtenido en el denominador y haciendo el cambio de variable $z = \frac{1+r}{1-r}$, se obtiene 
+            \begin{align*}
+            	0 = z^{2}+3z + 4 + k = \left(\frac{1+r}{1-r}\right)^{2} + 3\frac{1+r}{1-r} + 4 + k = \frac{1}{\left(1-r\right)^{2}}\left(\left(1+r\right)^{2} + 3\left(1+r\right)\left(1-r\right) + \left(4+k\right)\left(1-r\right)^{2}\right).
+            \end{align*}
+            Así, queda la ecuación
+            \begin{align*}
+            	0 &= \left(1+r\right)^{2} + 3\left(1-r^{2}\right) + \left(4+k\right)\left(1-r\right)^{2}\\ &= 1+2r+r^{2} + 3-3r^{2} + \left(4+k\right)\left(1-2r + r^{2}\right)\\ &= \left(2+k\right)r^{2} + \left(2-2k\right)r + k.
+            \end{align*}
+            Luego, la tabla del criterio de Routh-Hurwitz
+            \begin{center}
+            	\begin{tabular}{c|c|c}
+            		$r^{2}$ & $k+2$ & $k$ \\
+            		\hline
+            		$r^{1}$ & $1-k$ & $0$ \\
+            		\hline
+            		$r^{0}$ & $k$ & $0$ \\
+            	\end{tabular}
+            \end{center}
+            Para que el sistema sea estable debe pasar que la columna pivote no tenga cambios de signos, es decir,
+            \begin{align*}
+            	k+2>0\ \wedge 1-k>0 \ \wedge k>0 \iff k\in ]-2,+\infty[\cap]-\infty,1[\cap]0,+\infty[ \ =\  ]0,1[
+            \end{align*}
+            o también
+            \begin{align*}
+            	k+2<0\ \wedge 1-k<0 \ \wedge k<0 \iff k\in ]-\infty,-2[\cap]1,+\infty[\cap]-\infty,0[ \ =\  ]-1,0[
+            \end{align*}
+            De esta forma, si $k\in]-1,1[$, se tiene la estabilidad deseada.
+            \item[$(c)$] Considere el sistema continuo
+            \begin{align*}
+            	\dot{\boldsymbol{x}}(t) &= A\boldsymbol{x}(t) + Bu(t)\\
+            	y(t) &= C\boldsymbol{x}(t)
+            \end{align*}
+            donde 
+            \begin{align*}
+            	A = \begin{bmatrix}
+            		1 & 0\\
+            		0 & -1
+            	\end{bmatrix}, \quad B = \begin{bmatrix}
+            	0\\
+            	1
+            \end{bmatrix} \quad \text{y} \quad C [0\ 1].
+            \end{align*}
+            Al ser $A$ una matriz diagonal, se tiene que sus valores propios son sus elementos de la diagonal, es decir, $\lambda_{1} = 1$ y $\lambda_{2} = -1$, luego, el sistema no es internamente estable. Por otro lado, la función de transición $h(s)$ asociada a este sistema es
+            \begin{align*}
+            	h(s) = [0\ 1]\begin{bmatrix}
+            		s-1 & 0\\
+            		0 & s+1
+            	\end{bmatrix}^{-1} \begin{bmatrix}
+            		0\\
+            		1
+            	\end{bmatrix} = \frac{1}{s^{2}-1}[0\ 1]\begin{bmatrix}
+            		s+1 & 0\\
+            		0 & s-1
+            	\end{bmatrix} \begin{bmatrix}
+            		0\\
+            		1
+            	\end{bmatrix} = \frac{s-1}{s^{2}-1} = \frac{1}{s+1}
+            \end{align*}
+            esta función tiene solo un polo, este es, $s_{1} = -1$. Como el polo tiene parte real negativa, entonces, el sistema es estable entrada/salida.
+    	\end{itemize}
+    \end{proof}
+\end{document}

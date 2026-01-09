@@ -1,0 +1,466 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Metodo de Galerkin Discontinuo}}
+\newcommand{\tarea}{\textbf{Tarea 2}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Método de Galerkin Discontinuo}\\
+	\textbf{Tarea 2}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	Aproximaremos la solución de la siguiente ecuación, mediante el método de penalización interior simétrico con grado polinomial $k = 1$:
+	\begin{align}
+		\left\{\begin{matrix}
+			-u''(x) = f, &x\in (a,b),\\ 
+			u(a) = u_{a}, &u(b) = u_{b},
+		\end{matrix}\right.\label{eq:EDO}
+	\end{align}
+    con $f$, $u_{a}$ y $u_{b}$ dados.
+	\begin{pro}
+		Mostrar que el sistema está dado po $\textbf{A}\textbf{x} = \textbf{b}$, con
+		\begin{align*}
+			\textbf{A} = \frac{1}{h}\begin{pmatrix}
+				\gamma -1 & a & b & 0 & 0 & 0 & 0 & 0 & 0 & \hdots \\ 
+				a & \gamma & c & b & 0 & 0 & 0 & 0 & 0 & \hdots\\ 
+				b & c & \gamma & 0 & b & 0 & 0 & 0 & 0 & \hdots\\ 
+				0 & b & 0 & \gamma & c & b & 0 & 0 & 0 & \hdots\\ 
+				0 & 0 & b & c & \gamma & 0 & b & 0 & 0 & \hdots\\ 
+				0 & 0 & 0 & b & 0 & \gamma & c & b & 0 & \hdots\\ 
+				\vdots & \vdots &  & \ddots & \ddots & \ddots & \ddots & \ddots & \ddots & \\ 
+				\vdots & \vdots &  &  & \ddots & \ddots & \ddots & \ddots & \ddots & \\ 
+				0 & 0 & 0 & 0 & 0 & 0 & b & c & \gamma & a\\ 
+				0 & 0 & 0 & 0 & 0 & 0 & b & b & a & \gamma -1
+			\end{pmatrix}\in \mathbb{R}^{2(n+1)\times 2(n+1)},
+		\end{align*}
+	con $a = 1/2,\ b = -1/2,\ c = 1-\gamma$,
+	\begin{align*}
+	\textbf{b} = \frac{h}{2}\begin{pmatrix}
+		f(\hat{x}_{1})\\ 
+		f(\hat{x}_{1})\\ 
+		f(\hat{x}_{2})\\ 
+		f(\hat{x}_{2})\\ 
+		\vdots\\ 
+		\vdots\\ 
+		f(\hat{x}_{n})\\ 
+		f(\hat{x}_{n})\\ 
+		f(\hat{x}_{n+1})\\ 
+		f(\hat{x}_{n+1})
+	\end{pmatrix} + \frac{1}{h}\begin{pmatrix}
+		-u_{a}c\\ 
+		u_{a}\\ 
+		0\\ 
+		0\\ 
+		\vdots\\ 
+		\vdots\\ 
+		0\\ 
+		0\\ 
+		u_{b}\\ 
+		-u_{b}c
+	\end{pmatrix}\in \mathbb{R}^{2(n+1)},
+	\end{align*}
+    donde $\hat{x}_{i} = \frac{x_{i-1} + x_{i}}{2}$ es el punto medio del intervalo $[x_{i-1},x_{i}]$.
+	\end{pro}
+    \begin{proof}
+    	El sistema anterior surge de tratar de encontrar $u_{h}\in V^{d}_{h}$ tal que
+    	\begin{align}
+    		a_{h}(u_{h},v_{h}) = L(v_{h}), \ \forall v_{h}\in V^{d}_{h} \label{eq: Fd}
+    	\end{align}
+        donde 
+        \begin{align*}
+        	a_{h}(u_{h},v_{h}) &:= \int_{a}^{b} u'_{h}(x)v'_{h}(x)\ \dx - \sum_{i=1}^{n}\Big(\salto{u_{h}(x_{i})}\prom{v'_{h}(x_{i})} + \prom{u'_{h}(x_{i})}\salto{v_{h}(x_{i})}\Big)\\
+        	&-u'_{h}(b)v_{h}(b) + u'_{h}(a)v_{h}(a) - u_{h}(b)v'_{h}(b) + u_{h}(a)v'_{h}(a) + \sum_{i=1}^{n}\gamma h^{-1}\salto{u_{h}(x_{i})}\salto{v_{h}(x_{i})}\\
+        	&+ \gamma h^{-1}u_{h}(a)v_{h}(a) + \gamma h^{-1}u_{h}(b)v_{h}(b)
+        \end{align*}
+        y 
+        \begin{align*}
+        	L(v_{h}) := \int_{a}^{b} f(x)v_{h}(x)\ \dx - v'_{h}(b)u_{b} + v'_{h}(a)u_{a} + \gamma h^{-1}u_{a}v_{h}(a) + \gamma h^{-1}u_{b}v_{h}(b).
+        \end{align*}
+        De lo visto en clases se sabe que 
+        \begin{align*}
+        	V^{d}_{h} = \text{span}\{\phi^{1}_{1},\phi^{1}_{2},\dots, \phi^{n}_{1},\phi^{n}_{2},\phi^{n+1}_{1},\phi^{n+1}_{2} \},
+        \end{align*}
+        con
+        \begin{align*}
+        	\phi^{i}_{1}(x) = \frac{x_{i}-x}{h}\chi_{[x_{i-1},x_{i}]}(x)\hspace{1cm} \textup{y} \hspace{1cm} \phi^{i}_{2}(x) = \frac{x-x_{i-1}}{h}\chi_{[x_{i-1},x_{i}]}(x),
+        \end{align*}
+        para todo $i\in\{1,\dots,n+1\}$. Además, también se sabe que $\{\phi^{1}_{1},\phi^{1}_{2},\dots, \phi^{n}_{1},\phi^{n}_{2},\phi^{n+1}_{1},\phi^{n+1}_{2} \}$ es un conjunto l.i, por lo que es una base de $V^{d}_{h}$ y como $u_{h}\in V^{d}_{h}$, entonces, existen $\{x_{i}\}^{2(n+1)}_{i=1}\subset \mathbb{R}$ tal que
+        \begin{align}
+        	u_{h}(x) = \sum_{i=1}^{2(n+1)} x_{i}\varphi_{i}(x)\label{eq:sol}
+        \end{align}
+        por comodidad, se define $\{\phi^{1}_{1},\phi^{1}_{2},\dots, \phi^{n}_{1},\phi^{n}_{2},\phi^{n+1}_{1},\phi^{n+1}_{2} \} = \{\varphi_{1},\varphi_{2},\dots,\varphi_{2n+1},\varphi_{2(n+1)}\}$. Reemplazando \eqref{eq:sol} en \eqref{eq: Fd} y utilizando el hecho que $a_{h}$ es una forma bilineal se obtiene 
+        \begin{align*}
+        	\sum_{i=1}^{2(n+1)}x_{i}a_{h}\left( \varphi_{i},v_{h}\right) = L(v_{h}),\ \forall v_{h}\in V^{d}_{h}.
+        \end{align*} 
+        En particular, para los elementos de la base de $V^{d}_{h}$, se obtiene
+        \begin{align*}
+        	\sum_{i=1}^{2(n+1)}a_{h}\left( \varphi_{i},\varphi_{j}\right)x_{i} = L(\varphi_{j}), \ \forall j\in\{1,\dots,2(n+1)\}.
+        \end{align*}
+        Estas ecuaciones forman el sistema descrito en el enunciado, por lo que ahora solo falta calcular $A_{ij} = a_{h}\left( \varphi_{i},\varphi_{j}\right)$ y $b_{j} = L(\varphi_{j})$ para todo $i,j\in\{1,\dots,2n+2\}$. Para esto se procede como sigue
+        \begin{itemize}
+        	\item $A_{jj} := a_{h}\left( \varphi_{j},\varphi_{j}\right)$ con $j\in\{1,\dots,2(n+1)\}$\\
+        	Procederemos por casos
+        	\begin{itemize}
+        		\item si $j = 1$. Por definición
+        		\begin{align*}
+        			A_{11} &:= a_{h}(\varphi_{1},\varphi_{1})\\ &= a_{h}(\phi^{1}_{1},\phi^{1}_{1})\\ 
+        			&= \int_{a}^{b} \Dx{\phi^{1}_{1}}(x)\Dx{\phi^{1}_{1}}(x)\ \dx - \sum_{l=1}^{n}\Big(\salto{\phi^{1}_{1}(x_{l})}\prom{\Dx{\phi^{1}_{1}}(x_{l})} + \prom{\Dx{\phi^{1}_{1}}(x_{l})}\salto{\phi^{1}_{1}(x_{l})}\Big)\\
+        			&-\Dx{\phi^{1}_{1}}(b)\phi^{1}_{1}(b) + \Dx{\phi^{1}_{1}}(a)\phi^{1}_{1}(a) - \phi^{1}_{1}(b)\Dx{\phi^{1}_{1}}(b) + \phi^{1}_{1}(a)\Dx{\phi^{1}_{1}}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{1}_{1}(x_{l})}\salto{\phi^{1}_{1}(x_{l})}\\
+        			&+ \gamma h^{-1}\phi^{1}_{1}(a)\phi^{1}_{1}(a) + \gamma h^{-1}\phi^{1}_{1}(b)\phi^{1}_{1}(b)\\
+        			&= \int_{x_{0}}^{x_{1}}\frac{1}{h^{2}}\ \dx + 2\phi^{1}_{1}(x_{0})\Dx{\phi^{1}_{1}}(x_{0}) + \gamma h^{-1}\salto{\phi^{1}_{1}(x_{0})}^{2} + \gamma h^{-1}\salto{\phi^{1}_{1}(x_{1})}^{2}\\
+        			&= \frac{1}{h} -\frac{2}{h} + \frac{\gamma}{h}\\
+        			&= \frac{\gamma -1}{h}
+        		\end{align*}
+        	    \item si $j = 2$. Por definición
+        	    \begin{align*}
+        	    	A_{22} &:= a_{h}(\varphi_{2},\varphi_{2})\\ 
+        	    	&= a_{h}(\phi^{1}_{2},\phi^{1}_{2})\\
+        	    	&= \int_{a}^{b} \Dx{\phi^{1}_{2}}(x)\Dx{\phi^{1}_{2}}(x)\ \dx - \sum_{l=1}^{n}\Big(\salto{\phi^{1}_{2}(x_{l})}\prom{\Dx{\phi^{1}_{2}}(x_{l})} + \prom{\Dx{\phi^{1}_{2}}(x_{l})}\salto{\phi^{1}_{2}(x_{l})}\Big)\\
+        	    	&-\Dx{\phi^{1}_{2}}(b)\phi^{1}_{2}(b) + \Dx{\phi^{1}_{2}}(a)\phi^{1}_{2}(a) - \phi^{1}_{2}(b)\Dx{\phi^{1}_{2}}(b) + \phi^{1}_{2}(a)\Dx{\phi^{1}_{2}}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{1}_{2}(x_{l})}\salto{\phi^{1}_{2}(x_{l})}\\
+        	    	&+ \gamma h^{-1}\phi^{1}_{2}(a)\phi^{1}_{2}(a) + \gamma h^{-1}\phi^{1}_{2}(b)\phi^{1}_{2}(b)\\
+        	    	&= \int_{x_{0}}^{x_{1}}\frac{1}{h^{2}}\ \dx - 2\prom{\Dx{\phi^{1}_{2}}(x_{1})}\salto{\phi^{1}_{2}(x_{1})} + \gamma h^{-1}\salto{\phi^{1}_{2}(x_{1})}^{2} \\
+        	    	&= \frac{1}{h}- \frac{1}{h}  + \frac{\gamma}{h}\\
+        	    	&= \frac{\gamma}{h}
+        	    \end{align*}
+                \item si $j = 2n+2$. Por definición
+                \begin{align*}
+                	A_{jj} = A_{(2n+2)(2n+2)} &:= a_{h}(\varphi_{2n+2},\varphi_{2n+2})\\
+                	                 &= a_{h}(\phi^{n+1}_{2},\phi^{n+1}_{2})\\
+                	                 &= \int_{a}^{b} \Dx{\phi^{n+1}_{2}}(x)\Dx{\phi^{n+1}_{2}}(x)\ \dx - 2\sum_{l=1}^{n}\salto{\phi^{n+1}_{2}(x_{l})}\prom{\Dx{\phi^{n+1}_{2}}(x_{l})}\\
+                	                 &-\Dx{\phi^{n+1}_{2}}(b)\phi^{n+1}_{2}(b) + \Dx{\phi^{n+1}_{2}}(a)\phi^{n+1}_{2}(a) - \phi^{n+1}_{2}(b)\Dx{\phi^{n+1}_{2}}(b) + \phi^{n+1}_{2}(a)\Dx{\phi^{n+1}_{2}}(a)\\ &+ \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{n+1}_{2}(x_{l})}\salto{\phi^{n+1}_{2}(x_{l})}
+                	                 + \gamma h^{-1}\phi^{n+1}_{2}(a)\phi^{n+1}_{2}(a) + \gamma h^{-1}\phi^{n+1}_{2}(b)\phi^{n+1}_{2}(b)\\
+                	                 &= \int_{x_{n}}^{x_{n+1}} \frac{1}{h^{2}}\ \dx  -2\phi^{n+1}_{2}(x_{n+1})\Dx{\phi^{n+1}_{2}}(x_{n+1})+ \gamma h^{-1}\phi^{n+1}_{2}(x_{n+1})\phi^{n+1}_{2}(x_{n+1})\\
+                	                 &= \frac{1}{h} - \frac{2}{h} + \frac{\gamma}{h}\\
+                	                 &= \frac{\gamma -1}{h}
+                \end{align*}
+        		\item Si $j$ es par, es decir, $j = 2i$ con $i\in\{2,\dots,n\}$. Por definición
+        		\begin{align*}
+        			A_{jj} = A_{2i 2i} &:= a_{h}(\varphi_{2i},\varphi_{2i})\\ 
+        			                   &= a_{h}(\phi^{i}_{2},\phi^{i}_{2})\\
+        			                   &= \int_{a}^{b} \Dx{\phi^{i}_{2}}(x)\Dx{\phi^{i}_{2}}(x)\ \dx - 2\sum_{l=1}^{n}\salto{\phi^{i}_{2}(x_{l})}\prom{\Dx{\phi^{i}_{2}}(x_{l})}\\
+        			                   &-2\Dx{\phi^{i}_{2}}(b)\phi^{i}_{2}(b) + 2\Dx{\phi^{i}_{2}}(a)\phi^{i}_{2}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{i}_{2}(x_{l})}\salto{\phi^{i}_{2}(x_{l})}\\
+        			                   &+ \gamma h^{-1}\phi^{i}_{2}(a)\phi^{i}_{2}(a) + \gamma h^{-1}\phi^{i}_{2}(b)\phi^{i}_{2}(b)\\
+        			                   &= \int_{x_{i-1}}^{x_{i}}\frac{1}{h^{2}}\ \dx -2\salto{\phi^{i}_{2}(x_{i})}\prom{\Dx{\phi^{i}_{2}}(x_{i})} +\gamma h^{-1}\salto{\phi^{i}_{2}(x_{i})}^{2} \\
+        			                   &= \frac{1}{h} - \frac{1}{h} + \frac{\gamma}{h}\\
+        			                   &= \frac{\gamma}{h}
+        		\end{align*}
+        		\item Si $j$ es impar, es decir, $j = 2i-1$ con $i\in\{2,\dots,n+1\}$. Por definición
+        		\begin{align*}
+        			A_{jj} = A_{(2i-1) (2i-1)} &:= a_{h}(\varphi_{2i-1},\varphi_{2i-1})\\ 
+        			&= a_{h}(\phi^{i}_{1},\phi^{i}_{1})\\
+        			&= \int_{a}^{b} \Dx{\phi^{i}_{1}}(x)\Dx{\phi^{i}_{1}}(x)\ \dx - 2\sum_{l=1}^{n}\salto{\phi^{i}_{1}(x_{l})}\prom{\Dx{\phi^{i}_{1}}(x_{l})}\\
+        			&-2\Dx{\phi^{i}_{1}}(b)\phi^{i}_{1}(b) + 2\Dx{\phi^{i}_{1}}(a)\phi^{i}_{1}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{i}_{1}(x_{l})}\salto{\phi^{i}_{1}(x_{l})}\\
+        			&+ \gamma h^{-1}\phi^{i}_{1}(a)\phi^{i}_{1}(a) + \gamma h^{-1}\phi^{i}_{1}(b)\phi^{i}_{1}(b)\\
+        			&= \int_{x_{i-1}}^{x_{i}}\frac{1}{h^{2}}\ \dx - 2\salto{\phi^{i}_{1}(x_{i-1})}\prom{\Dx{\phi^{i}_{1}}(x_{i-1})} + \gamma h^{-1}\salto{\phi^{i}_{1}(x_{i-1})}\\
+        			&= \frac{1}{h} - \frac{1}{h} + \frac{\gamma}{h}\\
+        			&= \frac{\gamma}{h}
+        		\end{align*}
+        	\end{itemize}
+            \newpage
+            \item  $A_{j(j+1)} := a_{h}\left( \varphi_{j},\varphi_{j+1}\right)$ con $j\in\{1,\dots,2n+1\}$\\
+        Procederemos por casos
+            \begin{itemize}
+            	\item Si $j=1$. Por definición
+            	\begin{align*}
+            		A_{12} &= a_{h}(\varphi_{1},\varphi_{2})\\ 
+            		       &= a_{h}(\phi^{1}_{1},\phi^{1}_{2})\\
+            		       &= \int_{a}^{b} \Dx{\phi^{1}_{1}}(x)\Dx{\phi^{1}_{2}}(x)\ \dx - \sum_{l=1}^{n}\Big(\salto{\phi^{1}_{1}(x_{l})}\prom{\Dx{\phi^{1}_{2}}(x_{l})} + \prom{\Dx{\phi^{1}_{1}}(x_{l})}\salto{\phi^{1}_{2}(x_{l})}\Big)\\
+            		       &-\Dx{\phi^{1}_{1}}(b)\phi^{1}_{2}(b) + \Dx{\phi^{1}_{1}}(a)\phi^{1}_{2}(a) - \phi^{1}_{1}(b)\Dx{\phi^{1}_{2}}(b) + \phi^{1}_{1}(a)\Dx{\phi^{1}_{2}}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{1}_{1}(x_{l})}\salto{\phi^{1}_{2}(x_{l})}\\
+            		       &+ \gamma h^{-1}\phi^{1}_{1}(a)\phi^{1}_{2}(a) + \gamma h^{-1}\phi^{1}_{1}(b)\phi^{1}_{2}(b)\\
+            		       &= \int_{x_{0}}^{x_{1}} -\frac{1}{h^{2}}\ \dx -\prom{\Dx{\phi^{1}_{1}}(x_{1})}\salto{\phi^{1}_{2}(x_{1})} + \phi^{1}_{1}(x_{0})\Dx{\phi^{1}_{2}}(x_{0}) \\
+            		       &= -\frac{1}{h} + \frac{1}{2h} + \frac{1}{h}\\
+            		       &= \frac{1}{2h}
+            	\end{align*}
+                \item Si $j=2$. Por definición
+                \begin{align*}
+                	A_{23} &= a_{h}(\varphi_{2},\varphi_{3})\\ 
+                	       &= a_{h}(\phi^{1}_{2},\phi^{2}_{1})\\
+                	       &= \int_{a}^{b} \Dx{\phi^{1}_{2}}(x)\Dx{\phi^{2}_{1}}(x)\ \dx - \sum_{l=1}^{n}\Big(\salto{\phi^{1}_{2}(x_{l})}\prom{\Dx{\phi^{2}_{1}}(x_{l})} + \prom{\Dx{\phi^{1}_{2}}(x_{l})}\salto{\phi^{2}_{1}(x_{l})}\Big)\\
+                	       &-\Dx{\phi^{1}_{2}}(b)\phi^{2}_{1}(b) + \Dx{\phi^{1}_{2}}(a)\phi^{2}_{1}(a) - \phi^{1}_{2}(b)\Dx{\phi^{2}_{1}}(b) + \phi^{1}_{2}(a)\Dx{\phi^{2}_{1}}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{1}_{2}(x_{l})}\salto{\phi^{2}_{1}(x_{l})}\\
+                	       &+ \gamma h^{-1}\phi^{1}_{2}(a)\phi^{2}_{1}(a) + \gamma h^{-1}\phi^{1}_{2}(b)\phi^{2}_{1}(b) \\
+                	       &= -2\salto{\phi^{1}_{2}(x_{1})}\prom{\Dx{\phi^{2}_{1}}(x_{1})} + \gamma h^{-1}\salto{\phi^{1}_{2}(x_{1})}\salto{\phi^{2}_{1}(x_{1})}\\
+                	       &= \frac{1}{h} -\frac{\gamma}{h}\\
+                	       &= \frac{1}{h}\left(1-\gamma\right)
+                \end{align*}
+                \item Si $j=2n+1$. Por definición
+                \begin{align*}
+                	A_{j(j+1)} &= A_{(2n+1)(2n+2)} \\
+                	&= a_{h}(\varphi_{2n+1},\varphi_{2n+2})\\ 
+                	&= a_{h}(\phi^{n+1}_{1},\phi^{n+1}_{2})\\
+                	&=  \int_{a}^{b} \Dx{\phi^{n+1}_{1}}(x)\Dx{\phi^{n+1}_{2}}(x)\ \dx - \sum_{l=1}^{n}\Big(\salto{\phi^{n+1}_{1}(x_{l})}\prom{\Dx{\phi^{n+1}_{2}}(x_{l})} + \prom{\Dx{\phi^{n+1}_{1}}(x_{l})}\salto{\phi^{n+1}_{2}(x_{l})}\Big)\\
+                	&-\Dx{\phi^{n+1}_{1}}(b)\phi^{n+1}_{2}(b) + \Dx{\phi^{n+1}_{1}}(a)\phi^{n+1}_{2}(a) - \phi^{n+1}_{1}(b)\Dx{\phi^{n+1}_{2}}(b) + \phi^{n+1}_{1}(a)\Dx{\phi^{n+1}_{2}}(a)\\ &+ \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{n+1}_{1}(x_{l})}\salto{\phi^{n+1}_{2}(x_{l})}
+                	+ \gamma h^{-1}\phi^{n+1}_{1}(a)\phi^{n+1}_{2}(a) + \gamma h^{-1}\phi^{n+1}_{1}(b)\phi^{n+1}_{2}(b)\\
+                	&= \int_{x_{n}}^{x_{n+1}} -\frac{1}{h^{2}}\ \dx -\prom{\Dx{\phi^{n+1}_{2}}(x_{n})}\salto{\phi^{n+1}_{1}(x_{n})} - \phi^{n+1}_{2}(x_{n+1})\Dx{\phi^{n+1}_{1}}(x_{n+1}) \\
+                	&= -\frac{1}{h} + \frac{1}{2h} + \frac{1}{h}\\
+                	&= \frac{1}{2h}
+                \end{align*}
+                \newpage
+            	\item Si $j$ es par, es decir, $j = 2i$ con $i\in\{2,\dots,n\}$. Por definición
+            	\begin{align*}
+            		A_{j(j+1)} &= A_{2i (2i+1)}\\ 
+            		           &:= a_{h}(\varphi_{2i},\varphi_{2i+1})\\ 
+            		           &= a_{h}(\phi^{i}_{2},\phi^{i+1}_{1})\\
+            		           &=  \int_{a}^{b} \Dx{\phi^{i}_{2}}(x)\Dx{\phi^{i+1}_{1}}(x)\ \dx - \sum_{l=1}^{n}\Big(\salto{\phi^{i}_{2}(x_{l})}\prom{\Dx{\phi^{i+1}_{1}}(x_{l})} + \prom{\Dx{\phi^{i}_{2}}(x_{l})}\salto{\phi^{i+1}_{1}(x_{l})}\Big)\\
+            		           &-\Dx{\phi^{i}_{2}}(b)\phi^{i+1}_{1}(b) + \Dx{\phi^{i}_{2}}(a)\phi^{i+1}_{1}(a) - \phi^{i}_{2}(b)\Dx{\phi^{i+1}_{1}}(b) + \phi^{i}_{2}(a)\Dx{\phi^{i+1}_{1}}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{i}_{2}(x_{l})}\salto{\phi^{i+1}_{1}(x_{l})}\\
+            		           &+ \gamma h^{-1}\phi^{i}_{2}(a)\phi^{i+1}_{1}(a) + \gamma h^{-1}\phi^{i}_{2}(b)\phi^{i+1}_{1}(b)\\
+            		           &= -\salto{\phi^{i}_{2}(x_{i})}\prom{\Dx{\phi^{i+1}_{1}}(x_{l})} - \prom{\Dx{\phi^{i}_{2}}(x_{i})}\salto{\phi^{i+1}_{1}(x_{i})} + \gamma h^{-1}\salto{\phi^{i}_{2}(x_{i})}\salto{\phi^{i+1}_{1}(x_{i})}\\
+            		           &= \frac{1}{2h} + \frac{1}{2h}-\frac{\gamma}{h}\\
+            		           &= \frac{1}{h}(1-\gamma)
+            	\end{align*}
+            	\item Si $j$ es impar, es decir, $j = 2i-1$ con $i\in\{2,\dots,n+1\}$. Por definición
+            	\begin{align*}
+            		A_{j(j+1)} &= A_{(2i-1) (2i)}\\ 
+            		           &:= a_{h}(\varphi_{2i-1},\varphi_{2i})\\
+            		           &= a_{h}(\phi^{i}_{1},\phi^{i}_{2})\\
+            		           &= \int_{a}^{b} \Dx{\phi^{i}_{1}}(x)\Dx{\phi^{i}_{2}}(x)\ \dx - \sum_{l=1}^{n}\Big(\salto{\phi^{i}_{1}(x_{l})}\prom{\Dx{\phi^{i}_{2}}(x_{l})} + \prom{\Dx{\phi^{i}_{1}}(x_{l})}\salto{\phi^{i}_{2}(x_{l})}\Big)\\
+            		           &-\Dx{\phi^{i}_{1}}(b)\phi^{i}_{2}(b) + \Dx{\phi^{i}_{1}}(a)\phi^{i}_{2}(a) - \phi^{i}_{1}(b)\Dx{\phi^{i}_{2}}(b) + \phi^{i}_{1}(a)\Dx{\phi^{i}_{2}}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{i}_{1}(x_{l})}\salto{\phi^{i}_{2}(x_{l})}\\
+            		           &+ \gamma h^{-1}\phi^{i}_{1}(a)\phi^{i}_{2}(a) + \gamma h^{-1}\phi^{i}_{1}(b)\phi^{i}_{2}(b)\\
+            		           &= \int_{x_{i-1}}^{x_{i}}-\frac{1}{h^{2}}\ \dx - \prom{\Dx{\phi^{i}_{1}}(x_{i})}\salto{\phi^{i}_{2}(x_{i})} - \salto{\phi^{i}_{1}(x_{i-1})}\prom{\Dx{\phi^{i}_{2}}(x_{i-1})}\\
+            		           &= -\frac{1}{h} + \frac{1}{2h} + \frac{1}{2h}\\
+            		           &= 0
+            	\end{align*}
+            \end{itemize}
+            \item  $A_{j(j+2)} := a_{h}\left( \varphi_{j},\varphi_{j+2}\right)$ con $j\in\{1,\dots,2n\}$\\
+            Procederemos por casos
+            \begin{itemize}
+            	\item Si $j$ es par, es decir, $j = 2i$ con $i\in\{1,\dots,n\}$. Por definición
+            	\begin{align*}
+            		A_{j(j+2)} &= A_{2i (2i+2)}\\ 
+            		           &:= a_{h}(\varphi_{2i},\varphi_{2i+2})\\ 
+            		           &= a_{h}(\phi^{i}_{2},\phi^{i+1}_{2})\\
+            		           &= \int_{a}^{b} \Dx{\phi^{i}_{2}}(x)\Dx{\phi^{i+1}_{2}}(x)\ \dx - \sum_{l=1}^{n}\Big(\salto{\phi^{i}_{2}(x_{l})}\prom{\Dx{\phi^{i+1}_{2}}(x_{l})} + \prom{\Dx{\phi^{i}_{2}}(x_{l})}\salto{\phi^{i+1}_{2}(x_{l})}\Big)\\
+            		           &-\Dx{\phi^{i}_{2}}(b)\phi^{i+1}_{2}(b) + \Dx{\phi^{i}_{2}}(a)\phi^{i+1}_{2}(a) - \phi^{i}_{2}(b)\Dx{\phi^{i+1}_{2}}(b) + \phi^{i}_{2}(a)\Dx{\phi^{i+1}_{2}}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{i}_{2}(x_{l})}\salto{\phi^{i+1}_{2}(x_{l})}\\
+            		           &+ \gamma h^{-1}\phi^{i}_{2}(a)\phi^{i+1}_{2}(a) + \gamma h^{-1}\phi^{i}_{2}(b)\phi^{i+1}_{2}(b)\\
+            		           &= -\salto{\phi^{i}_{2}(x_{i})}\prom{\Dx{\phi^{i+1}_{2}}(x_{i})} \\
+            		           &= -\frac{1}{2h}
+            	\end{align*}
+            	\item Si $j$ es impar, es decir, $j = 2i-1$ con $i\in\{1,\dots,n\}$. Por definición
+            	\begin{align*}
+            		A_{j(j+2)} &= A_{(2i-1) (2i+1)}\\ 
+            		           &:= a_{h}(\varphi_{2i-1},\varphi_{2i+1})\\ 
+            		           &= a_{h}(\phi^{i}_{1},\phi^{i+1}_{1})\\
+            		           &= \int_{a}^{b} \Dx{\phi^{i}_{1}}(x)\Dx{\phi^{i+1}_{1}}(x)\ \dx - \sum_{l=1}^{n}\Big(\salto{\phi^{i}_{1}(x_{l})}\prom{\Dx{\phi^{i+1}_{1}}(x_{l})} + \prom{\Dx{\phi^{i}_{1}}(x_{l})}\salto{\phi^{i+1}_{1}(x_{l})}\Big)\\
+            		           &-\Dx{\phi^{i}_{1}}(b)\phi^{i+1}_{1}(b) + \Dx{\phi^{i}_{1}}(a)\phi^{i+1}_{1}(a) - \phi^{i}_{1}(b)\Dx{\phi^{i+1}_{1}}(b) + \phi^{i}_{1}(a)\Dx{\phi^{i+1}_{1}}(a) + \sum_{l=1}^{n}\gamma h^{-1}\salto{\phi^{i}_{1}(x_{l})}\salto{\phi^{i+1}_{1}(x_{l})}\\
+            		           &+ \gamma h^{-1}\phi^{i}_{1}(a)\phi^{i+1}_{1}(a) + \gamma h^{-1}\phi^{i}_{1}(b)\phi^{i+1}_{1}(b)\\
+            		           &= -\prom{\Dx{\phi^{i}_{1}}(x_{i})}\salto{\phi^{i+1}_{1}(x_{i})}\\
+            		           &= -\frac{1}{2h}
+            	\end{align*}
+            \end{itemize}
+        \item  $A_{j(j+l)} := a_{h}\left( \varphi_{j},\varphi_{j+l}\right)$ con $j\in\{1,\dots,2n\}$ y $l\in\{3,\dots,2n+1\}$.\\
+        Procederemos por casos
+        \begin{itemize}
+        	\item Si $j$ es par, es decir, $j = 2i$ con $i\in\{1,\dots,n\}$. Entonces 
+        	\begin{align*}
+        		A_{j(j+l)} = A_{2i(2i+l)} = a_{h}(\varphi_{2i},\varphi_{2i+l})
+        	\end{align*}
+            de aquí se tienen dos casos
+        	\begin{itemize}
+        		\item Si $l$ es par, es decir, $l = 2k$ con $k\in\{1,\dots,n\}$. Por definición
+        		\begin{align*}
+        			a_{h}(\varphi_{2i},\varphi_{2i+2k}) = a_{h}(\phi^{i}_{2},\phi^{i+k}_{2}) = 0
+        		\end{align*}
+        		\item Si $l$ es impar, es decir, $l = 2k-1$ con $k\in\{1,\dots,n\}$. Por definición
+        		\begin{align*}
+        			a_{h}(\varphi_{2i},\varphi_{2i+2k-1}) = a_{h}(\phi^{i}_{2},\phi^{i+k}_{1}) = 0
+        		\end{align*}
+        	\end{itemize}
+        	\item Si $j$ es impar, es decir, $j = 2i-1$ con $i\in\{1,\dots,n\}$. Entonces
+        	\begin{align*}
+        		A_{j(j+l)} = A_{(2i-1)(2i-1+l)} = a_{h}(\varphi_{2i-1},\varphi_{2i-1+l})
+        	\end{align*}
+        	de aquí se tienen dos casos 
+        	\begin{itemize}
+        		\item Si $l$ es par, es decir, $l = 2k$ con $k\in\{1,\dots,n\}$. Por definición
+        		\begin{align*}
+        			a_{h}(\varphi_{2i-1},\varphi_{2i+2k-1}) = a_{h}(\phi^{i}_{1},\phi^{i+k}_{1}) = 0
+        		\end{align*}
+        		\item Si $l$ es impar, es decir, $l = 2k-1$ con $i\in\{1,\dots,n\}$. Por definición
+        		\begin{align*}
+        			a_{h}(\varphi_{2i-1},\varphi_{2i+2k-2}) = a_{h}(\phi^{i}_{1},\phi^{i+k-1}_{2}) = 0
+        		\end{align*}
+        	\end{itemize}
+        \end{itemize}
+        \end{itemize}
+    Es fácil ver que la forma bilineal es simétrica, por lo que $A_{ij} = A_{ji}$, para todo $i,j\in\{1,\dots,2n+2\}$. Por tanto se tiene que la matriz $\textbf{A}$ del sistema tiene la forma
+    \begin{align*}
+    	\textbf{A} = \frac{1}{h}\begin{pmatrix}
+    		\gamma -1 & a & b & 0 & 0 & 0 & 0 & 0 & 0 & \hdots \\ 
+    		a & \gamma & c & b & 0 & 0 & 0 & 0 & 0 & \hdots\\ 
+    		b & c & \gamma & 0 & b & 0 & 0 & 0 & 0 & \hdots\\ 
+    		0 & b & 0 & \gamma & c & b & 0 & 0 & 0 & \hdots\\ 
+    		0 & 0 & b & c & \gamma & 0 & b & 0 & 0 & \hdots\\ 
+    		0 & 0 & 0 & b & 0 & \gamma & c & b & 0 & \hdots\\ 
+    		\vdots & \vdots &  & \ddots & \ddots & \ddots & \ddots & \ddots & \ddots & \\ 
+    		\vdots & \vdots &  &  & \ddots & \ddots & \ddots & \ddots & \ddots & \\ 
+    		0 & 0 & 0 & 0 & 0 & 0 & b & c & \gamma & a\\ 
+    		0 & 0 & 0 & 0 & 0 & 0 & b & b & a & \gamma -1
+    	\end{pmatrix},
+    \end{align*}
+    con $a,b,c,\gamma$ descritos en el enunciado. Por otro lado, para calcular $\textbf{b}$ se procede como sigue
+    \begin{itemize}
+    	\item Calculo de $b_{1}$. Por definición
+    	\begin{align*}
+    		b_{1} &= L(\varphi_{1})\\ 
+    		      &= L(\phi^{1}_{1})\\ 
+    		      &= \int_{a}^{b} f(x)\phi^{1}_{1}(x)\ \dx - \Dx{\phi^{1}_{1}}(b)u_{b} + \Dx{\phi^{1}_{1}}(a)u_{a} + \gamma h^{-1}u_{a}\phi^{1}_{1}(a) + \gamma h^{-1}u_{b}\phi^{1}_{1}(b)\\
+    		      &= \int_{a}^{b} f(x)\phi^{1}_{1}(x)\ \dx + \Dx{\phi^{1}_{1}}(a)u_{a} + \gamma h^{-1}u_{a}\phi^{1}_{1}(a)\\
+    		      &= \int_{x_{0}}^{x_{1}} f(x)\phi^{1}_{1}(x)\ \dx + \Dx{\phi^{1}_{1}}(x_{0})u_{a} + \gamma h^{-1}u_{a}\phi^{1}_{1}(x_{0})\\
+    		      &= \int_{x_{0}}^{x_{1}} f(x)\phi^{1}_{1}(x)\ \dx -\frac{u_{a}}{h} + \frac{\gamma u_{a}}{h}\\
+    		      &= \int_{x_{0}}^{x_{1}} f(x)\phi^{1}_{1}(x)\ \dx - \frac{u_{a}c}{h}\\
+    		      &= hf(\hat{x})\phi^{1}_{1}(\hat{x}_{1})- \frac{u_{a}c}{h}\\
+    		      &= \frac{h}{2}f(\hat{x}_{1}) - \frac{u_{a}c}{h}
+    	\end{align*}
+        \item Calculo de $b_{2}$. Por definición
+        \begin{align*}
+        	b_{2} &= L(\varphi_{2})\\ 
+        	&= L(\phi^{1}_{2})\\ 
+        	&= \int_{a}^{b} f(x)\phi^{1}_{2}(x)\ \dx - \Dx{\phi^{1}_{2}}(b)u_{b} + \Dx{\phi^{1}_{2}}(a)u_{a} + \gamma h^{-1}u_{a}\phi^{1}_{2}(a) + \gamma h^{-1}u_{b}\phi^{1}_{2}(b)\\
+        	&= \int_{x_{0}}^{x_{1}} f(x)\phi^{1}_{2}(x)\ \dx + \Dx{\phi^{1}_{2}}(x_{0})u_{a} \\
+        	&= \int_{x_{0}}^{x_{1}} f(x)\phi^{1}_{2}(x)\ \dx +\frac{u_{a}}{h} \\
+        	&= \int_{x_{0}}^{x_{1}} f(x)\phi^{1}_{2}(x)\ \dx + \frac{u_{a}c}{h}\\
+        	&= hf(\hat{x}_{1})\phi^{1}_{2}(\hat{x}_{1})+ \frac{u_{a}}{h}\\
+        	&= \frac{h}{2}f(\hat{x}_{1}) + \frac{u_{a}}{h}
+        \end{align*}
+        \item Calculo de $b_{j}$ con $j\in\{1,\dots,2n\}$. Procederemos por casos
+        \begin{itemize}
+        	\item Si $j$ es par, esto es, $j = 2i$ con $i\in\{2,\dots,n\}$. Por definición
+        	\begin{align*}
+        		b_{j} &= L(\varphi_{2i})\\ 
+        		&= L(\phi^{i}_{2})\\ 
+        		&= \int_{a}^{b} f(x)\phi^{i}_{2}(x)\ \dx - \Dx{\phi^{i}_{2}}(b)u_{b} + \Dx{\phi^{i}_{2}}(a)u_{a} + \gamma h^{-1}u_{a}\phi^{i}_{2}(a) + \gamma h^{-1}u_{b}\phi^{i}_{2}(b)\\
+        		&= \int_{x_{i-1}}^{x_{i}} f(x)\phi^{i}_{2}(x)\ \dx \\
+        		&= hf(\hat{x}_{i})\phi^{1}_{2}(\hat{x}_{i})\\
+        		&= \frac{h}{2}f(\hat{x}_{i}) 
+        	\end{align*}
+            \item Si $j$ es impar, esto es, $j = 2i-1$ con $i\in\{2,\dots,n\}$. Por definición
+            \begin{align*}
+            	b_{j} &= L(\varphi_{2i-1})\\ 
+            	&= L(\phi^{i}_{1})\\ 
+            	&= \int_{a}^{b} f(x)\phi^{i}_{1}(x)\ \dx - \Dx{\phi^{i}_{1}}(b)u_{b} + \Dx{\phi^{i}_{1}}(a)u_{a} + \gamma h^{-1}u_{a}\phi^{i}_{1}(a) + \gamma h^{-1}u_{b}\phi^{i}_{1}(b)\\
+            	&= \int_{x_{i-1}}^{x_{i}} f(x)\phi^{i}_{1}(x)\ \dx \\
+            	&= hf(\hat{x}_{i})\phi^{1}_{1}(\hat{x}_{i})\\
+            	&= \frac{h}{2}f(\hat{x}_{i}) 
+            \end{align*}
+        \end{itemize}
+            \item Calculo de $b_{2n+1}$. Por definición
+            \begin{align*}
+            	b_{2n+1} &= L(\varphi_{2n+1})\\ 
+            	&= L(\phi^{n+1}_{1})\\ 
+            	&= \int_{a}^{b} f(x)\phi^{n+1}_{1}(x)\ \dx - \Dx{\phi^{n+1}_{1}}(b)u_{b} + \Dx{\phi^{n+1}_{1}}(a)u_{a} + \gamma h^{-1}u_{a}\phi^{n+1}_{1}(a) + \gamma h^{-1}u_{b}\phi^{n+1}_{1}(b)\\
+            	&= \int_{a}^{b} f(x)\phi^{n+1}_{1}(x)\ \dx + \Dx{\phi^{n+1}_{1}}(b)u_{b} + \gamma h^{-1}u_{b}\phi^{n+1}_{1}(b)\\
+            	&= \int_{x_{0}}^{x_{1}} f(x)\phi^{n+1}_{1}(x)\ \dx +\frac{u_{b}}{h}\\
+            	&= hf(\hat{x}_{n+1})\phi^{n+1}_{1}(\hat{x})+ \frac{u_{b}}{h}\\
+            	&= \frac{h}{2}f(\hat{x}_{n+1}) + \frac{u_{b}}{h}
+            \end{align*}
+            \item Calculo de $b_{2n+2}$. Por definición
+            \begin{align*}
+            	b_{2n+2} &= L(\varphi_{2n+2})\\ 
+            	&= L(\phi^{n+1}_{2})\\ 
+            	&= \int_{a}^{b} f(x)\phi^{n+1}_{2}(x)\ \dx - \Dx{\phi^{n+1}_{2}}(b)u_{b} + \Dx{\phi^{n+1}_{2}}(a)u_{a} + \gamma h^{-1}u_{a}\phi^{n+1}_{2}(a) + \gamma h^{-1}u_{b}\phi^{n+1}_{2}(b)\\
+            	&= \int_{a}^{b} f(x)\phi^{n+1}_{2}(x)\ \dx + \Dx{\phi^{n+1}_{2}}(b)u_{b} + \gamma h^{-1}u_{b}\phi^{n+1}_{2}(b)\\
+            	&= \int_{x_{0}}^{x_{2}} f(x)\phi^{n+1}_{2}(x)\ \dx -\frac{u_{b}}{h} + \frac{\gamma u_{b}}{h}\\
+            	&= hf(\hat{x}_{n+1})\phi^{n+1}_{2}(\hat{x})- \frac{u_{b}c}{h}\\
+            	&= \frac{h}{2}f(\hat{x}_{n+1}) - \frac{u_{b}c}{h}.
+            \end{align*}
+    \end{itemize}
+    Por tanto se deduce que el vector $\textbf{b}$ del sistema tiene la forma
+    \begin{align*}
+    	\textbf{b} = \frac{h}{2}\begin{pmatrix}
+    		f(\hat{x}_{1})\\ 
+    		f(\hat{x}_{1})\\ 
+    		f(\hat{x}_{2})\\ 
+    		f(\hat{x}_{2})\\ 
+    		\vdots\\ 
+    		\vdots\\ 
+    		f(\hat{x}_{n})\\ 
+    		f(\hat{x}_{n})\\ 
+    		f(\hat{x}_{n+1})\\ 
+    		f(\hat{x}_{n+1})
+    	\end{pmatrix} + \frac{1}{h}\begin{pmatrix}
+    		-u_{a}c\\ 
+    		u_{a}\\ 
+    		0\\ 
+    		0\\ 
+    		\vdots\\ 
+    		\vdots\\ 
+    		0\\ 
+    		0\\ 
+    		u_{b}\\ 
+    		-u_{b}c
+    	\end{pmatrix}.
+    \end{align*}
+    Mostrando así lo pedido.\\
+    \textbf{Obs:} para encontrar las componentes $b_{i}$ del vector $\textbf{b}$ se realizó una aproximación de la integral $\int_{x_{i-1}}^{x_{i}}f(x)\varphi_{i}(x)\ \dx$ mediante el método del punto medio.
+    \end{proof}
+    \begin{pro}
+    	Considere $u_{a} = 1,\ u_{b}=-1,\ f(x) = \pi^{2}\cos(\pi x)$ y $x\in\left(0,1\right)$ cuya solución exacta es $u(x) = \cos(\pi x)$. Complete la siguiente tabla
+    	\begin{center}
+    		\begin{tabular}{c||c||c||c||c||c}
+    			\hline
+    			$n$ & $h$ & $\norm{u-u_{h}}_{L^{2}(a,b)}$ & $r_{L^{2}}$ & $\norm{u-u_{h}}_{\textup{DG}}$ & $r_{\textup{DG}}$ \\
+    			\hline
+    			16 & $0.0588$ & $2.15\times10^{-4}$ & - & $6.62\times10^{-5}$  & - \\
+    			\hline
+    			32 & $0.0303$ & $5.70\times10^{-5}$ & $2.0032$ & $1.44\times10^{-5}$ & $2.29$  \\
+    			\hline
+    			64 & $0.0153$ & $1.46\times10^{-5}$ & $2.00087$ & $3.39\times10^{-6}$ & $2.135$ \\
+    			\hline
+    			128 & $0.0077$  & $3.728\times10^{-6}$ & $2.0002$ & $8.355\times10^{-7}$  & $2.045$ \\
+    			\hline
+    		\end{tabular}
+    	\end{center}
+    	
+    \end{pro}
+    	
+\end{document}

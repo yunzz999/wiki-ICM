@@ -1,0 +1,346 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{\color{azul}{Problema}}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Elementos Finitos}}
+\newcommand{\tarea}{\textbf{Tarea 4}}
+%\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\textbf{\today}}
+% Titulo
+\title{\color{azul}\textbf{Elementos Finitos}\\
+	\textbf{Tarea 2}}
+\author{\color{azul}\autor}
+\date{\color{azul}}
+\begin{document}
+	\begin{pro}
+		Sea $K:=\left[-1,1\right]^{2}$. Definimos $\mathbb{Q}_{1}\left(K\right) := \left\{p: \ p(x,y) = p(x)q(y),\quad (x,y)\in K\right\}$ donde $p$ y $q$ son polinomios de grado a lo más uno en las variables $x$ e $y$ respectivamente. Notar que $\text{dim}\ \mathbb{Q}_{1}(K) = 4$. \\
+		Sea $\mathcal{N} := \left\{N_{1},N_{2},N_{3},N_{4}\right\}$.
+		\begin{itemize}
+			\item[$a)$] Suponga que los elementos de $\mathcal{N}$ están determinados por la evaluación de $p\in\mathbb{Q}_{1}\left(K\right)$ en los vértices de $K$. Muestre que $\left(K,\mathbb{Q}_{1}(K),\mathcal{N}\right)$ es un elemento finito.
+			\item[$b)$] Construir las bases nodales $\{ \phi_{j}\}_{j=1}^{4}$ de $\mathbb{Q}_{1}(K)$.
+			\item[$c)$] Suponga que los elementos de $\mathcal{N}$ están determinados por la evaluación de $p\in\mathbb{Q}_{1}(K)$ en los \textbf{puntos medios} de los lados de $K$. Muestre que $\left(K,\mathbb{Q}_{1}(K),\mathcal{N}\right)$ \textbf{no} es un elemento finito.
+		\end{itemize}
+	\end{pro}
+    \begin{proof}[\textcolor{rojo}{Demostración}]
+    	\begin{itemize}
+    		\item[$a)$] Dado que $K$ es cerrado, no vacio y de frontera suave a trozos, y que  $\text{dim}\ \mathbb{Q}_{1}(K) = 4$, solo resta probar la unisolvencia del elemento, para esto, se define $v_{1} := (1,1)$, $v_{2} := (-1,1)$, $v_{3} := (-1,-1)$ y $v_{4} := (1,-1)$ los vértices de $K$. Sea $p\in\mathbb{Q}_{1}(K)$, es decir, existen $a_{0},a_{1},b_{0}, b_{1}\in\mathbb{R}$ tales que $p(x,y) = (a_{0}+a_{1}x)(b_{0}+b_{1}y)$, además, asuma que $N_{i}(p) = 0$ para todo $i\in\{1,2,3,4\}$, con esto se obtiene el sistema de ecuaciones
+    		\begin{align*}
+    			N_{1}(p) &= p(v_{1}) = (a_{0} + a_{1})(b_{0} + b_{1}) = 0\\
+    			N_{2}(p) &= p(v_{2}) = (a_{0} - a_{1})(b_{0} + b_{1}) = 0\\
+    			N_{3}(p) &= p(v_{3}) = (a_{0} - a_{1})(b_{0} - b_{1}) = 0\\
+    			N_{2}(p) &= p(v_{4}) = (a_{0} + a_{1})(b_{0} - b_{1}) = 0\\
+    		\end{align*}
+    	    del cual se deduce que $a_{0} = a_{1} = b_{0} = b_{1} = 0$. Por tanto $p\equiv 0$, teniendo así la unisolvencia del elemento.
+    	    \item[$b)$] Se propone como base nodal al conjunto $\{\phi_{j}\}_{j=1}^{4}$ donde 
+    	    \begin{align*}
+    	    	\phi_{1}(x,y) &= \frac{(x+1)(y+1)}{4},\\
+    	    	\phi_{2}(x,y) &= \frac{(1-x)(y+1)}{4},\\
+    	    	\phi_{3}(x,y) &= \frac{(x-1)(y-1)}{4},\\
+    	    	\phi_{4}(x,y) &= \frac{(x+1)(1-y)}{4}.
+    	    \end{align*}
+    	    Por construcción $N_{i}(\phi_{j}) = \delta_{ij}$.\hspace{0.2cm}
+    	    
+    	    \noindent Veamos que $\{\phi_{j}\}_{j=1}^{4}$ es una base de $\mathbb{Q}_{1}(K)$. Dado que $\phi_{j}\in\mathbb{Q}_{1}(K)$ para todo $j\in\{1,2,3,4\}$, se tiene que $\langle \{\phi_{1},\phi_{2},\phi_{3},\phi_{4}\} \rangle \subset \mathbb{Q}_{1}(K)$. Por otro lado, sea $p\in \mathbb{Q}_{1}(K)$, se define $p_{I}\in \langle \{\phi_{1},\phi_{2},\phi_{3},\phi_{4}\} \rangle$ de la forma
+    	    \begin{align*}
+    	    	p_{I}(x,y) = \sum_{j=1}^{4}N_{j}(p)\phi_{j}(x,y)
+    	    \end{align*}
+    	    A continuación veremos que $p_{I} \equiv p$. Sea $\xi$ un polinomio de dos variables en $K$ de grado a lo más 2 definido por
+    	    \begin{align*}
+    	    	\xi(x,y) := p(x,y) - p_{I}(x,y),\quad \forall (x,y)\in K 
+    	    \end{align*}
+            Por la propiedades intrínsecas de los espacios vectoriales, dado que $p$ y $p_{I}$ son elementos de $\mathbb{Q}_{1}(K)$, se tiene que $\xi\in\mathbb{Q}_{1}(K)$, además, 
+            \begin{align*}
+            	N_{i}(\xi) = 0,\quad \forall i\in\{1,2,3,4\}.
+            \end{align*}
+            Por la unisolvencia del elemento $\xi\equiv 0$, es decir, 
+            \begin{align*}
+            	p(x,y) = p_{I}(x,y) = \sum_{j=1}^{4}N_{j}(p)\phi_{j}(x,y),\quad (x,y)\in K.
+            \end{align*}
+            Luego, $\mathbb{Q}_{1}(K)\subset\langle \{\phi_{1},\phi_{2},\phi_{3},\phi_{4}\} \rangle$. Concluyendo así la igualdad. deseada.\hspace{0.2cm}
+            
+            Por tanto, $\{\phi_{j}\}_{j=1}^{4}$ es una base nodal de $\mathbb{Q}_{1}(K)$.
+            \item[$c)$] Considere el polinomio $p(x,y) = xy$, es claro que $p\in\mathbb{Q}_{1}(K)$, además
+            \begin{align*}
+            	N_{1}(p) &= p(0,1) = 0,\\
+            	N_{2}(p) &= p(-1,0) = 0,\\
+            	N_{3}(p) &= p(0,-1) = 0,\\
+            	N_{4}(p) &= p(1,0) = 0.
+            \end{align*}
+            Como existe un polinomio no nulo en $\mathbb{Q}_{1}(K)$ el cual cumple que se anula en los puntos medios de los lados de $K$, se deduce que el elemento no cumple con la unisolvecia y por tanto $\left(K,\mathbb{Q}_{1}(K),\mathcal{N}\right)$ no es un elemento finito.
+    	\end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Sea $\hat{K}=\left\{\hat{\boldsymbol{x}} = \boldsymbol{x}/h: \quad \boldsymbol{x}\in K\subset\mathbb{R}^{n}\right\}$, donde $h$ es el diámetro de $K$. Sean además $u\in W^{m}_{p}\left(K\right)$, $p\geq 1$ y $k$ tal que $0\leq k\leq m$. Denotando por $\hat{u}\left(\hat{\boldsymbol{x}}\right) := u(\boldsymbol{x})$, probar que 
+    	\begin{align}
+    		\abs{\hat{u}}_{W^{k}_{p}\left(\hat{K}\right)} = h^{k-n/p}\abs{u}_{W^{k}_{p}\left(K\right)}.
+    	\end{align}
+    \end{pro}
+    \begin{proof}[\textcolor{rojo}{Demostración}]
+    	Sea $v\in W_{p}^{m}(K)\cap C^{\infty}(K)$, Mediante principio de inducción matemática sobre el orden de diferenciación, se puede probar que 
+    	\begin{align*}
+    		\partial^{\alpha}v(\boldsymbol{x}) = \frac{1}{h^{k}}\partial^{\alpha}\hat{v}(\hat{\boldsymbol{x}}) \iff \partial^{\alpha}\hat{v}(\hat{\boldsymbol{x}}) = h^{m}	\partial^{\alpha}v(\boldsymbol{x})
+    	\end{align*}
+        donde $\alpha$ es un multi indice tal que $\abs{\alpha}= m$. En efecto, para $\abs{\alpha}=1$, usando regla de la cadena
+         \begin{align*}
+         	\frac{\partial v}{\partial x_{i}} = \sum_{j=1}^{n} \frac{\partial \hat{v}}{\partial\hat{x}_{j}}\frac{\partial \hat{x}_{j}}{\partial x_{i}} = \frac{1}{h}\frac{\partial \hat{v}}{\partial\hat{x}_{i}}
+         \end{align*}
+         Suponga que para $\abs{\alpha} = m-1$, se tiene que 
+         \begin{align*}
+         	\partial^{\alpha}_{\boldsymbol{x}}v(\boldsymbol{x}) = h^{1-m}\partial^{\alpha}_{\hat{\boldsymbol{x}}}\hat{v}(\hat{\boldsymbol{x}})
+         \end{align*}
+         Para $\abs{\alpha} = m$, sean $\beta$ y $\gamma$ multi indices tales que $\abs{\beta}=1$ y $\abs{\gamma} = m-1$, y que $\alpha = \beta + \gamma$ luego
+         \begin{align*}
+         	\partial^{\alpha}_{\boldsymbol{x}}v(\boldsymbol{x}) = \partial^{\beta}_{\boldsymbol{x}}\partial^{\gamma}_{\boldsymbol{x}}v(\boldsymbol{x}) = h^{1-m}\partial^{\beta}_{\boldsymbol{x}}\partial^{\gamma}_{\hat{\boldsymbol{x}}}\hat{v}(\hat{\boldsymbol{x}}) = h^{1-m}\partial^{\beta}_{\hat{\boldsymbol{x}}}\partial^{\gamma}_{\hat{\boldsymbol{x}}}\hat{v}(\hat{\boldsymbol{x}})h^{-1} = h^{-m}\partial^{\alpha}_{\hat{\boldsymbol{x}}}\hat{v}(\hat{\boldsymbol{x}}).
+         \end{align*}
+         Probando así lo deseado.\vspace{0.2cm}
+         
+        \begin{comment}
+        	Para $u\in W^{m}_{p}(K)$, por densidad, existe una sucesión $\{u_{n}\}_{n\in\mathbb{N}}\subset W^{m}_{p}(K)\cap C^{\infty}(K)$, tal que converge a $u$ en la norma inducida por $W^{m}_{p}(K)$. Dado $\alpha = \left(\alpha_{1},\dots,\alpha_{k}\right)$ un multi indice, tal que $\abs{\alpha}\leq k$
+        	\begin{align*}
+        		\norm{\partial^{\alpha}u - \partial^{\alpha}u_{n}}_{L^{p}(K)} \leq \norm{u-u_{n}}_{W^{k}_{p}(K)}\longrightarrow 0.
+        	\end{align*}
+        	Por otro lado, para $n\in\mathbb{N}$, se define $\hat{u}_{n}(\hat{\boldsymbol{x}}) := u_{n}(\boldsymbol{x})$, es claro que 
+        	\begin{align*}
+        		\norm{\partial^{\alpha}\hat{u} - \partial^{\alpha}\hat{u}_{n}}_{L^{p}(\hat{K})} \leq \norm{\hat{u}-\hat{u}_{n}}_{W^{k}_{p}(\hat{K})}\longrightarrow 0.
+        	\end{align*}
+        	Luego,
+        	\begin{align*}
+        		\norm{\partial^{\alpha}\hat{u}-h^{k}\partial^{\alpha}u}_{L^{p}(K)} &\leq \norm{\partial^{\alpha}\hat{u}-h^{k}\partial^{\alpha}u_{n}}_{L^{p}(K)} + \norm{h^{k}\partial^{\alpha}u_{n}-h^{k}\partial^{\alpha}u}_{L^{p}(K)}\\ &= \norm{\partial^{\alpha}\hat{u}-\partial^{\alpha}\hat{u}_{n}}_{L^{p}(K)} + \norm{h^{k}\partial^{\alpha}u_{n}-h^{k}\partial^{\alpha}u}_{L^{p}(K)}
+        	\end{align*}
+        \end{comment}
+         \noindent Con lo anterior, y usando el teorema del cambio de variable para integrales en $\mathbb{R}^{n}$, se deduce que   
+    	\begin{align*}
+    		\norm{\partial^{\alpha}\hat{v}}^{p}_{L^{p}(\hat{K})} = \int_{\hat{K}}\abs{\partial^{\alpha}\hat{v}(\hat{\boldsymbol{x}})}^{p}\ \text{d}\hat{\boldsymbol{x}} = \int_{K}\abs{h^{k}\partial^{\alpha}v(\boldsymbol{x})}^{p}h^{-n}\text{d}\boldsymbol{x} = h^{kp-n}\int_{K}\abs{\partial^{\alpha}v(\boldsymbol{x})}^{p}\text{d}\boldsymbol{x} = h^{kp-n}\norm{\partial^{\alpha}\hat{v}}^{p}_{L^{p}(K)}
+    	\end{align*}
+        Luego, para $0\leq k\leq m$, se tiene 
+        \begin{align}\label{equ}
+        	\abs{\hat{v}}_{W^{k}_{p}(\hat{K})} =\left( \sum_{\abs{\alpha} = k} \norm{\partial^{\alpha}\hat{v}}^{p}_{L^{p}(\hat{K})}\right)^{1/p} = \left(h^{kp-n}\sum_{\abs{\alpha} = k} \norm{\partial^{\alpha}v}^{p}_{L^{p}(K)}\right)^{1/p} = h^{k-n/p}\abs{v}_{W^{k}_{p}(K)}
+        \end{align}
+        Lo anterior es valido para $1\leq p <\infty$. Si $p=\infty$, entonces para $\alpha$ un multi indice tal que $\abs{\alpha}= k$, se tiene que
+        \begin{align*}
+        	\lim_{p\to \infty}\norm{\partial^{\alpha}\hat{v}}_{L^{p}(\hat{K})} = \norm{\partial^{\alpha}\hat{v}}_{L^{\infty}(\hat{K})},
+        \end{align*}
+        pero 
+        \begin{align*}
+        	\norm{\partial^{\alpha}\hat{v}}_{L^{p}(\hat{K})} = h^{k-n/p}\norm{\partial^{\alpha}v}_{L^{p}(K)},
+        \end{align*}
+        entonces,
+        \begin{align*}
+        	h^{k}\norm{\partial^{\alpha}v}_{L^{\infty}(K)} = \lim_{p\to \infty} h^{k-n/p}\norm{\partial^{\alpha}v}_{L^{p}(K)} = \norm{\partial^{\alpha}\hat{v}}_{L^{\infty}(\hat{K})}
+        \end{align*}
+        de esta forma se tiene
+        \begin{align*}
+        	\abs{\hat{v}}_{W^{k}_{\infty}(\hat{K})} = \max_{\abs{\alpha}= k}\norm{\partial^{\alpha}\hat{v}}_{L^{\infty}(\hat{K})} = \max_{\abs{\alpha}= k}h^{k}\norm{\partial^{\alpha}v}_{L^{\infty}(K)} = h^{k}\max_{0<\abs{\alpha}\leq k}\norm{\partial^{\alpha}v}_{L^{\infty}(K)} = h^{k} \abs{v}_{W^{k}_{\infty}(K)}
+        \end{align*}
+        Para $u\in W^{m}_{p}(K)$, por densidad, existe una sucesión $\{u_{i}\}_{i\in\mathbb{N}}\subset W^{m}_{p}(K)\cap C^{\infty}(K)$, tal que 
+        \begin{align*}
+        	\norm{u-u_{i}}_{W^{m}_{p}(K)} \longrightarrow 0
+        \end{align*}
+        Además, de \eqref{equ} es directo notar que
+        \begin{align*}
+        	\abs{\hat{u}_{i} - \hat{u}_{j}}_{W^{k}_{p}(\hat{K})} = h^{kp-n}\abs{u_{i}-u_{j}}_{W_{p}^{k}(K)}\leq \max\{h^{kp-n},1\}\norm{u_{i}-u_{j}}_{W^{m}_{p}(K)} \longrightarrow 0
+        \end{align*}
+        con $0\leq k\leq m$. De lo anterior se deduce que $\{\hat{u}_{i}\}_{i\in\mathbb{N}}$ es una sucesión de Cauchy en $W_{p}^{k}(\hat{K})$ y como este espacio es Banach, entonces existe un $\hat{u}\in W_{p}^{k}(\hat{K})$ tal que 
+        \begin{align*}
+        	\norm{\hat{u}-\hat{u}_{i}}_{W^{k}_{p}(\hat{K})} \longrightarrow 0
+        \end{align*}
+        Como, 
+        \begin{align*}
+        	\abs{\hat{u}_{i}}_{W^{k}_{p}\left(\hat{K}\right)} = h^{k-n/p}\abs{u_{i}}_{W^{k}_{p}\left(K\right)}
+        \end{align*}
+        para todo $i\in\mathbb{N}$. tomando límite, se obtiene
+        \begin{align*}
+        	\abs{\hat{u}}_{W^{k}_{p}\left(\hat{K}\right)} = h^{k-n/p}\abs{u}_{W^{k}_{p}\left(K\right)}.
+        \end{align*}
+        Análogamente, se deduce para $u\in W^{m}_{\infty}(K)$
+        \begin{align*}
+        	\abs{\hat{u}}_{W^{k}_{\infty}\left(\hat{K}\right)} = h^{k}\abs{u}_{W^{k}_{\infty}\left(K\right)}.
+        \end{align*}
+    \end{proof}
+    \begin{pro}
+    	Sean $K\subset \mathbb{R}^{n}$ tal que su diámetro es proporcional a $h$, con $0<h\leq 1$ y $\mathcal{P}$ un espacio de dimensión finita $\mathcal{P}\subset W^{l}_{p}\left(K\right)\cap W^{m}_{q}\left(K\right)$, con $1\leq p,q\leq \infty$ y $0\leq m \leq l$. Demostrar que existe $C>0$, independiente de $h$ tal que 
+    	\begin{align}
+    		\norm{v}_{W^{l}_{p}\left(K\right)}\leq Ch^{m-l+n/p-n/q}\norm{v}_{W^{m}_{q}\left(K\right)}\quad \forall v\in\mathcal{P}.
+    	\end{align}
+    \end{pro}
+    \begin{proof}[\textcolor{rojo}{Demostración}]
+        Sea $v\in \mathcal{P}$, $1\leq p,q < \infty$ y sea $\rho := \text{diam}(K)$. Suponga que $m=0$, por equivalencia de normas
+        \begin{align*}
+        	\norm{\hat{v}}_{W^{l}_{\infty}(\hat{K})}\leq \hat{C}\norm{\hat{v}}_{L^{\infty}(\hat{K})},
+        \end{align*}
+        por lo hecho en el \textbf{\textcolor{azul}{Problema 2}}
+        \begin{align}
+        	\abs{v}_{W^{j}_{p}(K)}\rho^{j-n/p}\leq \hat{C}\norm{v}_{L^{q}(K)}\rho^{-n/q},
+        \end{align}
+        para todo $0\leq j \leq l$, usando la proporcionalidad de $h$ con el diámetro de $K$, se obtiene
+        \begin{align}\label{desi}
+        	\abs{v}_{W^{j}_{p}(K)}\leq \hat{C}h^{-j+n/p-n/q}\norm{v}_{L^{q}(K)},
+        \end{align}
+        para todo $0\leq j \leq l$. Dado que $0<h\leq 1$, entonces
+        \begin{align}\label{desigualdadsemiynorm}
+        	\norm{v}_{W^{j}_{p}(K)} \leq \abs{v}_{W^{j}_{p}(K)}.
+        \end{align}
+        Juntando $\eqref{desi}$ con $\eqref{desigualdadsemiynorm}$, se obtiene 
+        \begin{align}\label{desigualdaaaaad}
+        	\norm{v}_{W^{j}_{p}(K)}\leq \hat{C}h^{-j+n/p-n/q}\norm{v}_{L^{q}(K)}.
+        \end{align}
+        Considerando $j=l$, se deduce 
+        \begin{align*}
+        	\norm{v}_{W^{l}_{p}(K)}\leq \hat{C}h^{-j+n/p-n/q}\norm{v}_{L^{q}(K)},
+        \end{align*}
+        lo que demuestra lo pedido para $m=0$.\vspace{0.2cm}
+        
+        \noindent Considere el caso $0< m\leq l$. Para $l-m\leq k\leq l$. Sea $\alpha,\ \beta$ y $\gamma$ multi indices tales que $\abs{\alpha} = k$, $\abs{\beta} = l-m$ y $\abs{\gamma} = k+m-l$, luego
+        \begin{align*}
+        	\norm{\partial^{\alpha}v}_{L^{p}(K)} = \norm{\partial^{\beta}\partial^{\gamma}v}_{L^{p}(K)}\leq \norm{\partial^{\gamma}v}_{W^{l-m}_{p}(K)}
+        \end{align*}
+        por lo demostrado en le caso $m=0$, se obtiene 
+        \begin{align*}
+        	\norm{\partial^{\alpha}v}_{L^{p}(K)}\leq \hat{C}h^{-(l-m) + n/p-n/q}\norm{\partial^{\gamma}v}_{L^{q}(K)}\leq \hat{C}h^{-(l-m) + n/p-n/q}\norm{\partial^{\gamma}v}_{W^{k+m-l}_{q}(K)},
+        \end{align*}
+        y como $\alpha$ era arbitrario, se deduce
+        \begin{align}
+        	\abs{v}_{W^{k}_{p}(K)}\leq Ch^{-(l-m)+n/p-n/q}\abs{v}_{W^{k+m-l}_{q}(K)},
+        \end{align}
+        para todo $k\in [l-m,l]$. En particular, para $m$, se obtiene
+        \begin{align*}
+        	\abs{v}_{W^{k}_{p}(K)}\leq Ch^{-(l-m)+n/p-n/q}\norm{v}_{W^{m}_{q}(K)},
+        \end{align*}
+        para todo $k\in[l-m,l]$. Reemplazando $j=l-m$ en \eqref{desigualdaaaaad}
+        \begin{align*}
+        	\norm{v}_{W^{l-m}_{p}(K)}\leq \hat{C}h^{m-l+n/p-n/q}\norm{v}_{L^{q}(K)}
+        \end{align*} 
+        luego
+        \begin{align*}
+        	\norm{v}_{W_{p}^{l}(K)} \leq \norm{v}_{W^{l-m}_{p}(K)} + \sum_{k=l-m}^{l}\abs{v}_{W^{k}_{p}(K)}\leq \Tilde{C}h^{m-l+n/p-n/q}\norm{v}_{W^{m}_{q}(K)}.
+        \end{align*}
+        Con $\Tilde{C}$ una constante positiva que depende de $\hat{K},p,q,l$ y la constante de proporcionalidad.
+        \begin{comment}
+        	 Si $p=\infty$ y $1\leq q < \infty$. Para $v\in\mathcal{P}$, se define $\hat{v}\in\mathcal{P}$, luego, por equivalencia de normas, existe $\underline{C}>0$, tal que 
+        	\begin{align*}
+        		\norm{\hat{v}}_{W^{l}_{\infty}(\hat{K})}\leq \tilde{C}\norm{\hat{v}}_{W^{m}_{q}(\hat{K})},
+        	\end{align*}
+        	por lo hecho en \eqref{thirdineq} se obtiene 
+        	\begin{align}\label{fourtheq}
+        		\norm{\hat{v}}_{W^{l}_{\infty}(\hat{K})}\leq \tilde{C}\norm{\hat{v}}_{W^{m}_{q}(\hat{K})}\leq \tilde{C}sh^{m-n/q}\norm{v}_{W_{q}^{m}(K)}
+        	\end{align}
+        	por lo hecho en el \textbf{\textcolor{azul}{Problema 2}}
+        	\begin{align}\label{fiftheq}
+        		\norm{\hat{v}}_{W^{l}_{\infty}(\hat{K})} = h^{l}\norm{v}_{W^{l}_{\infty}(K)}
+        	\end{align}
+        	juntando \eqref{fourtheq} y \eqref{fiftheq} se deduce
+        	\begin{align*}
+        		\norm{v}_{W^{l}_{\infty}(K)}\leq C_{1}h^{m-l-n/q}\norm{v}_{W_{q}^{m}(K)}
+        	\end{align*}
+        	donde $C_{1} = \tilde{C}s$. De forma similar, para $1\leq p <\infty$ y $q=\infty$, se deduce que existe $C_{2}>0$ independiente de $h$ tal que
+        	\begin{align*}
+        		\norm{v}_{W^{l}_{p}(K)}\leq C_{2}h^{m-l-n/p}\norm{v}_{W_{\infty}^{m}(K)}.
+        	\end{align*}
+        	Finalmente, si $p = \infty$ y $q=\infty$. Para $v\in\mathcal{P}$, se define $\hat{v}\in\mathcal{P}$, luego, por equivalencia de normas, existe $\underline{C}>0$ tal que
+        	\begin{align*}
+        		\norm{\hat{v}}_{W^{l}_{\infty}(\hat{K})}\leq \underline{C}\norm{\hat{v}}_{W^{m}_{\infty}(\hat{K})},
+        	\end{align*}
+        	por lo hecho en el \textbf{\textcolor{azul}{Problema 2}}
+        	\begin{align}\label{sixtheq}
+        		\norm{\hat{v}}_{W^{l}_{\infty}(\hat{K})} = h^{l}\norm{v}_{W^{l}_{\infty}(K)}
+        	\end{align}
+        	de forma similar
+        	\begin{align}\label{seventheq}
+        		\norm{\hat{v}}_{W^{m}_{\infty}(\hat{K})} = h^{m}\norm{v}_{W^{m}_{\infty}(K)}
+        	\end{align}
+        	juntando \eqref{sixtheq} y \eqref{seventheq} se deduce
+        	\begin{align*}
+        		\norm{v}_{W^{l}_{\infty}(K)}\leq \underline{C}h^{m-l}\norm{v}_{W_{\infty}^{m}(K)}
+        	\end{align*}
+        \end{comment}
+        \begin{comment}
+        	Sea $v\in \mathcal{P}$, $1\leq p,q < \infty$ y sea $\rho := \text{diam}(K)$, luego
+        	\begin{align*}
+        		\norm{v}_{W^{l}_{p}(K)} = \left(\sum_{k=1}^{l}\abs{u}^{p}_{W_{p}^{k}(K)} + \norm{v}^{p}_{L^{p}(K)}\right)^{1/p} = \left(\sum_{k=1}^{l}\rho^{n-kp}\abs{\hat{u}}^{p}_{W_{p}^{k}(\hat{K})} + \rho^{n}\norm{\hat{v}}^{p}_{L^{p}(\hat{K})}\right)^{1/p}.
+        	\end{align*}
+        	Usando que $\rho$ es proporcional a $h$ y la monotonía de la función $f(x) = x^{1/p}$, entonces
+        	\begin{align*}
+        		\norm{v}_{W_{p}^{l}(K)}\leq r\left(\sum_{k=1}^{l} h^{n-kp}\abs{\hat{u}}^{p}_{W_{p}^{k}(\hat{K})} + h^{n}\norm{\hat{v}}^{p}_{L^{p}(\hat{K})}\right)^{1/p},
+        	\end{align*}
+        	donde $r^{p} = \max\{c^{n-p},\dots,c^{n-lp},c^{n}\}$ y $c$ es la constante de proporcionalidad.
+        	Dado que $1\leq k\leq l$, se tiene que 
+        	\begin{align*}
+        		k\leq l \iff kp\leq lp \iff kp - n\leq lp - n \iff n-lp \leq n-kp,
+        	\end{align*}
+        	y como $0 < h \leq 1$, entonces
+        	\begin{align}\label{des}
+        		h^{n-kp}\leq h^{n-lp},
+        	\end{align}
+        	para todo $k\in\{1,\dots,l\}$. De forma similar, se deduce 
+        	\begin{align}\label{dess}
+        		h^{n}\leq h^{n-lp}.
+        	\end{align}
+        	Usando \eqref{des} y \eqref{dess} se obtiene
+        	\begin{align}\label{firstinq}
+        		\norm{v}_{W^{l}_{p}(K)} \leq r\left(h^{n-lp}\sum_{k=1}^{l}\abs{\hat{u}}^{p}_{W_{p}^{k}(\hat{K})} + h^{n}\norm{\hat{v}}^{p}_{L^{p}(\hat{K})}\right)^{1/p} \leq rh^{n/p-l}\norm{\hat{v}}_{W^{l}_{p}(\hat{K})}.
+        	\end{align} 
+        	Como $\hat{\mathcal{P}}\subset W_{p}^{l}(\hat{K})\cap W_{q}^{m}(\hat{K})$ es un subespacio de dimensión finita, usando la equivalencia de normas se tiene que, existe una constante $R>0$ tal que 
+        	\begin{align}\label{secondineq}
+        		\norm{\hat{v}}_{W_{p}^{l}(\hat{K})}\leq R\norm{\hat{v}}_{W_{q}^{m}(\hat{K})},
+        	\end{align} 
+        	para todo $\hat{v}\in\hat{\mathcal{P}}$. Luego, usando nuevamente lo hecho en el \textbf{\textcolor{azul}{Problema 2}} y repitiendo los argumentos usados para probar \eqref{secondineq}, se obtiene que 
+        	\begin{align}\label{thirdineq}
+        		\norm{\hat{v}}_{W_{q}^{m}(\hat{K})} = \left(\sum_{k=1}^{m}\rho^{kq-n}\abs{v}^{q}_{W_{q}^{k}(K)} + \rho^{-n}\norm{v}^{q}_{L^{q}(K)}\right)^{1/q} \leq sh^{m-n/q}\norm{v}_{W_{q}^{m}(K)}.
+        	\end{align}
+        	Donde $s^{q} = \max\{r^{q-n},\dots,r^{mq-n},r^{-n}\}$.
+        	Finalmente, juntando \eqref{firstinq},\eqref{secondineq} y \eqref{thirdineq} se deduce
+        	\begin{align*}
+        		\norm{v}_{W^{l}_{p}(K)}\leq Ch^{m-l+n/p-n/q}\norm{v}_{W^{m}_{q}(K)},
+        	\end{align*}
+        	donde $C := rsR>0$.
+        \end{comment}
+    \end{proof}
+\end{document}

@@ -1,0 +1,40 @@
+/*
+Un script que resuelve, usando FreeFem++ el
+problema:
+
+-eps \Delta u + a.\nabla u = f     en ]0,1[x]0,1[
+                        u  = uD    en la frontera
+
+donde
+
+f  = 0
+uD = 0 en una parte de la frontere del dominio y 1 en la otra
+a = (sqrt(3)/2,1/2) un vector que forma un angulo de 30 grados con el eje x
+*/
+
+// generando la malla
+mesh Th=square(100,100);
+plot(Th,wait=1);
+
+// Definicion del espacio H_h  (P_1)
+fespace Vh(Th,P2);
+Vh uh,vh;
+
+// Definicion de los datos
+real eps = 1.0e-03;
+func f   = 0.0;
+func uD1 = 0.0;
+func uD2 = 1.0;
+func aa = [sqrt(3.0)/2.0,0.5];  // vector con 30 grados
+
+  
+// Macro que define el gradiente de una funcion
+macro Grad(u)[dx(u),dy(u)]//
+
+// Solucion del proble discreto: a(u_h,v_h) - F(v_h) = 0 (con condiciones de Dirichlet)
+  solve Poisson(uh,vh) = int2d(Th)(eps*(Grad(uh)'*Grad(vh)) + (aa'*Grad(uh))*vh)
+                                   - int2d(Th)( f*vh) + on(1,2,uh=uD1) + on(3,4,uh=uD2);
+
+// Gr'afica de la solucion numerica
+plot(uh,dim=2,fill=true,value=true,boundary=false);
+
