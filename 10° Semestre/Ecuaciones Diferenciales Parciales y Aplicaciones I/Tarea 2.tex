@@ -1,0 +1,265 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{stix}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{EDP I y Aplicaciones}}
+\newcommand{\tarea}{\textbf{Tarea 1}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dy}{\textup{d}y}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\ds}{\textup{d}s}
+\newcommand{\dS}{\textup{d}S}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+
+
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{EDP I y Aplicaciones }\\
+	\textbf{Tarea 2}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}
+		Utilizando el método de características, resuelva el problema de valores de contorno 
+		\begin{align*}
+			x_{1}u_{x_{1}} + x_{2}u_{x_{2}} = 2u,\quad u(x_{1},1) = g(x_{1}).
+		\end{align*}
+	\end{pro}
+    \begin{proof}[Solución]
+    	En primer lugar, el problema se puede reescribir como sigue
+    	\begin{align*}
+    		F\left(Du,u,\bs{x}\right) = 0,\quad u(x_{1},1) = g(x_{1}),
+    	\end{align*}
+        donde $F\left(Du,u,\bs{x}\right) = \bs{x}\cdot Du - 2u$. Haciendo los cambios de variable $\bs{p} = Du$ y $z = u$, se tiene que 
+        \begin{align*}
+        	F\left(\bs{p},z,\bs{x}\right) = \bs{x}\cdot\bs{p} - 2z,
+        \end{align*}
+        de aquí es inmediato notar que 
+        \begin{align*}
+        	D_{\bs{p}}F\left(\bs{p},z,\bs{x}\right) &= \bs{x},\\
+        	D_{z}F\left(\bs{p},z,\bs{x}\right) &= -2,\\
+        	D_{\bs{x}}F\left(\bs{p},z,\bs{x}\right) &= \bs{p}.
+        \end{align*}
+        Por otro lado, se define la función $\bs{x}(s) = \left(x^{1}(s),x^{2}(s)\right)$ con $s\in I\subset \mathbf{R}$, esta función parametriza a la curva que une a un punto en el dominio de $u$ con un punto en la frontera. Con lo anterior se deducen las ecuaciones características
+        \begin{align}
+        	\dot{\bs{p}}(s) &= \bs{p}(s),\nonumber \\
+        	\dot{z}(s) &= \bs{x}(s)\cdot\bs{p}(s),\label{eq2}\\
+        	\dot{\bs{x}}(s) &= \bs{x}(s).\nonumber
+        \end{align}
+        Ademas,
+        \begin{align}
+        	F\left(\bs{p}(s),z(s),\bs{x}(s)\right)\equiv 0,\label{eq4}
+        \end{align}
+        para todo $s\in I$. Usando \eqref{eq4} se deduce que $\bs{x}(s)\cdot\bs{p}(s) = 2z(s)$ por lo que \eqref{eq2} se puede reescribir como sigue
+        \begin{align}
+        	\dot{\bs{p}}(s) &= \bs{p}(s),\nonumber \\
+        	\dot{z}(s) &= 2z(s),\label{eq6}\\
+        	\dot{\bs{x}}(s) &= \bs{x}(s),\nonumber
+        \end{align}
+        para todo $s\in I$. La tercera ecuación es un sistema de EDO's de primer orden lineal y homogéneo donde su solución es
+        \begin{align*}
+        	\bs{x}(s) = \left(C_{1}e^{s},C_{2}e^{s}\right)\quad C_{1},C_{2}\in\mathbf{R},
+        \end{align*}
+        usando el hecho que $x(0)$ es un punto en la frontera se deduce que $C_{2} = 1$. Por tanto la parametrización de la curva esta dada por 
+        \begin{align*}
+        	\bs{x}(s) = \left(C_{1}e^{s},e^{s}\right).
+        \end{align*}
+        Resolviendo la segunda ecuación de \eqref{eq6} usando el método del factor integrante se deduce que 
+        \begin{align*}
+        	z(s) = C_{3}e^{2s}\quad C_{3}\in \mathbf{R},
+        \end{align*} 
+        recordando que $z(s) = u(x(s))$ y usando la condición de contorno se tiene que 
+        \begin{align*}
+        	C_{3} = z(0) = u(x(0)) = u(C_{1},1) = g(C_{1}), 
+        \end{align*}
+        de esta forma
+        \begin{align*}
+        	u(x(s)) = z(s) = g(C_{1})e^{2s}\quad C_{1}\in \mathbf{R},
+        \end{align*}
+        para todo $s\in I$. Tomando un punto $(\hat{x}_{1},\hat{x}_{2})$ en la curva, entonces existe un $\hat{s}\in I$ tal que 
+        \begin{align*}
+        	\bs{x}(\hat{s}) = (C_{1}e^{\hat{s}},e^{\hat{s}}) = (\hat{x}_{1},\hat{x}_{2})
+        \end{align*}
+        de aquí se deduce que 
+        \begin{align*}
+        	\hat{s} = \ln(\hat{x}_{2}) \quad \wedge \quad
+        	C_{1} = \frac{\hat{x}_{1}}{\hat{x}_{2}},
+        \end{align*}
+        y por tanto
+        \begin{align*}
+        	u(\hat{x}_{1},\hat{x}_{2}) = g\left(\frac{\hat{x}_{1}}{\hat{x}_{2}}\right)\hat{x}^{2}_{2}
+        \end{align*}
+        es la solución al problema de valore de contorno. 
+    \end{proof}
+    \begin{pro}
+    	Para $i\in\{1,2\}$, sea $u^{i}$ la solución del problema de valores iniciales 
+    	\begin{align*}
+    		u^{i}_{t} + H\left(Du^{i}\right) &= 0 \quad\textup{en} \ \mathbf{R}^{n}\times(0,\infty), \\
+    		u^{i} &= g^{i} \quad\textup{en}\ \mathbf{R}^{n}\times\{t=0\},
+    	\end{align*}
+        que da la fórmula de Hopf-Lax. Pruebe la desigualdad de contracción
+        \begin{align*}
+        	(\forall t>0)\quad\sup_{\mathbf{R}^{n}}\lvert u^{1}(\cdot,t) - u^{2}(\cdot,t)\lvert \leq \sup_{\mathbf{R}^{n}}\lvert g^{1} - g^{2}\lvert.
+        \end{align*}
+    \end{pro}
+    \begin{proof}
+    	Para $i\in\{1,2\}$. La solución $u^{i}$ del problema de valores iniciales descrito en el enunciado se escribe como sigue
+    	\begin{align}\label{xddd}
+    		u^{i}(\bs{x},t) = \min_{\bs{y}\in\mathbf{R}^{n}}\left\{tL\left(\frac{\bs{x}-\bs{y}}{t}\right) + g^{i}(\bs{y})\right\}.
+    	\end{align}
+        Tomando $t>0$, $\bs{x}\in \mathbf{R}^{n}$ y denotando por $\bs{y}^{i}$ a la solución del problema de minimización descrito en \eqref{xddd}, se sigue que
+        \begin{align*}
+        	\lvert u^{1}(\bs{x},t) - u^{2}(\bs{x},t) \lvert &= \left\lvert tL\left(\frac{\bs{x}-\bs{y}^{1}}{t}\right) + g^{1}\left(\bs{y}^{1}\right) - tL\left(\frac{\bs{x}-\bs{y}^{2}}{t}\right) - g^{2}\left(\bs{y}^{2}\right) \right\lvert\\ 
+        	&\leq \left\lvert tL\left(\frac{\bs{x}-\bs{y}^{2}}{t}\right) + g^{1}\left(\bs{y}^{2}\right) - tL\left(\frac{\bs{x}-\bs{y}^{2}}{t}\right) - g^{2}\left(\bs{y}^{2}\right) \right\lvert\\
+        	&= \left\lvert  g^{1}\left(\bs{y}^{2}\right)- g^{2}\left(\bs{y}^{2}\right) \right\lvert \\
+        	&\leq \sup_{\mathbf{R}^{n}}\lvert g^{1} - g^{2}\lvert
+        \end{align*}
+        como lo anterior vale para todo $\bs{x}\in\mathbf{R}^{n}$ se desprende lo pedido. 
+    \end{proof}
+    \begin{pro}
+    	Calcule explícitamente la única solución de entropía de 
+    	\begin{align*}
+    		u_{t} + \left(\frac{u^{2}}{2}\right)_{x} &= 0\quad \textup{en} \ \mathbf{R}\times(0,\infty)\\
+    		u &= g\quad \textup{en} \ \mathbf{R}\times\{t = 0\},
+    	\end{align*}
+        donde 
+        \begin{align*}
+        	g(x) = \begin{cases}
+        	1	& \text{ si } x<-1, \\ 
+        	0	& \text{ si } -1<x<0, \\ 
+        	2	& \text{ si } 0<x<1, \\ 
+        	0	& \text{ si } x>1. 
+        	\end{cases}
+        \end{align*}
+        Ilustre su respuesta con un gráfico como el de la página $143$ del libro de
+        Evans; asegúrese que quede ilustrado qué sucede para tiempos $t$ grandes.
+    \end{pro}
+    \begin{proof}[Solución]
+    	De la condición inicial se puede ver que en $x=-1$ y $x=1$ se tiene $u_{l}>u_{r}$ lo cual implica que hay una onda de choque en aquellos puntos mientras que en $x=0$ se tiene una onda de rarefacción pues $u_{l}>u_{r}$. \\~\\
+    	La condición de Rankine-Hugoniot a lo largo de la curva de choque para $x = -1$ es
+    	\begin{align*}
+    		\sigma = \frac{F(u_{l}) - F(u_{r})}{u_{l}-u_{r}} = \frac{u^{2}_{l} - u^{2}_{l}}{2(u_{l}-u_{r})} = \frac{u_{l} + u_{r}}{2} = \frac{1}{2}.
+    	\end{align*}
+        Mientras que en el caso $x =1$ se tiene 
+        \begin{align*}
+        	\sigma = \frac{F(u_{l}) - F(u_{r})}{u_{l}-u_{r}} = \frac{u^{2}_{l} - u^{2}_{l}}{2(u_{l}-u_{r})} = \frac{u_{l} + u_{r}}{2} = \frac{2}{2} = 1.
+        \end{align*}
+    	La observación inicial junto a la condición de Rankine-Hugoniot permiten deducir la siguiente solución al problema
+    	\begin{align*}
+    		u(x,t) = \begin{cases}
+    			1	& \text{ si } x<-1 + \frac{1}{2}t, \\ 
+    			0	& \text{ si } -1 + \frac{1}{2}t<x<0, \\ 
+    			\frac{x}{t} & \text{ si } 0 <x<2t, \\
+    			2	& \text{ si } 2t < x < 1 + t, \\ 
+    			0	& \text{ si } 1+t <x. 
+    		\end{cases}
+    	\end{align*}
+        Lo anterior es válido para $0\leq t\leq 1$, pues para los casos $t=1$ y $t=2$ hay una colisión. Cuando $t=1$, se tiene que $u_{l} = \frac{x}{t}$ y $u_{r} = 0$ y así por condición de Rankine-Hugoniot
+        \begin{align*}
+        	\dot{s}(t) = \sigma = \frac{\salto{F(u)}}{\salto{u}} = \frac{s(t)}{2t},
+        \end{align*} 
+        usando el método del factor integrante para EDO's y que $s(1)=2$, se llega a que 
+        \begin{align*}
+        	s(t) = 2\sqrt{t},
+        \end{align*}
+        para $1\leq t \leq 2$, de esta forma se tiene
+        	\begin{align*}
+        	u(x,t) = \begin{cases}
+        		1	& \text{ si } x<-1 + \frac{1}{2}t, \\ 
+        		0	& \text{ si } -1 + \frac{1}{2}t<x<0, \\ 
+        		\frac{x}{t} & \text{ si } 0 <x<2\sqrt{t}, \\
+        		0	& \text{ si } 2\sqrt{t} <x. 
+        	\end{cases}
+           \end{align*}
+        Cuando $t=2$, se tiene que $u_{l} = -1$ y $u_{r} = \frac{x}{t}$ y así por condición de Rankine-Hugoniot
+        \begin{align*}
+        	\dot{s}(t) = \sigma = \frac{\salto{F(u)}}{\salto{u}} = \frac{1- \frac{s^{2}(t)}{t^{2}}}{2\left(1 - \frac{s(t)}{t}\right)} = \frac{1}{2}\left(1+\frac{s(t)}{t}\right),
+        \end{align*} 
+        usando el método del factor integrante para EDO's y que $s(2)=0$, se llega a que 
+        \begin{align*}
+        	s(t) = t - \sqrt{2t},
+        \end{align*}
+        de esta forma 
+        \begin{align*}
+        	u(x,t) = \begin{cases}
+        		1	& \text{ si } x<t-\sqrt{2t}, \\
+        		\frac{x}{t} & \text{ si } t-\sqrt{2t} <x<2\sqrt{t}, \\
+        		0	& \text{ si } 2\sqrt{t} <x. 
+        	\end{cases}
+        \end{align*}
+        de aquí se deduce que la solución es válida para $2\leq t\leq 6 + 4\sqrt{2}$. Ahora cuando $t = 6 + 4\sqrt{2}$ se tiene que $u_{l} = 1$ y $u_{r} = 0$  y así por condición de Rankine-Hugoniot
+        \begin{align*}
+        	\dot{s}(t) = \sigma = \frac{\salto{F(u)}}{\salto{u}} = \frac{1}{2},
+        \end{align*}
+        integrando y usando que $s\left(6 + 4\sqrt{2}\right) = 4 + 2\sqrt{2}$ se obtiene que 
+        \begin{align*}
+        	s(t) = \frac{1}{2}t + 1
+        \end{align*} 
+        y de esta forma 
+        \begin{align*}
+        	u(x,t) = \begin{cases}
+        		1	& \text{ si } x<\frac{1}{2}t+1, \\
+        		0	& \text{ si } \frac{1}{2}t+1 <x. 
+        	\end{cases}
+        \end{align*}
+        Solución que es válida para $t\geq 6 + 4\sqrt{2}$. 
+    \end{proof}
+\end{document}

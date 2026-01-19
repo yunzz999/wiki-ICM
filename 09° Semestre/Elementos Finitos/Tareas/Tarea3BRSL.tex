@@ -1,0 +1,257 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{\color{azul}{Problema}}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Elementos Finitos}}
+\newcommand{\tarea}{\textbf{Tarea 3}}
+%\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\textbf{\today}}
+% Titulo
+\title{\color{azul}\textbf{Elementos Finitos}\\
+	\textbf{Tarea 2}}
+\author{\color{azul}\autor}
+\date{\color{azul}}
+\begin{document}
+	\begin{pro}
+		Sea $\Omega\subset\mathbb{R}^{2}$ un dominio poligonal cuyo mayor ángulo interior es $\tilde{\theta}$, como muestra la figura. Asuma que el vértice asociado a $\tilde{\theta}$ es el origen $(0,0)$. Considere la siguiente función en coordenadas polares: $u(\theta,r) = r^{\gamma}\alpha\left(\theta\right)$, donde $\gamma = \pi/\tilde{\theta}$ y $\alpha\in C^{\infty}(\Omega)$.
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=0.2\linewidth]{Dominiopoligonal}
+			\label{fig:dominiopoligonal}
+		\end{figure}
+		\begin{itemize}
+			\item[$a)$] Demostrar que $\norm{D^{m}u}_{L^{2}(\Omega)}<\infty$ si $\gamma + 1 > m$. 
+			\item[$b)$] De $a)$ concluir que $u\in W^{\gamma + 1-\varepsilon}_{2}(\Omega)\hspace{0.2cm} \forall \varepsilon\in \left[ 0,\gamma + 1\right[$.
+			\item[$c)$] Si $\Omega = ]-1,1[^2\backslash [0,1]^{2}$, determine el espacio al cual pertenece $u$.
+			\item[$d)$]  $\Omega = ]0,1[^2$, determine el espacio al cual pertenece $u$.  
+		\end{itemize}
+	\end{pro}
+    \begin{proof}[{\color{rojo}{Demostración}}]
+    	\begin{itemize}
+    		\item[$a)$] Para $m\in\mathbb{N}_{0}$, se tiene que 
+    		\begin{align*}
+    			\partial^{m}_{r}u(r,\theta) &=  r^{\gamma-m}\alpha(\theta)\xi(m)\\
+    			\partial^{m}_{\theta}u(r,\theta) &= r^{\gamma}\alpha^{(m)}(\theta)
+    		\end{align*}
+    	    donde $\displaystyle \xi(m) = \prod_{i=0}^{m-1}(\gamma - i)$. Considerando el cambio de variable $x = r\cos(\theta)$ e $y = r\sen(\theta)$, se tiene, por regla de la cadena 
+    	    \begin{align*}
+    	    	\partial_{x}u(x,y) &= -\frac{1}{r}\sen(\theta)\partial_{\theta}u + \cos(\theta)\partial_{r}u = -\frac{1}{r}\sen(\theta)r^{\gamma}\alpha'(\theta) + \cos(\theta)r^{\gamma-1}\alpha(\theta)\xi(1) = \Lambda_{1,x}(\theta)r^{\gamma-1} \\
+    	    	\partial_{y}u(x,y) &= \frac{1}{r}\cos(\theta)\partial_{\theta}u + \sen(\theta))r^{\gamma}\alpha'(\theta) = \frac{1}{r}\cos(\theta)r^{\gamma}\alpha'(\theta) + \sen(\theta)r^{\gamma-1}\alpha(\theta)\xi(1) = \Lambda_{1,y}(\theta)r^{\gamma-1}
+    	    \end{align*}
+    	    Luego
+    	    \begin{align*}
+    	    	\partial^{2}_{xx}u(x,y) &= -\frac{1}{r}\sen(\theta)\partial_{\theta}\partial_{x}u + \cos(\theta)\partial_{r}\partial_{x}u = -\frac{1}{r}\sen(\theta) \Lambda'_{1,x}(\theta)r^{\gamma-1} + \cos(\theta) \Lambda_{1,x}(\theta)(\gamma -1)r^{\gamma-2} = \Lambda_{2,x}(\theta)r^{\gamma-2},\\
+    	    	\partial^{2}_{yy}u(x,y) &= \frac{1}{r}\cos(\theta)\partial_{\theta}\partial_{y}u + \sen(\theta)\partial_{r}\partial_{y}u = \frac{1}{r}\cos(\theta) \Lambda'_{1,y}(\theta)r^{\gamma-1} + \sen(\theta) \Lambda_{1,y}(\theta)(\gamma -1)r^{\gamma-2} = \Lambda_{2,y}(\theta)r^{\gamma-2},\\
+    	    	\partial^{2}_{xy}u(x,y) &= \frac{1}{r}\cos(\theta)\partial_{\theta}\partial_{y}u + \sen(\theta)\partial_{r}\partial_{y}u = \frac{1}{r}\cos(\theta) \Lambda'_{1,y}(\theta)r^{\gamma-1} + \sen(\theta) \Lambda_{1,y}(\theta)(\gamma -1)r^{\gamma-2} = \Lambda_{2,xy}(\theta)r^{\gamma-2}.
+    	    \end{align*}
+            Derivando $m$ veces, se obtiene 
+            \begin{align*}
+            	D^{m}u(x,y) = \Lambda_{m}(\theta)r^{\gamma-m}
+            \end{align*}
+            donde $\Lambda_{m}\in C^{\infty}(0,\tilde{\theta})$, pues resulta del producto de funciones $C^{\infty}(0,\tilde{\theta})$. Por otro lado, 
+    	    \begin{align*}
+    	   	|J(r,\theta)| = \text{det}\begin{bmatrix}
+    	   		\partial_{r}x & \partial_{\theta}x\\
+    	   		\partial_{r}y & \partial_{\theta}y
+    	   	\end{bmatrix} = \text{det}\begin{bmatrix}
+    	   		\cos(\theta) & -r\sen(\theta)\\
+    	   		\sen(\theta) & r\cos(\theta)
+    	   	\end{bmatrix} = r\cos^{2}(\theta) + r\sen^{2}(\theta) = r
+    	   \end{align*}
+           Luego, por Teorema de Cambio de Variable
+           \begin{align*}
+           	\norm{Du}_{L^{2}(\Omega)}^{2} &= \int_{\Omega}D^{m}u(x,y)D^{m}u(x,y)\text{d}(x,y)\\ &= \int_{0}^{R}\int_{0}^{\tilde{\theta}} \Lambda^{2}(\theta)r^{2\gamma-2m}r\text{d}\theta\text{d}r\\ &= \left(\int_{0}^{\tilde{\theta}} \Lambda^{2}(\theta)\text{d}\theta\right)\int_{0}^{R}r^{2\gamma-2m+2}\text{d}r\\ &= \left(\int_{0}^{\tilde{\theta}} \Lambda^{2}(\theta)\text{d}\theta\right)\frac{R^{2(\gamma- m + 1)}}{2(\gamma - m + 1)}
+           \end{align*}
+           de lo anterior, se deduce que $\gamma-m+1>0$, lo cual es equivalente a decir que $\gamma + 1>m$. 
+           \item[$b)$] Dado $\varepsilon\in[0,\gamma+1[$, luego
+           \begin{align*}
+           	0\leq \varepsilon < \gamma+1 \Longrightarrow -(\gamma+1) < -\varepsilon \leq 0 \Longrightarrow 0 < \gamma + 1 -\varepsilon \leq \gamma+1
+           \end{align*}
+           Así, por lo visto en $a)$ se tiene 
+           \begin{align*}
+           	\norm{D^{\gamma+1-\varepsilon}u}_{L^{2}(\Omega)} < \infty
+           \end{align*}
+           Lo cual implica que $\norm{u}_{W^{\gamma+1-\varepsilon}_{2}}<\infty$. Por tanto $u\in W^{\gamma+1-\varepsilon}_{2}$.
+           \item[$c)$] Si $\Omega = ]-1,1[^2\backslash [0,1]^{2}$ se tiene que $\tilde{\theta} = 2\pi$, luego $\gamma = \frac{1}{2}$. Con lo anterior y gracias a $b)$ se tiene que $u\in W^{3/2 - \varepsilon}_{2}(\Omega)$, donde $\varepsilon\in[0,3/2[$.
+           \item[$c)$] Si $\Omega = ]0,1[^{2}$ se tiene que $\tilde{\theta} = \pi/2$, luego $\gamma = 2$. Con lo anterior y gracias a $b)$ se tiene que $u\in W^{3 - \varepsilon}_{2}(\Omega)$, donde $\varepsilon\in[0,3[$.
+    	\end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Considere un dominio $\Omega\subset \mathbb{R}^{n}$ abierto y acotado con frontera Lipschitz. Para $\psi\in H^{1/2}(\partial\Omega)$, sea $u_{\psi}$ la solución de la siguiente ecuación 
+    	\begin{align}\label{EDP}
+    		\begin{cases}
+    			-\Delta u_{\psi}\hspace{0.2cm} + &u_{\psi} = 0\hspace{0.2cm} \text{en}\hspace{0.2cm} \Omega\\
+    			  &u_{\psi} = \psi\hspace{0.2cm} \text{en}\hspace{0.2cm} \partial\Omega
+    		\end{cases}
+    	\end{align}
+        \begin{itemize}
+        	\item[$a)$] Convierta \eqref{EDP} en un problema con condiciones de contorno homogéneas.
+        	\item[$b)$] Establecer una formulación variacional del problema obtenido en $a)$ y demostrar que posee solución única.
+        	\item[$c)$] Mostrar que $\norm{u_{\psi}}_{H^{1}(\Omega)} \leq \norm{\psi}_{H^{1/2}(\partial\Omega)}$ y concluir que $\norm{u_{\psi}}_{H^{1}(\Omega)} = \norm{\psi}_{H^{1/2}(\partial\Omega)}$. Recordar que 
+        	\begin{align*}
+        		\norm{u_{\psi}}_{H^{1/2}(\partial\Omega)} := \inf_{\{v\in H^{1}(\Omega):\ v|_{\partial\Omega} = \psi\}}\norm{v}_{H^{1}(\Omega)}.
+        	\end{align*}
+        \end{itemize}
+    \end{pro}
+    \begin{proof}[{\color{rojo}{Demostración}}]
+    	\begin{itemize}
+    		\item[$a)$] Testeando la EDP en \eqref{EDP} con $v\in H^{1}(\Omega)$, se obtiene 
+    		\begin{align}\label{test}
+    			-\int_{\Omega}\Delta u_{\psi} v + \int_{\Omega} u_{\psi} v = 0 
+    		\end{align}
+    	    Haciendo integración por partes al primer termino que esta a la izquierda de a igualdad planteada en \eqref{test}, se obtiene
+    	    \begin{align}\label{ipp}
+    	    	-\int_{\Omega}\Delta u_{\psi}v = \int_{\Omega}\nabla u_{\psi}\cdot\nabla v - \int_{\partial\Omega} \frac{\partial \psi}{\partial \nu}v.
+    	    \end{align}
+             Reemplazando \eqref{ipp} en \eqref{test} 
+             \begin{align*}
+             	\int_{\Omega}\nabla u_{\psi}\cdot\nabla v  + \int_{\Omega} u_{\psi} v =  \int_{\partial\Omega} \frac{\partial \psi}{\partial \nu}v.
+             \end{align*}
+             Con lo anterior, se deduce el problema débil
+             \begin{align}\label{pdebil}
+             	\left\{\begin{aligned}
+             		&\text{Hallar}\ u_{\psi}\in H^{1}(\Omega)\  \text{tal que}\\
+             		&\ \ \ \ \  a(u_{\psi},v) = G(v)\\ 
+             		&\text{para todo}\ v\in H^{1}(\Omega).
+             	\end{aligned}
+             	\right.
+             \end{align}
+             Donde $a:H^{1}(\Omega)\times H^{1}(\Omega)\longrightarrow \mathbb{R}$ y $F:H^{1}(\Omega)\longrightarrow\mathbb{R}$ son una forma bilineal y un funcional definidos por:
+             \begin{align*}
+             	a(u,v) = \int_{\Omega}\nabla u\cdot\nabla v  + \int_{\Omega} u v \hspace{0.2cm}\text{y}\hspace{0.2cm} G(v) = \int_{\Omega}\frac{\partial \psi}{\partial \nu}v
+             \end{align*}
+             respectivamente. Luego por teorema de descomposición ortogonal, al ser $H_{0}^{1}(\Omega)$ un subespacio cerrado de $H^{1}(\Omega)$, se tiene que
+             \begin{align}\label{descom}
+             	H^{1}(\Omega) = H^{1}_{0}(\Omega)\oplus \left(H_{0}^{1}(\Omega)\right)^{\perp}
+             \end{align}
+             con esto la solución del problema débil \eqref{pdebil}, tiene la descomposición $u_{\psi} = u + u^{\perp}$, de aquí $u\in H_{0}^{1}(\Omega)$ y $u^{\perp}\in \left(H_{0}^{1}(\Omega)\right)^{\perp}$. De esta forma, el problema se reduce a encontrar $u\in H^{1}_{0}(\Omega)$ tal que satisfaga un problema variacional, con esto en mente y notando que cuando $v\in H_{0}^{1}(\Omega)$ 
+             \begin{align*}
+             	0 = G(v) = a(u_{\psi},v) = a(u,v) + a(u^{\perp},v)
+             \end{align*}
+             se obtiene el problema
+             \begin{align}\label{pdebilh}
+             	\left\{\begin{aligned}
+             		&\text{Hallar}\ u\in H_{0}^{1}(\Omega)\  \text{tal que}\\
+             		&\ \ \ \ \  a(u,v) = F(v)\\ 
+             		&\text{para todo}\ v\in H_{0}^{1}(\Omega).
+             	\end{aligned}
+             	\right.
+             \end{align}
+             donde $F:H_{0}^{1}(\Omega)\longrightarrow\mathbb{R}$ es un funcional lineal definido por
+             \begin{align*}
+             	F(v) = - a(u^{\perp},v) = -\langle u^{\perp},v\rangle_{H^{1}(\Omega)} = 0 
+             \end{align*}
+             \item[$b)$] En lo que sigue se probará que \eqref{pdebilh} posee única solución. Para lograr esto, primero se observa que la forma bilineal $a$ no es mas que el producto interior usual en $H^{1}(\Omega)$, ademas, dado que $H_{0}^{1}(\Omega)$ es un subespacio cerrado de $H^{1}(\Omega)$, se tiene que es un espacio de Hilbert dotado con el producto interior inducido por $H^{1}(\Omega)$. Por otro lado $F$ es un funcional lineal acotado, pues $F$ es el funcional nulo. De esta forma, por teorema de representación de Riesz se deduce que existe un único $u\in H_{0}^{1}(\Omega)$ tal que 
+             \begin{align*}
+             	\langle u,v\rangle_{H^{1}(\Omega)} = a(u,v) =  F(v) = 0
+             \end{align*}
+             para todo $v\in H_{0}^{1}(\Omega)$. Con esto se concluye la existencia y unicidad de \eqref{pdebilh} y también que $\norm{u}_{H^{1}(\Omega)} = \norm{F} = 0$, por lo que $u = \theta$. Por tanto $u_{\psi}\in \left(H_{0}^{1}(\Omega)\right)^{\perp}$.
+             \begin{comment}
+             	\begin{itemize}
+             		\item $a$ es una forma bilineal acotada y elíptica. En este caso, $a$ es trivialmente elíptica pues coincide con el producto interior usual de $H^{1}(\Omega)$. Para probar que es acotada, sean $u,v\in H_{0}^{1}$, luego
+             		\begin{align*}
+             			\abs{a(u,v)} &= \abs{\int_{\Omega}\nabla u\cdot\nabla v + \int_{\Omega} uv}\\ 
+             			&\leq \abs{\int_{\Omega}\nabla u\cdot\nabla v} + \abs{\int_{\Omega} uv}\\
+             			&\leq \norm{\nabla u}_{L^{2}(\Omega)} \norm{\nabla v}_{L^{2}(\Omega)} +  \norm{u}_{L^{2}(\Omega)} \norm{ v}_{L^{2}(\Omega)} \\
+             			&\leq \norm{u}_{H^{1}(\Omega)}\norm{v}_{H^{1}(\Omega)}
+             		\end{align*}
+             		Así, $a$ es acotada.
+             		\item $F$ es un funcional lineal acotado. Sea $v\in H_{0}^{1}(\Omega)$, entonces
+             		\begin{align*}
+             			\abs{F(v)} = \abs{- a(u^{\perp},v)} \leq \abs{a(u^{\perp},v)} \leq  \norm{u^{\perp}}_{H^{1}(\Omega)}\norm{v}_{H^{1}(\Omega)}
+             		\end{align*}
+             		Así, $F$ es acotado.
+             	\end{itemize}  
+                 \begin{align*}
+                	\abs{F(v)} &=  \abs{a(u^{\perp},v)}\\ 
+                	&= \abs{\int_{\Omega}\nabla u^{\perp}\cdot\nabla v + \int_{\Omega} u^{\perp}v}\\ 
+                	&\leq \abs{\int_{\Omega}\nabla u^{\perp}\cdot\nabla v} + \abs{\int_{\Omega} u^{\perp}v}\\
+                	&\leq \norm{\nabla u^{\perp}}_{L^{2}(\Omega)} \norm{\nabla v}_{L^{2}(\Omega)} +  \norm{u^{\perp}}_{L^{2}(\Omega)} \norm{ v}_{L^{2}(\Omega)} \\
+                	&\leq \norm{u^{\perp}}_{H^{1}(\Omega)}\norm{v}_{H^{1}(\Omega)}
+                \end{align*}
+             \end{comment}
+             \item[$c)$] Sea $\Xi := \{v\in H^{1}(\Omega):\ v|_{\partial\Omega} = \psi\}$. Dado $w\in\Xi$, por lo hecho en $b)$ se deduce que $w = w_{0} + u_{\psi}$ donde $w_{0}\in H_{0}^{1}(\Omega)$, esta descomposición es única gracias a \eqref{descom}. Luego,  
+             \begin{align*}
+             	\norm{u_{\psi}}_{H^{1}(\Omega)}\leq \norm{w_{0} + u_{\psi}}_{H^{1}(\Omega)}
+             \end{align*}
+             como esto es valido para cualquier elemento de $\Xi$, se deduce que 
+             \begin{align}\label{des1}
+             	\norm{u_{\psi}}_{H^{1}(\Omega)} \leq \norm{\psi}_{H^{1/2}(\partial\Omega)}.
+             \end{align}
+             Por otro lado, como $u_{\psi}\in\Xi$ se tiene por propiedad del ínfimo
+             \begin{align}\label{des2}
+             	\norm{\psi}_{H^{1/2}(\partial\Omega)} \leq \norm{u_{\psi}}_{H^{1}(\Omega)}.
+             \end{align}
+             Finalmente, dado que \eqref{des1} y \eqref{des2} se cumplen, se concluye que
+             \begin{align*}
+             	\norm{\psi}_{H^{1/2}(\partial\Omega)} = \norm{u_{\psi}}_{H^{1}(\Omega)}
+             \end{align*}
+    	\end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Mostrar que el espacio $\left(H^{1/2}(\partial\Omega),\norm{\cdot}_{H^{1/2}(\partial\Omega)}\right)$ es completo.
+    \end{pro}
+    \begin{proof}[{\color{rojo}{Demostración}}]
+    	Sea $\{\psi_{n}\}_{n\in\mathbb{N}}$ una sucesión de Cauchy en $\left(H^{1/2}(\partial\Omega),\norm{\cdot}_{H^{1/2}(\partial\Omega)}\right)$, luego para cada $n\in\mathbb{N}$ se existe un $u_{n}\in H^{1}(\Omega)$ tal que $u_{n}|_{\partial\Omega} = \psi_{n}$. Con lo anterior se tiene que 
+    	\begin{align*}
+    		\norm{u_{n}-u_{m}}_{H^{1}(\Omega)} = \norm{\psi_{n}-\psi_{m}}_{H^{1/2}(\partial\Omega)}\overset{n,m}{\longrightarrow} 0
+    	\end{align*}
+        Es decir, $\{u_{n}\}_{n\in\mathbb{N}}$ es una sucesión de Cauchy en $H^{1}(\Omega)$. Como $H^{1}(\Omega)$ es un espacio de Hilbert con el producto interior usual, se tiene que existe un $u\in H^{1}(\Omega)$ tal que 
+        \begin{align*}
+        	\norm{u-u_{n}}_{H^{1}(\Omega)} \overset{n}{\longrightarrow} 0
+        \end{align*}
+        Luego por Teorema de Traza, existe un $\psi\in H^{1/2}(\partial\Omega)$ tal que $u|_{\partial\Omega} = \psi$, de esta forma
+        \begin{align*}
+        	\norm{\psi-\psi_{n}}_{H^{1/2}(\partial\Omega)} = \norm{u_{n} - u}_{H^{1}(\Omega)} \overset{n}{\longrightarrow} 0 
+        \end{align*} 
+        Por lo que $\{\psi_{n}\}_{n\in\mathbb{N}}$ es una sucesión convergente en el espacio $\left(H^{1/2}(\partial\Omega),\norm{\cdot}_{H^{1/2}(\partial\Omega)}\right)$, concluyendo así que dicho espacio es completo.
+    \end{proof}
+\end{document}

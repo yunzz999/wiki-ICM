@@ -1,0 +1,188 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Analisis Funcional I}}
+\newcommand{\tarea}{\textbf{Tarea 1}}
+\newcommand{\fecha}{\textbf{\today}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Geometría Diferencial (525582)}\\
+	\textbf{Tarea 8}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}\upshape
+		Sea $X$ un espacio vectorial normado y sea $S := \{ x\in X : \norm{x} = 1 \}$. Pruebe que $S$ es completo si y sólo si $X$ es Banach.
+	\end{pro}
+	\begin{proof}
+		$(\Longrightarrow)$ Supongamos $S$ es completo.\\
+		Sea $\{x_{n}\}_{n\in \mathbb{N}}$ una sucesión de Cauchy en $X$. Sin perdida de la generalidad, suponga que $\{x_{n}\}_{n\in \mathbb{N}}$ no converge a $\theta_{X}$ (Si ocurre esto se tiene que la sucesión converge). Dado lo anterior, se define la sucesión $\left\{ \hat{x}_{k} := \dfrac{x_{n_{k}}}{\norm{x_{n_{k}}}}\right\}_{k\in \mathbb{N}}$, la cual es una sucesión de Cauchy. Para mostrar lo anterior usaremos el hecho que $\{x_{n_{k}}\}_{k\in \mathbb{N}}$ es una sucesión de Cauchy, es decir, dado $\varepsilon>0$ existe un $N_{1}\in \mathbb{N}$ tal que $\norm{x_{n_{k}} - x_{n_{l}}}\leq \varepsilon$ para todo $k$ y $l$ natural.
+		\begin{align*}
+			\norm{\hat{x}_{k} - \hat{x}_{l}} &= \norm{\frac{x_{n_{k}}}{\norm{x_{n_{k}}}} - \frac{x_{n_{l}}}{\norm{x_{n_{l}}}} }\\ 
+			&= \norm{\frac{x_{n_{k}}}{\norm{x_{n_{k}}}} +\frac{x_{n_{l}}}{\norm{x_{n_{k}}}} - \frac{x_{n_{l}}}{\norm{x_{n_{k}}}}  - \frac{x_{n_{l}}}{\norm{x_{n_{l}}}} }\\ 
+			&= \norm{\frac{x_{n_{k}}}{\norm{x_{n_{k}}}}  - \frac{x_{n_{l}}}{\norm{x_{n_{k}}}} +\frac{x_{n_{l}}}{\norm{x_{n_{k}}}}  - \frac{x_{n_{l}}}{\norm{x_{n_{l}}}} } \\
+			&\leq \norm{\frac{x_{n_{k}}}{\norm{x_{n_{k}}}}  - \frac{x_{n_{l}}}{\norm{x_{n_{k}}}}} + \norm{\frac{x_{n_{l}}}{\norm{x_{n_{k}}}}  - \frac{x_{n_{l}}}{\norm{x_{n_{l}}}} }\\ 
+			&= \norm{\frac{1}{\norm{x_{n_{k}}}}\left(x_{n_{k}} - x_{n_{l}}\right)} + \norm{x_{n_{l}}\left(\frac{1}{\norm{x_{n_{k}}}} - \frac{1}{\norm{x_{n_{l}}}} \right)} \\
+			&= \frac{1}{\norm{x_{n_{k}}}}\norm{x_{n_{k}} - x_{n_{l}}} + \norm{x_{n_{l}}}\abs{ \frac{\norm{x_{n_{l}}} - \norm{x_{n_{k}}}}{\norm{x_{n_{l}}}\norm{x_{n_{k}}}} }\\ 
+			&= \frac{1}{\norm{x_{n_{k}}}}\norm{x_{n_{k}} - x_{n_{l}}} + \frac{\norm{x_{n_{l}}}}{\norm{x_{n_{l}}}\norm{x_{n_{k}}}}\abs{\norm{x_{n_{l}}}-\norm{x_{n_{k}}}} \\
+			&= \frac{1}{\norm{x_{n_{k}}}}\norm{x_{n_{k}} - x_{n_{l}}} + \frac{1}{\norm{x_{n_{k}}}}\abs{\norm{x_{n_{l}}}-\norm{x_{n_{k}}}}\\ 
+			&\leq \frac{1}{\norm{x_{n_{k}}}}\norm{x_{n_{k}} - x_{n_{l}}} + \frac{1}{\norm{x_{n_{k}}}}\norm{x_{n_{l}} - x_{n_{k}}}\\ 
+			&= \frac{2}{\norm{x_{n_{k}}}}\norm{x_{n_{k}} - x_{n_{l}}}
+		\end{align*}
+	Por otro lado, dado que $\norm{x_{n_{k}}}>0$ para todo $k$ natural y que $\{x_{n_{k}}\}$ no converje a $\theta_{X}$, entonces existe un $M$ positivo tal que es una cota inferior de $\norm{x_{n_{k}}}$ para todo $k$ natural. Retomando la desigualdad anterior 
+	\begin{align*}
+		\norm{\hat{x}_{k} - \hat{x}_{l}} \leq \frac{2}{\norm{x_{n_{k}}}}\norm{x_{n_{k}} - x_{n_{l}}} \leq 2M\varepsilon, \ \ \forall k,l \geq N_{1}.
+	\end{align*}
+	Esto implica que $\left\{ \hat{x}_{k}\right\}_{k\in \mathbb{N}}$ es una sucesión de Cauchy en $S$, ademas, como $S$ es completo se tiene que la sucesión $\left\{ \hat{x}_{k}\right\}_{k\in \mathbb{N}}$ converge en $S$, es decir, dado $\varepsilon>0$, existe un $N_{2}>0$ tal que 
+	\begin{align*}
+		\norm{\hat{x}_{n} - \hat{x}}\leq \varepsilon, \ \ \forall n \geq N_{2}.
+	\end{align*}
+	El hecho que $\{x_{n}\}_{n\in \mathbb{N}}$ es de Cauchy en $X$, implica que la sucesión $\{ \norm{x_{n}}\}_{n\in \mathbb{N}}$ converge. En efecto, dado $\varepsilon>0$, existe un $N_{3}\in \mathbb{N}$ tal que
+	\begin{align*}
+		\abs{\norm{x_{n}}-\norm{x_{m}}} \leq \norm{x_{n} - x_{m}} \leq \varepsilon, \ \ \forall n,m\geq N_{3}.
+	\end{align*}
+    Como $\mathbb{R}$ es completo, entonces la sucesión de Cauchy $\{\norm{x_{n}}\}_{n\in \mathbb{N}}$ converge a un $\alpha\in\mathbb{R}^{+}$, es decir, dado $\varepsilon>0$, existe un $N_{4}\in \mathbb{N}$ tal que
+    \begin{align*}
+    	\abs{\norm{x_{n}}-\alpha}\leq \varepsilon, \ \ \forall n\geq N_{4}.
+    \end{align*}
+    Lo anterior nos ayudará a mostrar que la convergencia de $\{\hat{x}_{k}\}_{k\in \mathbb{N}}$ implica la convergencia de $\{x_{n_{k}}\}_{k\in \mathbb{N}}$. En efecto, dado $\varepsilon>0$, existe un $N := \max\{N_{2},N_{4}\}\in \mathbb{N}$ tal que 
+    \begin{align*}
+    	\norm{x_{n_{k}} - \alpha \hat{x}} &= \norm{x_{n_{k}}\frac{\norm{x_{n_{k}}}}{\norm{x_{n_{k}}}} - \alpha \hat{x}}\\ &= \norm{\norm{x_{n_{k}}}\hat{x}_{k} - \alpha\hat{x} + \alpha \hat{x}_{k} - \alpha\hat{x}_{k}}\\ 
+    	&= \norm{\hat{x}_{k}\left(\norm{x_{n_{k}}}-\alpha\right) + \alpha\left(\hat{x}_{k} - \hat{x}\right)} \\
+    	&\leq \norm{\hat{x}_{k}(\norm{x_{n_{k}}}-\alpha)} + \norm{\alpha(\hat{x}_{k}-\hat{x})}\\
+    	&=\norm{\hat{x}_{k}} \abs{\norm{x_{n_{k}}}-\alpha} + \abs{\alpha}\norm{\hat{x}_{k}-\hat{x}}\\
+    	&= \abs{\norm{x_{n_{k}}}-\alpha} + \alpha\norm{\hat{x}_{k}-\hat{x}}\\
+    	&\leq \varepsilon + \alpha \varepsilon = (1+\alpha)\varepsilon
+    \end{align*}
+   Es decir, la subsucesión $\{x_{n_{k}}\}_{k\in \mathbb{N}}$ converge en $X$, dado que $\{x_{n}\}_{n\in \mathbb{N}}$ es una sucesión de Cauchy que tiene una subsucesión $\{x_{n_{k}}\}_{k\in \mathbb{N}}$ convergente en $X$, por resultado del análisis real, se tiene que la sucesión $\{x_{n}\}_{n\in \mathbb{N}}$ converge en $X$ y por tanto $X$ es un espacio de Banach.\\~\\
+   $(\Longleftarrow)$ Supongamos $X$ es Banach.\\
+   Sea $y\in \bar{S}$ luego, existe una sucesión $\{y_{n}\}_{n\in \mathbb{N}}$ en $S$ tal que 
+   \begin{align*}
+   	\forall \varepsilon >0 , \ \exists N_{5}\in \mathbb{N}: \norm{y_{n}-y} \leq \varepsilon, \ \ \forall n\geq N_{5}.	
+   \end{align*}
+   Ademas, dado $\varepsilon>0$ se tiene que
+   \begin{align*}
+   	\abs{1 - \norm{y}} = \abs{\norm{y_{n}}-\norm{y}} \leq \norm{y_{n}-y} \leq \varepsilon, \ \ \forall n\geq N_{5}.
+   \end{align*}
+   Es decir,
+   \begin{align*}
+   	\norm{y} = 1 \iff y \in S
+   \end{align*}
+   Así, $S$ es un sub espacio cerrado de $X$ y por tanto $S$ es completo.
+	\end{proof}
+	\begin{pro}
+		Sea la aplicación lineal $\mathcal{B}:\mathbb{R}^{n} \longrightarrow \mathbb{R}^{m}$, definida por 
+		\begin{align*}
+			x\in \mathbb{R}^{n} \longmapsto \mathcal{B}(x) := \left( \mathcal{B}_{1}(x),\mathcal{B}_{2}(x), \dots , \mathcal{B}_{k}(x) \right)
+		\end{align*}
+	    con $\mathcal{B}_{i}:\mathbb{R}^{n}\longrightarrow \mathbb{R}^{m_{i}}$ para todo $i \in \{1,\dots,k\}$ y $\displaystyle m = \sum_{i=1}^{k} m_{i}$. Pruebe que $\mathcal{B}$ es sobreyectivo si y sólo si
+	    \begin{itemize}
+	    	\item[$i)$] Para cada $i\in \{1,\dots,k\}$ se tiene que $\mathcal{B}_{i}$ es sobreyectivo,
+	    	\item[$ii)$] $\displaystyle \mathbb{R}^{n} = N\left(\mathcal{B}_{j}\right) +  \bigcap_{i\neq j}^{k} N\left(\mathcal{B}_{i}\right)$, para cada $j\in\{1,...,k\}$.
+	    \end{itemize} 
+        $\mathbf{Observacion}$: Notar que para $k = 2$ se tiene el lema visto en clases.
+	    \begin{proof}
+	    	Mediante inducción sobre $k$.
+	    	\begin{itemize}
+	    		\item Caso $k = 2$. Se debe mostrar que 
+	    		\begin{align*}
+	    			\mathcal{B}\ \textup{es sobreyectivo} \iff \mathcal{B}_{1}, \mathcal{B}_{2}\ \textup{son sobreyectivos y } \mathbb{R}^{n} = N\left(\mathcal{B}_{1}\right) + N\left(\mathcal{B}_{2}\right) 
+	    		\end{align*}
+    		   En este caso es justamente el lema visto en clases.
+    		   \item Caso $k = r$. Supongamos que 
+    		   \begin{align*}
+    		   	\mathcal{B}\ \textup{es sobreyectivo} \iff \mathcal{B}_{1},\dots,\mathcal{B}_{r}\ \textup{son sobreyectivos y}\ 
+    		   	\displaystyle \mathbb{R}^{n} = N\left(\mathcal{B}_{j}\right)  + \bigcap_{i\neq j}^{r}	N\left(\mathcal{B}_{i}\right),\ \textup{para cada $j\in\{1,...,r\}$}.
+    		   \end{align*}
+    	       \item Caso $k = r+1$. Debemos mostrar que
+    	       \begin{align*}
+    	       	\mathcal{B}\ \textup{es sobreyectivo} \iff \mathcal{B}_{1},\dots,\mathcal{B}_{r+1}\ \textup{son sobreyectivos y}\ 
+    	       	\displaystyle \mathbb{R}^{n} = N\left(\mathcal{B}_{j}\right) +  \bigcap_{i\neq1}^{r+1}	N\left(\mathcal{B}_{i}\right)\ \textup{para cada $j\in\{1,...,r+1\}$}.
+    	       \end{align*}
+               Para mostrar lo anterior, suponga $\mathcal{B}$ es sobreyectivo. Ademas fijemos $j\in \{1,...,r+1\}$ y definamos las aplicaciones $\hat{\mathcal{B}}_{1}:\mathbb{R}^{n}\longrightarrow \mathbb{R}^{l_{1}}$, $\hat{\mathcal{B}}_{2}:\mathbb{R}^{n}\longrightarrow \mathbb{R}^{l_{2}}$, donde
+               \begin{align*}
+               	x\in \mathbb{R}^{n}\mapsto \hat{\mathcal{B}_{1}}(x) := \left(\mathcal{B}_{2}(x), \dots , \mathcal{B}_{j-1}(x)\right),\\
+               	x\in \mathbb{R}^{n}\mapsto \hat{\mathcal{B}_{2}}(x) := \left(\mathcal{B}_{j+1}(x), \dots , \mathcal{B}_{r+1}(x)\right),
+               \end{align*}
+               y se tiene,
+               \begin{align*}
+               	l_{1} = \sum_{i=1}^{j-1}m_{i}\\
+               	l_{2} = \sum_{i=j+1}^{r+1}m_{i}
+               \end{align*}
+               
+               luego $\mathcal{B}$ se puede reescribir 
+               \begin{align*}
+               	\mathcal{B}(x) = \left(\hat{\mathcal{B}_{1}}(x),\mathcal{B}_{j}(x), \hat{\mathcal{B}_{2}}(x)\right), \ \ \forall x\in \mathbb{R}^{n}
+               \end{align*}
+               De aquí, por hipótesis de inducción, se tiene que 
+               \begin{align*}
+               	\mathcal{B}\ \textup{es sobreyectivo} \iff \hat{\mathcal{B}_{1}}, \mathcal{B}_{j}, \hat{\mathcal{B}_{2}}\ \textup{son sobreyectivos y } \mathbb{R}^{n} &= N\left(\mathcal{B}_{j}\right) + N\left(\hat{\mathcal{B}_{1}}\right)\cap N\left(\hat{\mathcal{B}_{2}}\right)\\ &= N\left(\mathcal{B}_{j}\right) + \bigcap_{i\neq j} N\left(\mathcal{B}_{i}\right)
+               \end{align*}
+               Dado que lo anterior se cumple para todo $j\in \{1,...,r+1\}$, se tiene que 
+               \begin{align*}
+               	\mathcal{B}\ \textup{es sobreyectivo} \iff \mathcal{B}_{1},\dots,\mathcal{B}_{r+1}\ \textup{son sobreyectivos y}\ 
+               	\displaystyle \mathbb{R}^{n} = N\left(\mathcal{B}_{j}\right) +  \bigcap_{i\neq1}^{r+1}	N\left(\mathcal{B}_{i}\right)\ \textup{para cada $j\in\{1,...,r+1\}$}.
+               \end{align*}
+	    	\end{itemize}
+    	 Finalmente se demuestra lo deseado.
+	    \end{proof}
+	\end{pro}
+	\section*{Apendice}
+	\begin{tcolorbox}[title= \textbf{Lema},colback=blue!4,colframe=blue!30!black!80,colbacktitle=blue!30!black!80]
+		Sea $\{x_{n}\}_{n\in \mathbb{N}}$ una sucesión de Cauchy de $\left(X,\norm{\cdot}\right)$. Entonces $\{x_{n}\}_{n\in\mathbb{N}}$ es convergente si y solo si ella posee una subsucesión convergente.
+	\end{tcolorbox}
+    \begin{proof}
+    	$(\Longrightarrow)$ Es evidente notar que si $\{x_{n}\}_{n\in\mathbb{N}}$ es de Cauchy y convergente, entonces todas sus subsucesiones convergen.\\
+    	$(\Longleftarrow)$ Supongamos $\{x_{n}\}_{n\in \mathbb{N}}$ es una sucesión de Cauchy convergente. Sea $\{x_{n_{k}}\}_{k\in\mathbb{N}}$ una subsucesión de $\{x_{n}\}_{n\in \mathbb{N}}$ tal que converge a $x\in X$. Entonces, dado $\varepsilon>0$, existe $\hat{N}\in \mathbb{N}$ tal que $\norm{x_{n_{k}}-x}\leq \varepsilon\ \forall n\geq \hat{N}$. A su vez, como $\{x_{n}\}_{n\in\mathbb{N}}$ es de Cauchy, existe $\bar{N}\in\mathbb{N}$ tal que $\norm{x_{n}-x_{m}}\leq \varepsilon\ \forall n,m\geq \bar{N}$. Ahora, para todo $n\in \mathbb{N}$ existe $m\geq n$ tal que $x_{n_{k}}$ coincide con $x_{m}$. Luego, definiendo $N$ como el máximo entre $\bar{N}$ y $\hat{N}$, se sigue que
+    	\begin{align*}
+    		\norm{x_{n} - x} \leq \norm{x_{n} - x_{n_{k}}} + \norm{x_{n_{k}} - x}\leq 2\varepsilon \ \forall n \geq N , 
+    	\end{align*}
+       lo cual muestra que $\{x_{n}\}_{n\in \mathbb{N}}$ también converge a $x$.
+    \end{proof}
+	
+	
+	
+	
+	
+\end{document}

@@ -1,0 +1,22 @@
+m=input("Ingrese la cantidad de puntos: ");
+n=input("Ingrese el grado del polinomio con el que desea aproximar: ");
+
+
+x=zeros(m,1);
+y=zeros(m,1);
+A=zeros(m,n);
+for i=1:m
+    x(i)=input("Cordenada x: ");
+    y(i)=input("Cordenada y: ");
+
+end
+for i=1:m
+    for j=1:n
+        A(i,j)=x(i)^(j-1);
+    end
+end
+At=A.';
+sol=(At*A)\(At*y);
+p=0;
+x=linspace(-1,3,100);
+plot(x,poliev(x,sol,n),"r")

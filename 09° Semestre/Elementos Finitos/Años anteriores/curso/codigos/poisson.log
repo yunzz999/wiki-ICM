@@ -1,0 +1,49 @@
+-- FreeFem++ v4.12 (Tue Dec  6 18:35:04 CET 2022 - git v4.12)
+   file : C:\Users\braya\Desktop\Finitos\Años anteriores\curso\codigos\poisson.edp
+ Load: lg_fem lg_mesh lg_mesh3 eigenvalue
+    1 : /*
+    2 : Un script que resuelve, usando FreeFem++ el
+    3 : problema:
+    4 :
+    5 : -Laplace(u) = f     en ]0,1[x]0,1[
+    6 :          u  = uD    en la frontera
+    7 :
+    8 : donde
+    9 :
+   10 : f  = 1
+   11 : uD = 0
+   12 :
+   13 :
+   14 :  */
+   15 :
+   16 : // generando la malla
+   17 : mesh Th=square(10,10);
+   18 : plot(Th,wait=1);
+   19 :
+   20 : // Definicion del espacio H_h  (P_1)
+   21 : fespace Vh(Th,P1);
+   22 : Vh uh,vh;
+   23 :
+   24 : // Definicion de los datos
+   25 : func f  = 1.;
+   26 : func uD = 0.;
+   27 :
+   28 : // Macro que define el gradiente de una funcion
+   29 : macro Grad(u)[dx(u),dy(u)] )  //
+   30 :
+   31 : // Solucion del proble discreto: a(u_h,v_h) - F(v_h) = 0 (con condiciones de Dirichlet)
+   32 : solve Poisson(uh,vh) = int2d(Th)(Grad(uh)[dx(uh),dy(uh)]'*Grad(vh)[dx(vh),dy(vh)])
+   33 :                                    - int2d(Th)( f*vh) + on(1,2,3,4,uh=uD);
+   34 :
+   35 : // Gr'afica de la solucion numerica
+   36 : plot(uh,dim=3,fill=true,value=true,boundary=false);
+   37 :  sizestack + 1024 =1736  ( 712 )
+ 
+  -- Square mesh : nb vertices  =121 ,  nb triangles = 200 ,  nb boundary edges 40
+  -- Solve :
+          min 1.28131e-62  max 0.0730984
+times: compile 0.044s, execution 0.056s,  mpirank:0
+ ######## We forget of deleting   40 Nb pointer,   0Bytes  ,  mpirank 0, memory leak =0
+ CodeAlloc : nb ptr  3751,  size :505776 mpirank: 0
+Ok: Normal End
+ try getConsole C:\Users\braya\Desktop\Finitos\Años anteriores\curso\codigos\poisson.edp

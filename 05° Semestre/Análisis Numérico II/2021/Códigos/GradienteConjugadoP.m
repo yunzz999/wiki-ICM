@@ -1,0 +1,18 @@
+clear all;close all;clc;
+n = 100;
+w = 1/2;
+h = 1/(n+1);
+b = 0;c = 5;d = 3;
+A = matriz_tridiag_full((2+c*h^2),(b*h-2)/2,-(b*h+2)/2,n);
+A(n,:) = [zeros(1,n-3) h/2 b*h^2 -h/2];
+D = zeros(n,n);
+v = diag(A);
+D = diag(v);
+E = (-1)*tril(A,-1);
+B = [ones(n-1,1)];
+B = [B;d];
+B = (h^2)*B;
+u = zeros(n,1);
+max_iterations = 1000; 
+M = (1/(2-w))*((1/w)*D - E)*inv((1/w)*D)*((1/w)*D - E');
+x = GCP(A,B,M,u,h);

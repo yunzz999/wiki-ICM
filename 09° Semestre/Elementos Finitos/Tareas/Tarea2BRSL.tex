@@ -1,0 +1,261 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{\color{azul}{Problema}}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Elementos Finitos}}
+\newcommand{\tarea}{\textbf{Tarea 2}}
+%\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\textbf{2 de mayo de 2024}}
+% Titulo
+\title{\color{azul}\textbf{Elementos Finitos}\\
+	\textbf{Tarea 2}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+    \begin{pro}
+    	Considere la EDO 
+    	\begin{align*}
+    		\left\{\begin{aligned}
+    			-(\kappa(x)u'(x))' + \omega u(x) &= f(x),\ x\in]a,b[\\ 
+    			u(a) &= 0,\\ 
+    			u(b) &= 0,
+    		\end{aligned}
+    		\right.
+    	\end{align*}
+        con $f\in L^{2}(a,b)$, $\omega$ y $\kappa$ dados. Asuma que la función $\kappa$ es continua y positiva en $[a,b]$, y $\omega$ es un número positivo. Escriba un programa en Matlab que realice
+    	lo siguiente:
+    	\begin{itemize}
+    		\item[$(a)$] Escriba la matriz $\boldsymbol{A}$ y el vector $\boldsymbol{b}$ del sistema lineal $\boldsymbol{A}\boldsymbol{\alpha} = \boldsymbol{b}$.
+    		\item[$(b)$] Calcule la solución de $\boldsymbol{A}\boldsymbol{\alpha} = \boldsymbol{b}$.
+    		\item[$(c)$] Considere $f(x) = 2e^{x}(x^{2} - x)-2x-1$, $\omega = 2$, $\kappa(x) = e^{-x}$, $[a,b] = [0,1]$, cuya solución exacta es $u(x) = x(x-1)e^{-x}$.
+    		\item[$(d)$] Para la partición con $d=2$, resuelva a mano el sistema $\boldsymbol{A}\boldsymbol{\alpha} = \boldsymbol{b}$ y esboce la gráfica de la solución $u_{h}$ obtenida.
+    		\item[$(e)$] Programe y resuelva el sistema $\boldsymbol{A}\boldsymbol{\alpha} = \boldsymbol{b}$. Considere $d=100$ y grafique tanto $u_{h}$ como $u$. 
+    		\item[$(f)$] Calcule los errores $\norm{u-u_{h}}_{L^{2}(\Omega)}$ y $\norm{u-u_{h}}_{H^{1}(\Omega)}$.
+    		\item[$(g)$] Complete la siguiente tabla de convergencia.
+    		\begin{center}
+    			\begin{tabular}{c||c||c||c||c||c}
+    				\hline
+    				$n$ & $h$ & $\norm{u-u_{h}}_{L^{2}(a,b)}$ & $r_{L^{2}}$ & $\norm{u-u_{h}}_{H^{1}(a,b)}$ & $r_{H^{1}}$ \\
+    				\hline
+    				4 & $1/4$ & $-$ & $-$ & $-$  & $-$ \\
+    				\hline
+    				8 & $1/8$ & $-$ & $-$ & $-$  & $-$ \\
+    				\hline
+    				16 & $1/16$ & $-$ & $-$ & $-$ & $-$  \\
+    				\hline
+    				32 & $1/32$ & $-$ & $-$ & $-$ & $-$ \\
+    				\hline
+    				64 & $1/64$  & $-$ & $-$ & $-$  & $-$ \\
+    				\hline
+    			\end{tabular}
+    		\end{center}
+    	    Aquí $r$ es llamado orden de convergencia experimental y se define como
+    	    \begin{align*}
+    	    	r := \frac{\log\left(e_{h_{1}}/e_{h_{2}}\right)}{\log\left(h_{1}/h_{2}\right)}
+    	    \end{align*}
+            donde $e_{h_{1}}$ y $e_{h_{2}}$ son los errores correspondientes a dos discretizaciones consecutivas utilizando subintervalos de longitud $h_{1}$ y $h_{2}$ $(h_{2} < h_{1})$, respectivamente. ¿Qué observa respecto al comportamiento de $r$?
+    	\end{itemize}
+    \end{pro}
+    \begin{proof}[\color{rojo}{\textbf{Solución}}]
+    	Sea $h$ la longitud de los subintervalos de la partición uniforme  $\{x_{i}\}_{i=0}^{d+1}$ del intervalo $[a,b]$. Por lo hecho en la tarea 1 se tiene el sistema
+    	\begin{align*}
+    		\begin{bmatrix}
+    			a_{11} & a_{12} & 0 & 0\\ 
+    			a_{21} & a_{22} & \ddots & 0 \\ 
+    			0& \ddots & \ddots  & a_{d-1 d}\\
+    			0 & 0  & a_{d d-1} & a_{dd}
+    		\end{bmatrix}
+    		\begin{bmatrix}
+    			\alpha_{1}\\ 
+    			\vdots \\ 
+    			\vdots \\ 
+    			\alpha_{d}
+    		\end{bmatrix} = \begin{bmatrix}
+    			b_{1}\\ 
+    			\vdots \\ 
+    			\vdots \\ 
+    			b_{d}
+    		\end{bmatrix}
+    	\end{align*}
+    	donde 
+    	\begin{align*}
+    		a_{ii} &= \frac{1}{h}\left[\kappa\left(\frac{x_{i-1}+x_{i}}{2}\right) + \kappa\left(\frac{x_{i}+x_{i+1}}{2}\right)\right] + \frac{2}{3}\omega h,\ \text{con} \ i\in\{1,\dots,d\}\\
+    		a_{i i+1} &= \frac{-1}{h}\kappa\left(\frac{x_{i}+x_{i+1}}{2}\right) + \frac{h\omega}{6},\ \text{con} \ i\in\{1,\dots,d-1\}\\
+    		a_{i i-1} &= \frac{-1}{h}\kappa\left(\frac{x_{i}+x_{i+1}}{2}\right) + \frac{h\omega}{6},\ \text{con} \ i\in\{2,\dots,d\}\\
+    		b_{i} &= \frac{h}{2}\left[f\left(\frac{x_{i}+x_{i-1}}{2}\right) + f\left(\frac{x_{i}+x_{i+1}}{2}\right)\right],\ \text{con} \ i\in\{1,\dots,d\}
+    	\end{align*}
+        considerando $f(x) = 2e^{x}(x^{2} - x)-2x-1$, $\omega = 2$, $\kappa(x) = e^{-x}$, $[a,b] = [0,1]$ y $d = 2$ se tiene la partición $\{x_{0} = 0,x_{1} = 1/3,x_{2} = 2/3,x_{3} = 1\}$. Luego, el sistema queda 
+        \begin{align*}
+        	\begin{bmatrix}
+        		3(e^{-1/6} + e^{-1/2}) + 4/9 & -3e^{-1/2} + 1/9 \\ 
+        		-3e^{-1/2} + 1/9 & 3(e^{-1/2} + e^{-5/6}) + 4/9
+        	\end{bmatrix}
+        	\begin{bmatrix}
+        		\alpha_{1}\\  
+        		\alpha_{2}
+        	\end{bmatrix} = \begin{bmatrix}
+        		1/6\left(f(1/6) + f(1/2)\right)\\ 
+        		1/6\left(f(5/6) + f(1/2)\right)
+        	\end{bmatrix}
+        \end{align*}
+        Resolviendo el sistema, se tiene 
+        \begin{align*}
+        	\alpha_{1} \approx -0.3103 \ \wedge\ \alpha_{2} \approx -0.4340
+        \end{align*}
+        \newpage
+        Gráficamente
+        \begin{figure}[h]
+        	\centering
+        	\includegraphics[width=0.5\linewidth]{../Aproximaciond2}
+        	\caption{Comparación solución exacta vs aproximación con $d = 2$ nodos interiores.}
+        	\label{fig:aproximaciond2}
+        \end{figure}
+       \\
+       Por otro lado, usando $d = 100$ nodos interiores, se obtiene la aproximación
+       \begin{figure}[h!]
+       	\centering
+       	\includegraphics[width=0.5\linewidth]{../Aproximaciond100}
+       	\caption{Comparación solución exacta vs aproximación con $d = 100$ nodos interiores.}
+       	\label{fig:aproximaciond100}
+       \end{figure}
+       Finalmente, del método programado en matlab, se tiene la siguiente tabla de convergencia
+       \begin{center}
+       	\begin{tabular}{c||c||c||c||c||c}
+       		\hline
+       		$n$ & $h$ & $\norm{u-u_{h}}_{L^{2}(a,b)}$ & $r_{L^{2}}$ & $\norm{u-u_{h}}_{H^{1}(a,b)}$ & $r_{H^{1}}$ \\
+       		\hline
+       		4 & $1/4$ & $6.76\times 10^{-4}$ & $-$ & $3.51\times 10^{-2}$  & $-$ \\
+       		\hline
+       		8 & $1/8$ & $1.57\times 10^{-4}$ & $2.1062$ & $1.53\times 10^{-2}$  & $1.1977$ \\
+       		\hline
+       		16 & $1/16$ & $3.82\times 10^{-5}$ & $2.0394$ & $6.94\times 10^{-3}$ & $1.1424$  \\
+       		\hline
+       		32 & $1/32$ & $9.47\times 10^{-6}$ & $2.0110$ & $3.28\times 10^{-3}$ & $1.0831$ \\
+       		\hline
+       		64 & $1/64$  & $2.36\times 10^{-6}$ & $2.0028$ & $1.59\times 10^{-3}$  & $1.0447$ \\
+       		\hline
+       	\end{tabular}
+       \end{center} 
+        De la tabla anterior se puede observar que $r_{L^{2}}$ converge a $2$ y $r_{H^{1}}$ converge a $1$, esto quiere decir que el error medido en las normas $L^{2}$ y $H^{1}$ decaen a una taza de $h^{2}$ y $h$ respectivamente, lo cual es consistente con la teoría.
+    \end{proof}
+    \begin{pro}
+    	Considere la siguiente ecuación:
+    	\begin{align*}
+    		\left\{\begin{aligned}
+    			-\Delta u + u &= f,\ \text{en} \ \Omega := ]0,1[^{2}\\ 
+    			u &= g,\ \text{en} \ \partial\Omega
+    		\end{aligned}
+    		\right.
+    	\end{align*}
+        Modifique el programa de FreeFem (adjunto) para resolver este problema en los siguientes casos. Para cada caso complete la siguiente tabla:
+        \begin{center}
+        	\begin{tabular}{c||c||c||c||c}
+        		\hline
+        		 $h$ & $\norm{u-u_{h}}_{L^{2}(a,b)}$ & $r_{L^{2}}$ & $\norm{u-u_{h}}_{H^{1}(a,b)}$ & $r_{H^{1}}$ \\
+        		\hline
+        		 $1/4$ & $-$ & $-$ & $-$  & $-$ \\
+        		\hline
+        		 $1/8$ & $-$ & $-$ & $-$  & $-$ \\
+        		\hline
+        		 $1/16$ & $-$ & $-$ & $-$ & $-$  \\
+        		\hline
+        		 $1/32$ & $-$ & $-$ & $-$ & $-$ \\
+        		\hline
+        		 $1/64$  & $-$ & $-$ & $-$  & $-$ \\
+        		\hline
+        	\end{tabular}
+        \end{center}
+    \begin{itemize}
+    	\item[$(a)$] Caso $1$: $f(x,y) = \left(2\pi^{2} + 1\right)\cos(\pi x)\cos(\pi y)$, $g(x,y) = \cos(\pi x)\cos(\pi y)$. Se sabe que la solución exacta del problema es $u(x,y) = \cos(\pi x)\cos(\pi y)$.
+    	\item[$(b)$] Caso $2$: $f(x,y) = x+y$, $g(x,y) = x+y$. Se sabe que la solución exacta del problema es $u(x,y) = x+y$.
+    \end{itemize}
+    \end{pro}
+    \begin{proof}[\color{rojo}{\textbf{Solución}}]
+    	\begin{itemize}
+    		\item[$(a)$] Caso $1$.
+    		\begin{center}
+    			\begin{tabular}{c||c||c||c||c}
+    				\hline
+    				 $h$ & $\norm{u-u_{h}}_{L^{2}(a,b)}$ & $r_{L^{2}}$ & $\norm{u-u_{h}}_{H^{1}(a,b)}$ & $r_{H^{1}}$ \\
+    				\hline
+    				 $1/4$ & $7.072\times 10^{-2}$ & $-$ & $8.385\times 10^{-1}$  & $-$ \\
+    				\hline
+    				 $1/8$ & $1.899\times 10^{-2}$ & $1.896$ & $4.318\times 10^{-1}$  & $0.957$ \\
+    				\hline
+    				 $1/16$ & $4.839\times 10^{-3}$ & $1.972$ & $2.175\times 10^{-1}$ & $0.989$  \\
+    				\hline
+    				 $1/32$ & $1.215\times 10^{-3}$ & $1.992$ & $1.089\times 10^{-1}$ & $0.997$ \\
+    				\hline
+    				 $1/64$  & $3.043\times 10^{-4}$ & $1.998$ & $5.451\times 10^{-1}$  & $0.999$ \\
+    				\hline
+    			\end{tabular}
+    		\end{center}
+    	\item[$(b)$] Caso $2$
+    	\begin{center}
+    		\begin{tabular}{c||c||c||c||c}
+    			\hline
+    			 $h$ & $\norm{u-u_{h}}_{L^{2}(a,b)}$ & $r_{L^{2}}$ & $\norm{u-u_{h}}_{H^{1}(a,b)}$ & $r_{H^{1}}$ \\
+    			\hline
+    			 $1/4$ & $1.384\times 10^{-15}$ & $-$ & $0.577$  & $-$ \\
+    			\hline
+    			 $1/8$ & $3.758\times 10^{-15}$ & $-1.440$ & $0.577$  & $0$ \\
+    			\hline
+    			 $1/16$ & $2.088\times 10^{-14}$ & $-2.474$ & $0.577$ & $0$  \\
+    			\hline
+    			 $1/32$ & $8.252\times 10^{-14}$ & $-1.982$ & $0.577$ & $0$ \\
+    			\hline
+    			 $1/64$  & $3.336\times 10^{-13}$ & $-2.015$ & $0.577$  & $0$ \\
+    			\hline
+    		\end{tabular}
+    	\end{center}
+    	\end{itemize}
+    \end{proof}
+\end{document}

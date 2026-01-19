@@ -1,0 +1,182 @@
+clear; clc;
+% Parametros
+R = 0.5;
+L = 50e-3;
+a = 2e-2;
+ki = 3e-3;
+L1 = 50e-2;
+L0 = 30e-2;
+M = 250e-3;
+k = 24.5;
+d = 1.5;
+x0=0.3093; %Corregimos el error desde la tarea anterior
+v0=0;
+u0=2;
+i0=4;
+
+% Definición de las matrices del sistema
+A = [0 1 0; ki*i0^2/M*1/(L1-x0+a)^2-k/M  -d/M  2*ki/M*(i0/(L1-x0+a)); 0 0 -R/L] ;
+B = [0; 0; 1/L];
+C = [1 0 0];
+D = 0;
+
+% Definición del sistema
+sys = ss(A,B,C,D);
+
+% Cálculo de la función de transferencia
+h = tf(sys);
+
+%% hh
+% Gráfico del diagrama de Bode
+figure;
+bode(h);
+grid on;
+hold on;
+plot([0.1 100], [0 0], 'k--');
+plot([0.1 100], [0 0], 'k--');
+xlabel('Frecuencia (rad/s)');
+ylabel('Magnitud (dB)');
+title('Diagrama de Bode');
+legend('Magnitud', 'Fase');
+
+
+%% Problemas 1b 
+T0 = 1; %Si bien la tarea menciona 1000 ms = 1s
+f0 = 1/T0;
+t=linspace(0,2 ,1000);  
+e0 = i0;
+
+%Definimos la entrada
+e = e0 * heaviside(t) + 10/5 * (sin(2*pi*f0*t) - 1/5 * sin(10*2*pi*f0*t));
+
+%Ahora nos interesa obtener la atenuación/amplificación y atraso adelanto
+[mag, phase, wout] = bode(sys, 2*pi*[f0 5*f0 0]); %nos interesa en las 3 frecuencias: f0, 5*f0 y 0(para la ganancia)
+mag_dB = 20*log10(mag); % Necesitamos la magnitud en decíbeles
+phase_deg = rad2deg(phase); % La fase la necesitamos en grados
+save('bode_results.mat', 'mag', 'mag_dB', 'phase_deg');
+xss_dc = e0*mag(3) * heaviside(t);
+xss_f0 = (10/5)*(db2mag(mag_dB(1)) * sin(2*pi*f0*t + deg2rad(phase_deg(1))));
+xss_5f0 =(10/5)*(db2mag(mag_dB(2)) * sin(2*2*pi*5*f0*t + deg2rad(phase_deg(2)))); 
+
+%Calculamos xss sumando sus componentes asociadas a la ganancia dc, y la
+%descomposición en las otras dos frecuencias
+xss = xss_dc + xss_f0 - (1/5)*(xss_5f0);
+
+
+%Ahora graficamos xss y e(t)
+title('Problema 1.b')
+
+subplot(2,1,1)
+plot(t, xss, 'LineWidth',2);
+hold on
+title('xss(t)')
+grid on
+sgtitle('Problema 1b') 
+xlabel('Tiempo');
+ylabel('Amplitud');
+
+
+
+subplot(2,1,2)
+plot(t, e, 'LineWidth',2);
+xlabel('Tiempo');
+ylabel('Amplitud');
+grid on;
+%legend('xss(t)', 'e(t)');
+
+title('e(t)')
+
+%% Problema 1c
+
+x_ss = [i0; x0; v0]; % Variables de estado en SS con t = 0 es en el puinto de oeracion
+y = lsim(sys(), e, t, x_ss); %Simulamos el sistema con la entradaa e
+figure;
+subplot(2,1,1)
+plot(t, y,'LineWidth',2);
+hold on;
+xlabel('Tiempo');
+ylabel('Amplitud');
+title('y(t)')
+grid on 
+
+subplot(2,1,2)
+plot(t, e,'LineWidth',2);
+sgtitle('Problema 1c')
+title('e(t)')
+xlabel('Tiempo');
+ylabel('Amplitud');
+grid on
+
+%% Problemas 1d y 1e
+
+s1=-10;
+s2=-3+9.2019j;
+s3=-3-9.2019j;
+T = 0.025;
+z1 = exp(s1*T);
+z2 = exp(s2*T);
+z3 = exp(s3*T);
+dcg = dcgain(sys);
+mu = dcg*(1-z1)*(1-z2)*(1-z3);
+denom = @(z) z^3 + z^2*(-z1-z2-z3) + z*(z1*z2+z1*z3+z2*z3) -z1*z2*z3;
+discretenum = mu;
+discretedenom = [1 (-z1-z2-z3) (z1*z2+z1*z3+z2*z3) -z1*z2*z3 ];
+sysd = c2d(sys,0.025);
+save('bode_results.mat', 'mag', 'mag_dB', 'phase_deg');
+dsys = tf(discretenum, discretedenom, 0.025);
+figure('Name','Bode discreto');
+bode(sys,'r',dsys,'b--')
+hold on 
+xline(pi/T, '--r', 'Visible', false)
+grid on
+leg = legend({'Continuo','Discreto'});
+
+%% Problema 1 f
+%Realizamos lo mismo que en b pero con la versión discreta
+
+close all;
+T0 = 1; %Si bien la tarea menciona 1000 ms = 1s
+f0 = 1/T0;
+t=linspace(0,2.5 ,1000);  
+e0 = i0;
+
+%Definimos la entrada
+e = e0 * heaviside(t) + 10/5 * (sin(2*pi*f0*t) - 1/5 * sin(10*2*pi*f0*t));
+
+%Ahora nos interesa obtener la atenuación/amplificación y atraso adelanto
+[dmag, dphase, dwout] = bode(dsys, 2*pi*[f0 5*f0 0]); %nos interesa en las 3 frecuencias: f0, 5*f0 y 0(para la ganancia)
+dmag_dB = 20*log10(dmag); % Necesitamos la magnitud en decíbeles
+dphase_deg = rad2deg(dphase); % La fase la necesitamos en grados
+
+
+dxss_dc = e0*dmag(3) * heaviside(t);
+dxss_f0 = (10/5)*(db2mag(dmag_dB(1)) * sin(2*pi*f0*t + deg2rad(dphase_deg(1))));
+dxss_5f0 =(10/5)*(db2mag(dmag_dB(2)) * sin(2*2*pi*5*f0*t + deg2rad(dphase_deg(2)))); 
+
+%Calculamos xss sumando sus componentes asociadas a la ganancia dc, y la
+%descomposición en las otras dos frecuencias
+dxss = dxss_dc + dxss_f0 - (1/5)*(dxss_5f0);
+
+title('Problema 1f')
+
+subplot(2,1,1)
+plot(t, dxss, 'LineWidth',2);
+hold on
+title('xss(t) discreta')
+grid on
+sgtitle('Problema 1f') 
+xlabel('Tiempo');
+ylabel('Amplitud');
+
+
+
+subplot(2,1,2)
+plot(t, e, 'LineWidth',2);
+xlabel('Tiempo');
+ylabel('Amplitud');
+grid on;
+%legend('xss(t)', 'e(t)');
+
+
+
+

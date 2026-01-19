@@ -1,0 +1,428 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usefonttheme{professionalfonts}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{braket}
+\usepackage{amsthm}
+\usepackage{ dsfont }
+\usepackage{stmaryrd}
+\usepackage{stix}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Tópicos En Información Cuántica}}
+\newcommand{\tarea}{\textbf{Tarea 1}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dy}{\textup{d}y}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\ds}{\textup{d}s}
+\newcommand{\dS}{\textup{d}S}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\tr}[1]{\textup{tr}\left(#1\right)}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+%\renewcommand{\theequation}{\roman{equation}}
+\usepackage{soul}
+
+\usetheme{Berlin}
+\usecolortheme{default}
+% posible tema
+%\usetheme{Berlin}
+%\usecolortheme{lily}
+% posible tema
+%\usetheme{Berlin}
+%\usecolortheme{rose}
+% posible tema
+%\usetheme{Copenhagen}
+%\usecolortheme{beetle}
+% posible tema
+%\usetheme{Ilmenau}
+%\usecolortheme{sidebartab}
+\renewcommand{\qed}{\hfill$\blacksquare$}
+
+
+
+%------------------------------------------------------------
+%This block of code defines the information to appear in the
+%Title page
+\title %optional
+{Optimal Extraction of Information from Finite Quantum Ensemles}
+
+
+
+\author[Brayan Sandoval] % (optional)
+{Brayan Sandoval}
+
+\institute[CFM] % (optional)
+{
+	Ingeniería civil matemática\\
+	Universidad de concepción
+}
+
+\date[CCP 2022] % (optional)
+{\fecha}
+
+
+
+%End of title page configuration block
+%------------------------------------------------------------
+
+
+
+%------------------------------------------------------------
+%The next block of commands puts the table of contents at the 
+%beginning of each section and highlights the current section:
+
+
+%------------------------------------------------------------
+
+
+\begin{document}
+	
+	%The next statement creates the title page.
+	\frame{\titlepage}
+	
+	
+	%---------------------------------------------------------
+	%This block of code is for the table of contents after
+	%the title page
+	\begin{frame}
+		\frametitle{Tabla de contenidos}
+		\tableofcontents
+	\end{frame}
+	%---------------------------------------------------------
+	\section{Introducción}
+	\begin{frame}{Introducción}
+		\begin{enumerate}
+			\item Un supuesto básico de la mecánica cuántica es que si se da un
+			conjunto \textbf{infinito} de partículas idénticamente preparadas
+			el estado cuántico de las partículas puede determinarse con \textbf{exactitud}.
+			
+			\item Por otro lado, en el caso de un conjunto \textbf{finito} de partículas idénticamente preparadas el estado cuántico de las partículas solo se puede determinar de forma \textbf{aproximada}.
+		\end{enumerate}
+	\end{frame}
+	\begin{frame}
+		Si bien el segundo punto no es muy alentador, es natural preguntarse:
+		\begin{itemize}
+			\item ¿Qué tan rápido converge la aproximación?
+			\item ¿Cuál es la mejor aproximación que se puede tener?
+			\item ¿Qué estrategias experimentales proporcionan la mejor aproximación?
+		\end{itemize}
+	    En lo que sigue, se intentará responder estas preguntas para el \textbf{caso particular} de $N$ partículas de spin $1/2$. 
+	\end{frame}
+	%\section{Motivación}
+	%\begin{frame}
+	%	Se espera que la solución de tales problemas conduzca a aplicaciones
+	%	en los campos de la transmisión de información cuántica, la criptografía cuántica y la computación cuántica.
+	%\end{frame}
+    \section{Estrategia de Solución}
+    \begin{frame}{Estrategia de Solución}
+    	La solución al problema planteado se describe como un "juego cuántico", el cual se describe a continuación
+    	\begin{enumerate}
+    		\item En cada etapa un jugador recibe $N$ partículas de spin $1/2$, todas polarizadas en la misma dirección. El jugador conoce que los $N$ spin son paralelos. También sabe que en cada etapa están polarizados en otra dirección, \textbf{aleatoria y uniformemente distribuidas}, y que el Hamiltoniano de las partículas es el mismo en cada recorrido.
+    		\item El jugador puede hacer las mediciones que desee y, por ultimo debe adivinar la dirección de polarización. La puntuación de la etapa es $\cos^{2}\left(\frac{\alpha}{2}\right)$ donde $\alpha$ es el ángulo entre la dirección real y la supuesta. La puntuación final es el \textbf{promedio} de las puntuaciones obtenidas en cada ejecución, este valor será un numero entre $0$ y $1$.    
+    	\end{enumerate}
+    \end{frame}
+    \begin{frame}
+    	Evidentemente, el objetivo del juego es \textbf{Obtener la Puntuación máxima}. Lo cual es equivalente a encontrar la mejor aproximación. Naturalmente, de obtener lo anterior se responderán las otras preguntas planteadas.
+    \end{frame}
+    \section{Formulación Matemática}
+    \subsection{Formalismo}
+    \begin{frame}{Formulación Matemática}
+    	Primero se desarrolla un formalismo general, para luego desarrollar el caso particular. Siguiendo a Von Neumann [2], se puede considerar que cada medición tiene dos etapas:
+    	\begin{enumerate}
+    		\item Interacción entre el sistema medido y el sistema de medición.
+    		\item "Lectura" del dispositivo de medición.
+    	\end{enumerate}
+    \end{frame}
+    \begin{frame}
+    	Denotemos por $\{\ket{i}\}$ una base ortonormal del
+    	espacio de Hilbert del sistema medido, y $\ket{\psi_{0}}_{\textup{MD}}$
+    	el estado inicial del dispositivo de medición. \textbf{La primera etapa de
+    	medición} consiste en la interacción entre el sistema
+    	sistema medido y el dispositivo de medición,
+    	\begin{align}\label{Primerainteraccion}
+    		\ket{i}\ket{\psi_{0}}\longrightarrow\sum_{f}\ket{f}\ket{\psi_{j}}_{\textup{MD}}.
+    	\end{align}
+        Si el sistema medido comenzó en un estado arbitrario $\ket{\phi}$
+        la linealidad implica
+        \begin{align}\label{comlineal}
+        	\ket{\phi}\ket{\psi_{0}}_{\textup{MD}} \longrightarrow \sum_{i,f}\braket{i|\phi}\ket{f}\ket{\psi^{i}_{f}}_{\textup{MD}}.
+        \end{align}
+    \end{frame}
+    \begin{frame}
+    	Para permitir mediciones más generales, no imponemos
+    	ninguna restricción al dispositivo de medición ni a la
+    	interacción con el sistema medido. La dimensión del
+    	espacio de Hilbert del dispositivo de medición es arbitraria
+    	y puede ser mucho mayor que la del sistema medido. Las funciones de onda $\ket{\psi^{i}_{f}}_{\textup{MD}}$ no están necesariamente
+    	normalizadas ni ortogonales entre sí. Las únicas
+    	restricciones que obedecen son
+    	\begin{align}\label{Restriccion}
+    		\sum_{f}\braket{\psi^{i}_{f}|\psi^{i'}_{f}} = \delta_{ii'},
+    	\end{align}
+    	que se derivan de la unitariedad de la evolución temporal
+    	que describe la interacción con el sistema medido y
+    	la normalización de $\ket{\psi_{0}}_{\textup{MD}}$.
+    \end{frame}
+    \begin{frame}
+    	\textbf{La segunda etapa} del experimento consiste en leer
+    	el estado del dispositivo de medición. Para ello
+    	considerando un conjunto completo de proyectores ortogonales
+    	$\{P_{\xi}\}$. Los distintos resultados del experimento corresponden a
+    	encontrar el dispositivo de medición en los distintos espacios propios
+    	de los proyectores $P_{\xi}$. La probabilidad del resultado $\xi$ si
+    	el estado inicial fuera $\ket{\phi}$ es
+    	\begin{align}\label{prom}
+    		\mathbb{P}(\phi,\xi) = \sum_{i,i',f}\braket{\phi|i'}\braket{i|\phi}_{\textup{MD}}\bra{\psi^{i'}_{f}}P_{\xi}\ket{\psi^{i}_{f}}_{\textup{MD}}.
+    	\end{align}
+    	Para más generalidad, el número de
+    	posibles resultados $\xi$ de la medición se deja arbitrario
+    	y puede ser mayor que la dimensión del espacio de Hilbert
+    	del sistema medido.
+    \end{frame}
+    \begin{frame}
+    	 Al comprobar que el dispositivo de medición se encuentra en el estado
+    	$\xi$, se obtiene cierta ``información'' sobre el estado del
+    	sistema. Esta información podría expresarse como una función
+    	$S(\xi,\phi)$. El promedio de $S$ es
+    	\begin{align}\label{promS}
+    		\mathcal{S} = \sum_{\xi}\int  \mathbb{P}(\phi,\xi)S(\xi,\phi)\mathcal{D}\phi
+    	\end{align}
+    	donde las sumas abarcan los resultados $\xi$ del experimento
+    	y los estados iniciales $\phi$ del sistema a medir, con
+    	una medida $\mathcal{D}\phi$ correspondiente a su distribución.
+    \end{frame}
+    \begin{frame}
+    	El problema que se plantea es maximizar \eqref{promS} con respecto a
+    	las posibles mediciones y estrategias de adivinación
+    	respetando las relaciones unitarias \eqref{Restriccion}.\\~\\
+    	Con el fin de simplificar el formalismo elegimos los proyectores $P_{\xi}$ como operadores de proyección de rango uno sobre la base $\{\ket{e_{\xi}}\}$ del espacio de Hilbert del dispositivo de medición. 
+    \end{frame}
+    \subsection{Caso Particular}
+    \begin{frame}
+    	  El sistema a medir consiste en $N$ spines paralelos polarizados en una dirección aleatoria, digamos $(\theta,\varphi)$, denotamos este estado
+    	  \begin{align}\label{Spin}
+    	  	\ket{N_{\theta,\varphi}} =\underbrace{ \ket{\uparrow_{\theta,\varphi}\dots\uparrow_{\theta,\varphi}}}_{N}
+    	  \end{align} 
+          El espacio de Hilbert de los $N$ espines puede descomponerse
+          en una suma de subespacios que tienen diferentes espines totales $S$
+          con $S = N/2, N/2 -1,\cdots,-N/2$.
+    \end{frame}
+    \begin{frame}
+    	 Dado que el sistema consta
+    	de $N$ espines paralelos, siempre pertenecerá al subespacio
+    	de mayor espín por lo que se debe especificar la medida de interacción
+    	para este subespacio, el cual tiene como base a $\{\ket{m}\}_{m=-N/2}^{N/2}$, que es la abreviatura
+    	para $\ket{S=N/2,S_{z} = m}$.
+    	La evolución unitaria de los espines más el dispositivo de medición
+    	viene dada por
+    	\begin{align}\label{medicionspin}
+    		\ket{m}\ket{\psi_{0}}_{\textup{MD}}\longrightarrow\ket{v^{m}}=\sum_{f=1}^{2^{N}} \ket{f}\ket{\psi^{m}_{f}}_{\textup{MD}},
+    	\end{align}
+        donde $\{\ket{f}\}$ es una base completa del espacio de Hilbert de $N$ partículas de spin $1/2$.
+    \end{frame}
+    \begin{frame}
+    	 La probabilidad de obtener el resultado $\xi$ es 
+    	\begin{align}\label{Probaspin}
+    		\mathbb{P}(N_{\theta,\varphi};\xi) = \sum_{m,m'=-N/2}^{N/2}\sum_{f=1}^{2^{N}} \braket{N_{\theta,\varphi}|m}\braket{\psi^{m}_{f}|e_{\xi}}\braket{e_{\xi}|\psi^{m'}_{f}}\braket{m'|N_{\theta,\varphi}}
+    	\end{align}.
+        Al encontrar el dispositivo de medición en el estado $\xi$, se adivina una dirección de polarización $\theta_{\xi},\varphi_{\xi}$ y se obtiene una puntuación $S = S(\theta,\varphi;\theta_{\xi},\varphi_{\xi}) = \cos^{2}(\frac{\alpha}{2})$.
+    \end{frame}
+    \begin{frame}
+    	Con todo lo anterior se deduce la formulación matemática del problema, la cual consiste en 
+    	\begin{block}{Formulación}
+    		\begin{align}
+    			&\max\quad \sum_{\xi}\int\frac{\sin\theta\ \textup{d}\theta\textup{d}\varphi }{4\pi}\mathbb{P}\left(N_{\theta,\varphi};\xi\right)S\left(\theta,\varphi;\theta_{\xi},\varphi_{\xi} \right)\nonumber\\
+    			&\textup{s.a}\quad \braket{v^{m}|v^{m'}} = \sum_{\xi}\sum_{f}^{2^{N}}\braket{\psi^{m}_{f}|e_{\xi}}\braket{e_{\xi}|\psi^{m'}_{f}} = \delta_{mm'},\label{Formulacion}\\ 
+    			&\forall m,m'\in\{-N/2,\cdots,N/2\}.\nonumber
+    		\end{align}
+    	\end{block}
+    \end{frame}
+    \begin{frame}
+    	Las variables de este problema son:
+    	\begin{itemize}
+    		\item $\ket{\psi^{m}_{f}}$ que codifican las medidas de interacción.
+    		\item $\ket{e_{\xi}}$ que codifica el procedimiento de lectura.
+    		\item $\theta_{\xi}$ y $\varphi_{\xi}$ que codifican la estrategia de adivinación.
+    	\end{itemize}
+    Se puede observar que los estados finales del dispositivo de medición $\ket{\psi^{m}_{f}}$ y los vectores base de lectura $\ket{e_{\xi}}$ siempre aparecen juntos a través del producto escalar $\braket{\psi^{m}_{f}|e_{\xi}}$, por lo que no es necesario modificarlos de forma independiente, es decir, se pueden entender como una variable.
+    \end{frame}
+    \section{Solución del Problema}
+    \begin{frame}{Solución del Problema}
+    	El problema \eqref{Formulacion} puede ser complejo de resolver considerando la cantidad de restricciones que tiene. Por esta razón se intentará "debilitar" la restricción de tal forma que el nuevo problema sea mas sencillo de resolver y que su solución sea una cota superior para el problema original. Luego mediante algunos experimentos se probará que la solución del problema original alcanza el mismo máximo.
+    \end{frame}
+    \subsection{Problema Débil}
+    \begin{frame}
+    	\begin{block}{Problema Débil}
+    		\begin{align}
+    			&\max\quad \sum_{\xi}\int\frac{\sin\theta\ \textup{d}\theta\textup{d}\varphi }{4\pi}\mathbb{P}\left(N_{\theta,\varphi};\xi\right)S\left(\theta,\varphi;\theta_{\xi},\varphi_{\xi} \right)\nonumber\\
+    			&\textup{s.a}\quad \sum_{m=-N/2}^{N/2}\braket{v^{m}|v^{m}}  = \sum_{m=-N/2}^{N/2} 1 = N+1,\label{Formulaciondebil}
+    		\end{align}
+    	\end{block}
+    \end{frame}
+    \begin{frame}
+    	El problema \eqref{Formulaciondebil} al tener una restricción se puede resolver usando multiplicadores de Lagrange, de aquí se obtiene el sistema
+    	\begin{align}\label{Lagrange}
+    	   \frac{\partial}{\partial \braket{\psi^{m}_{f}|e_{\xi}}}S_{N} = \lambda\sum_{m'=-N/2}^{N/2}\frac{\partial}{\partial \braket{\psi^{m}_{f}|e_{\xi}}}\braket{v^{m'}|v^{m'}},\quad \forall \braket{\psi^{m}_{f}|e_{\xi}}.
+    	\end{align}
+    \end{frame}
+    \begin{frame}
+    	Notar que 
+    	\begin{align*}
+    		\sum_{m'=-N/2}^{N/2}\frac{\partial}{\partial \braket{\psi^{m}_{f}|e_{\xi}}}\braket{v^{m'}|v^{m'}} &= \sum_{m',f',\xi'}\frac{\partial}{\partial \braket{\psi^{m}_{f}|e_{\xi}}}\left(\braket{\psi^{m'}_{f'}|e_{\xi'}}\braket{e_{\xi'}|\psi^{m'}_{f'}}\right)\\
+    		&= \braket{e_{\xi}|\psi^{m}_{f}}
+    	\end{align*}
+        y que 
+    	\begin{align*}
+    		\frac{\partial}{\partial \braket{\psi^{m}_{f}|e_{\xi}}}S_{N} = \sum_{m'}\braket{e_{\xi}|\psi^{m'}_{f}}M_{mm'}\left(\theta_{\xi},\varphi_{\xi}\right)
+    	\end{align*}
+        donde 
+        \begin{align*}
+        	M_{mm'}\left(\theta_{\xi},\varphi_{\xi}\right) = \int \frac{\sin\theta\ \textup{d}\theta\textup{d}\varphi}{4\pi}\braket{N_{\theta,\varphi}|m}\braket{m'|N_{\theta,\varphi}}S\left(\theta,\varphi;\theta_{\xi},\varphi_{\xi}\right).
+        \end{align*}
+    \end{frame}
+    \begin{frame}
+    	El sistema \eqref{Lagrange} se puede reescribir 
+    	\begin{align}
+    		\sum_{m'}\braket{e_{\xi}|\psi^{m'}_{f}}\left(M_{mm'}\left(\theta_{\xi},\varphi_{\xi}\right) - \lambda\delta_{mm'}\right) = 0\quad \forall m,f,\xi.\label{Sistema}
+    	\end{align}
+        Multiplicando la $m$-esima ecuación por $\braket{\psi^{m}_{f}|e_{\xi}}$ se obtiene 
+        \begin{align*}
+        	\sum_{m'}\braket{e_{\xi}|\psi^{m'}_{f}}\braket{\psi^{m}_{f}|e_{\xi}}\left(M_{mm'}\left(\theta_{\xi},\varphi_{\xi}\right) - \lambda\delta_{mm'}\right) = 0\quad \forall m,f,\xi.
+        \end{align*}
+        Sumando todas las ecuaciones se llega a
+        \begin{align*}
+        	\underbrace{\sum_{m',m,\xi,f}\braket{e_{\xi}|\psi^{m'}_{f}}\braket{\psi^{m}_{f}|e_{\xi}}M_{mm'}\left(\theta_{\xi},\varphi_{\xi}\right)}_{S_{N}} = \lambda\underbrace{\sum_{m=-N/2}^{N/2}\sum_{\xi}\sum_{f}^{2^{N}}\braket{\psi^{m}_{f}|e_{\xi}}\braket{e_{\xi}|\psi^{m}_{f}}}_{N+1}
+        \end{align*}
+    \end{frame}
+    \begin{frame}
+    	Por tanto, el valor máximo de $S_{N}$ es
+    	\begin{align*}
+    		S_{N_{\textup{ext}}} = \lambda\left( N+1\right).
+    	\end{align*}
+        Ademas, se puede notar que \eqref{Sistema} tiene solución no trivial si y sólo si $\lambda$ es un valor propio de $M\left(\theta_{\xi},\varphi_{\xi}\right)$. La simetría inherente a este problema puede utilizarse para demostrar que la matriz $M\left(\theta_{\xi},\varphi_{\xi}\right)$ se transforma según la representación de $SU(2)$:
+        \begin{align*}
+        	M\left(\theta_{\xi},\varphi_{\xi}\right) = U\left(\theta_{\xi},\varphi_{\xi}\right)M\left(\theta_{\xi}=0\right)U^{\dagger}\left(\theta_{\xi},\varphi_{\xi}\right),
+        \end{align*}
+        donde $U\left(\theta_{\xi},\varphi_{\xi}\right)$ es un elemento de representación unitaria de dimensión $N+1$ de $SU(2)$ que realiza rotaciones de los espines, enviando la dirección $+z$ a la dirección $\theta_{\xi},\varphi_{\xi}$. Por esta razón, los valores propios de $M\left(\theta_{\xi},\varphi_{\xi}\right)$ no dependen de $\theta_{\xi}$ y $\varphi_{\xi}$.
+    \end{frame}
+    \begin{frame}
+    	Tomando $\theta_{\xi} = 0$, de un calculo directo se puede probar que $M$ es diagonal y que su valor propio mayor es $\lambda = \frac{1}{N+2}$. Por tanto, para el problema débil la puntuación media máxima es 
+    	\begin{align*}
+    		S_{N_{\textup{ext}}} = \frac{N+1}{N+2}.
+    	\end{align*}
+    \end{frame}
+    \subsection{Experimento}
+    \begin{frame}
+    	\begin{block}{}
+    		En el caso de una partícula de spin $\frac{1}{2}$, hay un experimento que alcanza la puntuación $\frac{2}{3}$, se realiza midiendo la proyección del spin a lo largo de un eje dado, por ejemplo el eje $z$, y según si el spin se encuentra polarizado a lo largo de la dirección $+z$ o $-z$ adivinar que esta es la dirección de polarización. 
+    	\end{block}
+    \end{frame}
+    \section{Conclusiones}
+    \begin{frame}
+    	¿Debe una medición óptima en un conjunto de espines paralelos tratar necesariamente el conjunto como una entidad, es decir, como un único sistema compuesto? A continuación se mostrará que no existen
+    	experimentos óptimos que consistan en mediciones separadas
+    	en cada espín, aunque el resultado de una medición
+    	puede utilizarse para decidir qué medida se realizará
+    	en el otro espín. 
+    \end{frame}
+    \begin{frame}
+    	Por simplicidad, considere el caso de $2$ partículas de spin $\frac{1}{2}$. Al realizar una medida arbitraria al primer spin
+    	\begin{align*}
+    		&\ket{\uparrow}_{1}\ket{\psi_{0}}_{\textup{MD1}}\rightarrow \ket{\uparrow}_{1}\ket{\psi^{+}_{\uparrow}}_{\textup{MD1}} + \ket{\downarrow}_{1}\ket{\psi^{+}_{\downarrow}}_{\textup{MD1}}\\
+    		&\ket{\downarrow}_{1}\ket{\psi_{0}}_{\textup{MD1}}\rightarrow \ket{\uparrow}_{1}\ket{\psi^{-}_{\uparrow}}_{\textup{MD1}} + \ket{\downarrow}_{1}\ket{\psi^{-}_{\downarrow}}_{\textup{MD1}}
+    	\end{align*}
+        donde MD1 indica el primer dispositivo de medición. 
+    \end{frame}
+    \begin{frame}
+    	Los resultados de esta medición se obtienen proyectando
+    	el estado de MD1 sobre la base de lectura $\{\ket{e_{\xi_{1}}}\}$. Según
+    	resultado $\xi_{1}$, se realizan diferentes mediciones
+    	en el segundo espín
+    	\begin{align*}
+    		&\ket{\uparrow}_{2}\ket{\phi_{0}}_{\textup{MD2}}\rightarrow \ket{\uparrow}_{2}\ket{\phi^{+}_{\uparrow,\xi_{1}}}_{\textup{MD2}} + \ket{\downarrow}_{2}\ket{\phi^{+}_{\downarrow,\xi_{1}}}_{\textup{MD2}}\\
+    		&\ket{\downarrow}_{2}\ket{\phi_{0}}_{\textup{MD2}}\rightarrow \ket{\uparrow}_{2}\ket{\phi^{-}_{\uparrow,\xi_{1}}}_{\textup{MD2}} + \ket{\downarrow}_{2}\ket{\phi^{-}_{\downarrow,\xi_{1}}}_{\textup{MD2}}
+    	\end{align*}
+        donde MD2 indica el segundo dispositivo de medición. Los resultados
+        resultados de esta medición se obtienen proyectando
+        el estado de MD2 sobre la base de lectura $\{\ket{g_{\xi_{2},\xi_{1}}}\}$; el índice
+        aparece porque la forma en que se leen los resultados de la segunda
+        también puede depender de los resultados de la primera medición. 
+    \end{frame}
+    \begin{frame}
+    	Juntando todo se obtiene 
+    	\begin{align}\label{xdd}
+    		\ket{\uparrow}_{1}\ket{\downarrow}_{2}\ket{\psi_{0}}_{\textup{MD1}}\ket{\phi_{0}}_{\textup{MD2}} \rightarrow \sum_{\underset{f = \uparrow,\downarrow}{f' = \uparrow,\downarrow}}\sum_{\xi_{1},\xi_{2}}&\ket{f}_{1}\ket{f'}_{2}\braket{e_{\xi}|\psi^{+}_{f}}\nonumber\\
+    		&\times\braket{g_{\xi_{2},\xi_{1}}|\phi^{+}_{f',\xi_{1}}}\ket{e_{\xi_{1}}}\ket{g_{\xi_{2},\xi_{1}}}
+    	\end{align}
+        y análogamente para los demás estados iniciales $\ket{\uparrow}_{1}\ket{\downarrow}_{2},\ket{\downarrow}_{1}\ket{\uparrow}_{2},\ket{\downarrow}_{1}\ket{\downarrow}_{2}$. La ecuación \eqref{xdd} es un caso particular de \eqref{medicionspin} sustituyendo la base de medición $\{\ket{e_{\xi}}\}$ por la base $\{\ket{e_{\xi_{1}}}\ket{g_{\xi_{2},\xi_{1}}}\}$.
+    \end{frame}
+    \begin{frame}
+    	En efecto, las dos mediciones sucesivas aquí consideradas corresponden en el formalismo general a un único dispositivo de medición compuesto por las dos piezas
+    	MDl y MD2, y la acción del observador humano que lee el resultado de MD1 y decide en consecuencia qué MD2 se correlaciona automáticamente con el estado final de MD1.
+    	se correlaciona con el estado final de MD1 y sintoniza su interacción con el segundo espín. 
+    \end{frame}
+    \begin{frame}
+    	Las relaciones unitarias en \eqref{Formulacion} se sustituyen ahora por las
+    	relaciones unitarias obedecidas por cada dispositivo de medición por separado:
+    	\begin{align*}
+    		\sum_{f,\xi_{1}}a^{+}_{f,\xi_{1}}\left(a^{+}_{f,\xi_{1}}\right)^{*} = 1, \quad \sum_{f,\xi_{1}}a^{-}_{f,\xi_{1}}\left(a^{-}_{f,\xi_{1}}\right)^{*} = 1 \\
+    		\sum_{f,\xi_{1}}a^{+}_{f,\xi_{1}}\left(a^{-}_{f,\xi_{1}}\right)^{*} = 0\\
+    		\sum_{f',\xi_{2}}b^{+}_{f',\xi_{2}}\left(b^{+}_{f',\xi_{2}}\right)^{*} = 1, \quad \sum_{f',\xi_{2}}b^{-}_{f',\xi_{2}}\left(b^{-}_{f',\xi_{2}}\right)^{*} = 1 \\
+    		\sum_{f',\xi_{2}}b^{+}_{f',\xi_{2}}\left(b^{-}_{f',\xi_{2}}\right)^{*} = 0
+    	\end{align*}
+    \end{frame}
+    \begin{frame}
+    	donde, $f,f'=\uparrow,\downarrow$ y 
+    	\begin{align*}
+    		a^{+}_{f,\xi_{1}} = \braket{e_{\xi_{1}}|\psi^{+}_{f}},\ b^{+}_{f',\xi_{2},\xi_{1}} = \braket{g_{\xi_{2},\xi_{1}}|\phi^{+}_{f',\xi_{1}}}\\
+    				a^{-}_{f,\xi_{1}} = \braket{e_{\xi_{1}}|\psi^{-}_{f}},\ b^{-}_{f',\xi_{2},\xi_{1}} = \braket{g_{\xi_{2},\xi_{1}}|\phi^{-}_{f',\xi_{1}}}
+    	\end{align*}
+        Después de completar estas dos mediciones, se adivina
+        una dirección de polarización $\theta_{\xi_{1},\xi_{2}},\varphi_{\xi_{1},\xi_{2}}$, que depende por
+        de ambos resultados.
+    \end{frame}
+    \begin{frame}
+    	Para que \eqref{xdd} describa un experimento óptimo debe satisfacer \eqref{Lagrange} con $\lambda = 1/4$.
+    	Explícitamente la Ec. \eqref{Lagrange} toma la forma
+    	\begin{align}\label{eqqlia}
+    		-2Sa^{+}b^{+} + CE \left(a^{+}b^{-} + a^{-}b^{+}\right) &= 0,\nonumber\\
+    		2CSE^{*}a^{+}b^{+} - \left(a^{+}b^{-}+a^{-}b^{+}\right) + 2CSEa^{-}b^{-} &= 0,\\
+    		SE^{*}\left(a^{+}b^{-} + a^{-}b^{+}\right) - 2Ca^{-}b^{-} &= 0,\nonumber
+    	\end{align}
+        la cual se cumple para todo $i,j,\xi_{1},\xi_{2}$. Donde, $C = \cos(\theta_{\xi_{1},\xi_{2}}/2)$, $S = \sin(\theta_{\xi_{1},\xi_{2}})$ y $E = e^{i\varphi_{\xi_{1},\xi_{2}}}$. Además, resolviendo \eqref{eqqlia}
+        \begin{align}\label{vivaxile}
+        	\frac{a^{+}_{f,\xi_{1}}}{a^{-}_{f,\xi_{1}}} = \frac{b^{+}_{f',\xi_{2},\xi_{1}}}{b^{-}_{f',\xi_{2},\xi_{1}}} = \frac{CE}{S}
+        \end{align}
+    \end{frame}
+    \begin{frame}
+    	Al insertar \eqref{vivaxile} en las relaciones unitarias
+    	se obtiene fácilmente una contradicción, demostrando así que
+    	experimentos como \eqref{xdd} no pueden ser experimentos óptimos.
+    \end{frame}
+\end{document}

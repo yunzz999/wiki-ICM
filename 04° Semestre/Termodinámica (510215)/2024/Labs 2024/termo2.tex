@@ -1,0 +1,220 @@
+\documentclass[12pt, paperletter]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{xcolor}
+\usepackage{cancel}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{amsmath, amssymb,amsmath}
+\usepackage[spanishes-lcroman]{babel}
+\usepackage{multicol}
+\usepackage{gensymb}
+\usepackage{ulem}
+\usepackage{hyperref}
+\usepackage{cancel}
+\usepackage{graphicx}
+\usepackage{moresize}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\newtheorem{prop}{Proposición}
+\usepackage{enumitem}
+\usepackage{stackrel}
+\usepackage{float}
+
+\parindent=2.1pc
+\setlength{\textwidth}{16cm} \setlength{\textheight}{23cm}
+\usepackage[top=2.5cm, bottom=2cm,left=2cm, right=2cm]{geometry}
+\date{}
+\usepackage{fancyhdr}
+\fancypagestyle{plain}{
+\fancyhead[L]{\begin{picture}(0,0)\put(0,12){\includegraphics[width=3.5cm]{aaaa.jpg}}    
+\end{picture}}
+\fancyhead[r]{\vspace{1cm}\\Universidad de Concepción, Campus Concepción. \\
+Facultad de Cs. Físicas y Matemáticas.\\ 
+\vspace{0.5cm}}
+\fancyfoot[c]{}}
+
+\fancypagestyle{fancy}{
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot[c]{\thepage}}
+
+\begin{document}
+\pagestyle{fancy}
+
+\maketitle
+
+\vspace{3cm}
+\begin{center}
+    \title{\HUGE\textbf{Laboratorio 3}}\\
+    \vspace{0.2cm}
+    \textbf{Determinación del calor específico de un metal}\\
+    \vspace{0.3cm}
+    \author{ Fernando Contreras \\Daniel Sepúlveda\\Joaquin Riquelme}\\
+\end{center}
+\maketitle
+\vspace{7.0cm}
+\begin{flushleft}
+        \begin{itemize}      
+        \item   \textbf{\underline{Carrera:}}  Ingeniería Civil Matemática\\[0.2cm]
+        \item   \textbf{\underline{Profesor:}}  Claudio Faundez\\[0.2cm]
+        \item   \textbf{\underline{Asignatura:}} Termodinámica\\[0.2cm]
+        \item  \textbf{\underline{Ayudante:}}  Giulianni Bernal\\[0.2cm]
+        \end{itemize}
+        % \end{flushleft}
+\end{flushleft}
+
+\newpage
+\section{Introducción}
+El estudio de la termodinámica y sus principios fundamentales es esencial para comprender el comportamiento de los metales (en nuestro caso hierro) frente a variaciones de temperatura y energía. En particular, el calor específico de un material es una propiedad termodinámica que describe la cantidad de calor que se requiere para que una unidad de una sustancia incremente su temperatura en una unidad de grado Celsius.
+La importancia de este experimento en cuestión es entender como se realiza el calculo de el calor específico de los materiales, el estudio de esta propiedad física nos sirve para la investigación de todos los fenómenos que tengan relación con la transferencia de calor, tanto en el ámbito académico como en el trabajo en empresas y/o industrias. Algunas de las aplicaciones practicas de esta propiedad de se ven presentes desde el diseño de sistemas de transferencia de calor, hasta la selección de materiales en procesos industriales.
+En este informe, estudiaremos y detallaremos un experimento en donde se busca conocer el calor específico de un metal de manera empírica, mediante un experimento en el cual se analiza la transferencia de calor entre un metal y agua a una temperatura ambiente.
+El objetivo principal de este informe consta de determinar el calor especifico de un  metal (en nuestro caso hierro) para luego compararlos con su valor teórico, para así analizar el grado de error del experimento. Además de responder las preguntas propuestas.
+
+\newpage
+
+\section{Marco Teórico}
+\indent En termodinámica, se estudia la relación entre el calor y otras formas de energía, cuando dos sistemas con distintas temperaturas se encuentran o cuando existe un gradiente de temperatura se produce una transferencia de energía entre ellos observable a través de los cambios en cada sistema.\\
+\indent Un concepto fundamental en relación con la temperatura es el equilibrio térmico. Dos objetos se encuentran en equilibrio térmico cuando están en contacto de forma que podrían intercambiar energía, pero no ocurre transferencia alguna. Incluso si no están en contacto, se dice que dos objetos están en equilibrio térmico si, al ponerse en contacto, no se produce transferencia de energía. Además, si dos objetos se mantienen en contacto por suficiente tiempo, alcanzarán eventualmente un estado de equilibrio térmico.\\
+\indent Según el primer principio de la termodinámica y suponiendo que no hay intercambio de energía con el entorno, la variación de energía interna de un sistema solo puede deberse al calor, es decir, a la transferencia de energía de un sistema a otro. Por lo tanto, la ecuación a considerar es:
+$$Q=mc\Delta T$$
+Donde:
+\begin{itemize}
+    \item $Q$ es la transferencia de calor
+    \item m es la masa de la sustancia u objeto
+    \item $\Delta T$ es el cambio de temperatura
+    \item c es el calor especifico, la cual depende del objeto y de su estado
+\end{itemize}
+\indent Su unidad de medida en el SI es $\frac{J}{kg\cdot K}$
+La transferencia de calor es el proceso mediante el cual se intercambia energía en forma de calor entre cuerpos que se encuentran a diferentes temperaturas, este calor puede transferirse por conducción, radiación o convección.\\
+\indent La conducción es el mecanismo de transferencia de calor que ocurre por contacto directo entre cuerpos a lo largo del tiempo. En este proceso no hay transferencia de materia, solo de energía. El matemático Joseph Fourier formuló una expresión matemática conocida como la Ley de Fourier de la conducción del calor, la cual establece que la velocidad de transferencia de calor a través de un cuerpo por unidad de sección transversal es proporcional al gradiente de temperatura de dicho cuerpo.\\
+\indent Por otro lado, la radiación es la transferencia de calor mediante ondas electromagnéticas. En este caso, no es necesario el contacto entre los objetos, y el medio o interfaz, como el aire no participa en el intercambio de energía; de hecho, la radiación puede ocurrir incluso en el vacío.\\
+\indent Por último, la convección es el proceso de transferencia de calor mediante el movimiento de fluidos, como líquidos o gases. Al calentarse, se generan corrientes ascendentes en el fluido que elevan las zonas de mayor temperatura, mientras que las zonas de menor temperatura descienden para aumentar su temperatura.
+\\
+\indent En el siguiente experimento contaremos con la presencia de esas 3 transferencias de calor, como en toda la naturaleza, pero la radiacion sera despreciable a temperaturas tan bajas y tiempos cortos.\\
+\indent El equilibrio termodinámico se refiere a un estado en el cual no existen cambios netos en las propiedades macroscópicas de un sistema a lo largo del tiempo, es decir, propiedades como la presión, temperatura y volumen permanecen constantes en este estado.
+
+La transferencia de calor y el equilibrio termodinámico pueden coexistir siempre que se respeten las leyes de la termodinámica, lo que implica que no deben ocurrir cambios netos en las propiedades macroscópicas del sistema. Generalmente, cuando se alcanza el equilibrio térmico, la transferencia de calor se interrumpe, ya que no hay una diferencia de temperatura que impulse el flujo de calor.
+\\
+\indent El calor específico de un objeto o sustancia es una magnitud física que indica su capacidad para almacenar energía interna en forma de calor. En otras palabras, representa la cantidad de energía necesaria para aumentar en una unidad la temperatura de una cierta cantidad de material.\\
+Una de las formas de medir la cantidad de calor involucrada en un proceso físico o químico es mediante un calorímetro, un dispositivo utilizado para determinar la cantidad de calor transferida hacia o desde una sustancia. El cambio de temperatura registrado por el calorímetro se emplea para calcular la cantidad de calor transferido en el proceso estudiado. Para esto, es esencial definir un sistema que incluya la sustancia o sustancias que experimentan el cambio y su entorno, además de considerar las propiedades del propio instrumento.
+\\
+\indent Las mediciones calorimétricas son fundamentales para comprender los procesos de transferencia de calor, desde el nivel microscópico hasta el funcionamiento de grandes maquinarias. La transferencia de calor estará muy presente durante el experimento. Por ejemplo, en el generador de vapor, el calor se transfiere inicialmente al agua, y posteriormente, una parte de este calor se transfiere del agua al metal. Una vez que el agua y el metal alcanzan el equilibrio térmico, el metal se traslada al calorímetro para que el calor se transfiera desde el metal hacia el agua contenida en el calorímetro. El objetivo es lograr un equilibrio térmico entre el metal y el agua, lo cual provocará que el metal se enfríe mientras el agua se calienta.\\
+\indent Además, es importante agitar el agua para asegurar que todo el contenido del calorímetro alcance un estado de equilibrio térmico uniforme. Finalmente, la transferencia de calor cesará cuando la temperatura del agua dentro del calorímetro se estabilice y se mantenga constante.
+\\
+\indent En resumen, en este experimento se observa la transferencia de calor a través de la interacción entre el metal caliente y el agua en el generador de vapor, y posteriormente, del metal al agua en el calorímetro.\\
+\indent Luego, al registrar datos como las temperaturas iniciales y finales tanto del agua en el calorímetro como del metal, será posible calcular el calor específico del metal mediante la ecuación:
+$$Q_{abs}=-Q_{sed}$$
+$$m_{H_20}\cdot c_{H_20}\cdot \Delta T_{H_20}=-(m_{metal}\cdot c_{metal} \cdot \Delta T_{metal}) $$
+$$c_{metal}=-\frac{m_{H_20}\cdot c_{H_20}\cdot \Delta T_{H_20}}{m_{metal} \cdot \Delta T_{metal} }$$
+Estos calculos son facilitados conociendo que el agua posee un calor especifico de 4.182 $\frac{J}{g\cdot K}$
+
+
+\newpage
+\section{Materiales}
+\begin{itemize}
+    \item Generador de vapor PASCO TD-8556A
+    \item calorímetro
+    \item vaso precipitado
+    \item soporte universal
+    \item termometros de mercurio x2
+    \item agua
+    \item balanza digital
+    \item trozo de metal
+\end{itemize}
+
+\begin{figure}[h]
+      \centering
+         \includegraphics[width=0.25\linewidth]{30fcb70a-bb02-47b3-82f8-c9ef0a956ec1.jpg}
+          \hspace{0.05\linewidth}
+      \includegraphics[width=0.2\linewidth]{calorimetro.jpg}\hspace{0.05\linewidth}
+      \includegraphics[width=0.2\linewidth]{hierro.jpg}
+     
+\end{figure}
+\hspace{0.6cm}(a) Generador de vapor  \hspace{1.5cm}(b) Calorimetro \hspace{1.5cm} (c) Trozo de hierro
+
+\hspace{1.3cm} PASCO TD-8556A
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Procedimiento}
+\begin{itemize}
+    \item Se maza el trozo de metal.
+    \item Se vacían alrededor de 850 [ml] de agua en el generador de vapor, y se cuelga el trozo de metal desde el soporte universal, de modo que quede totalmente sumergido y se enciende. Se espera hasta que hierva el agua.
+    \item Paralelamente, se llena el calorímetro con una cantidad aproximada de 350 [ml] de agua; esta agua debe ser masada, su temperatura también debe ser medida. 
+    \item Una vez que hierve el agua, se deja encendido el calorímetro por 2 minutos, de forma que el trozo de metal alcance el equilibrio térmico con el agua del generador. Luego se mide la temperatura de ella.
+    \item El trozo de metal se traslada hasta hacia el colorímetro y se cierra. El agua debe agitarse hasta que el interior alcance el equilibrio térmico para así medir su temperatura.
+\end{itemize}
+
+
+
+\newpage
+\section{Resultados}
+\begin{itemize}
+    \item $m_{Fe}=228.77$g  
+    \item $m_{H_{2}O}=350.4$g 
+    \item $T_{H_{2}O,i}=18.3$ $\degree$C  = 291.3K
+    \item $T_{Fe,i}=99$ $\degree$C  = 372K
+    \item $T_{f}=24$ $\degree$C  = 297K
+\end{itemize}
+
+\section{Preguntas}
+\begin{itemize}
+    \item [P1] Calcular el calor específico (c) del metal
+    
+    \underline{Respuesta:} Haciendo uso de la ecuacion deducida en El marco teorico:
+    $$c_{metal}=-\frac{m_{H_20}\cdot c_{H_20}\cdot \Delta T_{H_20}}{m_{metal} \cdot \Delta T_{metal} }$$
+    Se remplaza con los datos obtenidos para analizar el calor especifico del Hierro y considerando el calor especifico del agua como $4.182 \frac{J}{g\cdot K}$ :
+    $$ c_{Fe}=-\frac{350.4g\cdot 4.182 \frac{J}{g\cdot K}\cdot 5.7 K }{228.77g \cdot (-75)K }$$
+      $$ c_{Fe}\approx 0.487 \frac{J}{g\cdot K}$$
+
+    o en el SI: 
+    $$ c_{Fe}\approx 487 \frac{J}{kg\cdot K}$$
+    \vspace{0.5cm}
+    
+    \item [P2] Colocar valor de referencia para el calor específico del metal y comparar con el valor calculado
+(usando error porcentual). Citar fuente correspondiente.
+    \vspace{0.5cm}\\
+    \underline{Respuesta:}
+ Ocupando como valor de referencia $0,44 \frac{J}{g\cdot K}$ obtenido de \cite{2}. 
+ Se calcula el error porcentual como:
+$$ e_{r} = \left|\frac{(0.44 - 0.487) \, \frac{J}{g \cdot K}}{0.44 \, \frac{J}{g \cdot K}}\right| \times 100\% \approx  10.7 \%$$
+
+ 
+    
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Conclusión}
+
+Mediante el experimento se logro dar respuesta a nuestro objetivo el cual era determinar el calor especifico del hierro, dando un valor experimental de $0.487 \frac{J}{g\cdot K}$ equivalente a  $487 \frac{J}{kg\cdot K}$ En el SI. Este valor posee un error del $10.7 \%$ en comparación con la literatura disponible. \\Se conjetura que el error es debido principalmente a la idealización del experimento, donde se considera que el metal se mueve instantáneamente del generador de vapor al calorímetro, obviando así la transferencia de calor que se produce con el aire del medio ambiente al momento de sacar el metal del generador de vapor, ademas de errores humanos en la lectura del termómetro propios de la experimentación.
+
+
+
+
+\begin{thebibliography}{5}
+\bibitem{1} Faúndez Araya, C. (2024). \textit{Apuntes Clase} 
+\bibitem{2} Calor especifico (Hierro) 2022. (s.f.). Materiales (ES). \\https://www.materiales.gelsonluz.com/2021/03/calor-especifico-hierro.html
+\bibitem{3} Moebs, W., Ling, S. J., \& Sanny, J. (2021, 17 noviembre). 1.4 Transferencia de calor, calor específico y calorimetría - Física universitaria volumen 2 | OpenStax. https://openstax.org/books/f\%C3\%ADsica-universitaria-volumen-2/pages/1-4-transferencia-de-calor-calor-especifico-y-calorimetria
+
+\end{thebibliography}
+
+\end{document}

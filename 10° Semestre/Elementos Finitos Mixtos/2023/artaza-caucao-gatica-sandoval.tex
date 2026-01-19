@@ -1,0 +1,543 @@
+\documentclass[11pt]{article}
+
+\textwidth 17cm
+\textheight 23cm
+\oddsidemargin 0.25cm
+\addtolength{\voffset}{-2.4cm}
+\addtolength{\hoffset}{-0.5cm}
+
+\setlength{\parindent}{12pt}
+\setlength{\parskip}{3pt}
+\usepackage{amssymb,amsmath,epsfig}
+\usepackage[colorlinks=false,breaklinks=true,linkcolor=blue]{hyperref}
+\usepackage{graphics,psfrag,graphicx,color}
+\usepackage{diagbox}
+\usepackage{float,hhline}
+
+%\usepackage{refcheck}
+
+\pdfminorversion=7
+
+% OUR DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\ds}{\displaystyle}
+\newcommand{\bomega}{{\boldsymbol\omega}}
+\newcommand{\bsi}{{\boldsymbol\sigma}}
+\newcommand\bta{{\boldsymbol\tau}}
+\newcommand{\bze}{{\boldsymbol\zeta}}
+\newcommand\bet{{\boldsymbol\eta}}
+\newcommand{\bv}{{\mathbf{v}}}
+\newcommand{\bw}{{\mathbf{w}}}
+\newcommand\bz{{\mathbf z}}
+\newcommand{\f}{\mathbf{f}}
+\newcommand{\g}{\mathbf{g}}
+\newcommand{\bu}{\mathbf{u}}
+\newcommand{\bn}{{\mathbf{n}}}
+\newcommand\bbH{{\mathbb H}}
+\newcommand\bbL{{\mathbb L}}
+\newcommand\bL{{\mathbf L}}
+\renewcommand\div{{\mathrm{div}}}
+\newcommand\R{{\mathrm R}}
+\newcommand\Q{{\mathrm Q}}
+\newcommand\X{{\mathrm X}}
+\newcommand\bG{{\mathbf G}}
+\newcommand\bF{{\mathbf F}}
+\newcommand\A{{\mathrm A}}
+\newcommand\B{{\mathrm B}}
+\newcommand\F{{\mathrm F}}
+\newcommand\Y{{\mathrm Y}}
+\newcommand\G{{\mathrm G}}
+
+\def\bI{\mathbb{I}}
+\def\bM{\mathbf{M}}
+\newcommand\bH{\mathbf{H}}
+\newcommand\bbM{\mathbb{M}}
+\newcommand\bbI{\mathbb{I}}
+\newcommand\bt{{\mathbf t}}
+\newcommand\ba{{\mathbf a}}
+\newcommand\bb{{\mathbf b}}
+\newcommand\bc{{\mathbf c}}
+
+\newcommand\qin{{\quad\hbox{in}\quad}}
+\newcommand\qon{{\quad\hbox{on}\quad}}
+
+\def\R{\mathrm{R}}
+\def\H{\mathrm{H}}
+\def\L{\mathrm{L}}
+\def\M{\mathrm{M}}
+\def\W{\mathrm{W}}
+\def\rd{\mathrm{d}}
+\def\rD{\mathrm{D}}
+\def\rt{\mathrm{t}}
+\def\tF{{\mathtt F}}
+\def\tD{{\mathtt D}}
+\def\bdiv{\mathbf{div}}
+
+\def\tr{\mathrm{tr}}
+\def\pil{\left<}
+\def\pir{\right>}
+\def\qan{{\quad\hbox{and}\quad}}
+\def\wt{\widetilde}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{rem}{Remark}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{exa}{Example}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{defi}{Definition}[section]
+\newtheorem{prop}{Proposition}[section]
+\newenvironment{proof}{\noindent{\it Proof.}}{\hfill$\square$}
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+% END OF OUR DEFINITIONS 
+
+\allowdisplaybreaks
+
+%***********************************************************************************
+\title{A Banach spaces-based mixed-primal finite element method for the coupled
+Brinkman-Forchheimer and nonlinear transport equations\thanks{This research was supported by 
+ANID-Chile through the projects {\sc Centro de Modelamiento Matem\'atico} (FB210005),
+{\sc Anillo of Computational Mathematics for Desalination Processes} (ACT210087),
+and Fondecyt 11220393; by Grupo de Investigaci\'on en An\'alisis Num\'erico y C\'alculo Cient\'ifico (GIANuC$^2$), 
+Universidad Cat\'olica de la Sant\'isima Concepci\'on; and by Centro de Investigaci\'on en Ingenier\'ia Matem\'atica 
+(CI$^2$MA), Universidad de Concepci\'on.}}
+
+\author{
+{\sc Fernando A. Artaza}\thanks{CI$^2$MA and Departamento de Ingenier\'ia Matem\'atica, 
+Universidad de Concepci\'on, Casilla 160-C, Concepci\'on, Chile, email: {\tt fartaza2019@udec.cl}.}
+\quad
+{\sc Sergio Caucao}\thanks{GIANuC$^2$ and Departamento de Matem\'atica y F\'isica Aplicadas, Universidad Cat\'olica de la Sant\'isima Concepci\'on, Casilla 297, Concepci\'on, Chile,
+email: {\tt scaucao@ucsc.cl}.}
+\\
+{\sc Gabriel N. Gatica}\thanks{CI$^2$MA and Departamento de Ingenier\'ia Matem\'atica, 
+Universidad de Concepci\'on, Casilla 160-C, Concepci\'on, Chile, email: {\tt ggatica@ci2ma.udec.cl}.}
+\quad
+{\sc Brayan R. Sandoval}\thanks{CI$^2$MA and Departamento de Ingenier\'ia Matem\'atica, 
+Universidad de Concepci\'on, Casilla 160-C, Concepci\'on, Chile, email: {\tt bsandoval2018@udec.cl}.}}
+
+\date{ }
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent 
+We propose and analyze a Banach spaces-based mixed-primal finite element method for the 
+coupling of the Brinkman--Forchheimer equations with a nonlinear transport phenomenon 
+ 
+ ...............
+ 
+ 
+\end{abstract}
+
+\noindent
+{\bf Key words}: Brinkman--Forchheimer equations, nonlinear transport,
+pseudostress-velocity \\
+formulation, fixed point theory, perturbed saddle-point, mixed finite elements
+
+\smallskip\noindent
+{\bf Mathematics subject classifications (2000)}: 65N30, 65N12, 65N15, 35Q79, 80A20, 76R05, 76D07
+
+\maketitle
+
+%************************************************************************
+%************************************************************************
+
+
+\section{Introduction}\label{section1}
+
+
+\subsection*{Preliminary notations}
+
+Let $\Omega\subset \R^n, n\in\{2,3\}$, be a bounded domain with polyhedral boundary $\Gamma$, 
+and let $\bn$ be the outward unit normal vector on $\Gamma$. In what follows, standard notation is adopted 
+for Lebesgue spaces $\L^p(\Omega)$ and Sobolev spaces $\W^{s,p}(\Omega)$, with $s\in \R$ and $p > 1$, 
+whose corresponding norms, either for the scalar, vectorial, or tensorial case, are denoted by 
+$\|\cdot\|_{0,p;\Omega}$ and $\|\cdot\|_{s,p;\Omega}$, respectively. In particular, given a non-negative 
+integer $m$, $\mathrm W^{m,2}(\Omega)$  is also denoted by $\mathrm H^m(\Omega)$, and the 
+notations of its norm and seminorm are simplified to $||\cdot||_{m,\Omega}$ and $|\cdot|_{m,\Omega}$, 
+respectively. In addition, $\H^{1/2}(\Gamma)$ is the space of traces of functions of $\H^1(\Omega)$, and 
+$\H^{-1/2}(\Gamma)$ denotes its dual. On the other hand, given any generic scalar functional space 
+$\mathrm S$, we let $\mathbf{S}$ and $\mathbb{S}$ be the corresponding vectorial and tensorial 
+counterparts, whereas $\| \cdot\|$, with no subscripts, will be employed for the norm of any element or 
+operator whenever there is no confusion about the space to which they belong.
+Also, $|\cdot|$ denotes the Euclidean norm in both $\mathrm R^n$ and $\mathrm R^{n\times n}$, 
+and as usual, $\mathbb I$ stands for the identity tensor in $\mathrm R^{n\times n}$.
+In turn, for any vector fields $\bv=(v_i)_{i=1,n}$ and $\bw=(w_i)_{i=1,n}$, we set the gradient,  
+divergence, and tensor product operators, as
+\begin{equation*}
+\nabla\bv:=\left(\frac{\partial v_i}{\partial x_j}\right)_{i,j=1,n},\quad 
+\div (\bv):=\sum_{j=1}^n \frac{\partial v_j}{\partial x_j},\qan 
+\bv\otimes\bw:=(v_i w_j)_{i,j=1,n}\,,
+\end{equation*}
+whereas for any tensor fields $\bta =(\tau_{ij})_{i,j=1,n}$ 
+and $\bze=(\zeta_{ij})_{i,j=1,n}$, we let $\bdiv(\bta )$ be the divergence operator $\div$ acting 
+along the rows of $\bta $, and define the transpose, the trace, the 
+deviatoric tensor, and the tensor inner product, respectively, as
+\begin{equation*}
+\bta ^\rt := (\tau_{ji})_{i,j=1,n},\quad 
+\tr(\bta ) := \sum_{i=1}^n \tau_{ii},\quad
+\bta ^\rd := \bta  - \frac{1}{n}\,\tr(\bta )\,\bI,\qan 
+\bta :\bze := \sum_{i,j=1}^n \tau_{ij}\,\zeta_{ij}\,.
+\end{equation*}
+Furthermore, for each $t \in [1,+\infty)$ we introduce the Banach space
+\begin{equation*}\label{Hdiv-tensorial-def}
+\bbH(\bdiv_t;\Omega) := \Big\{\bta \in\bbL^2(\Omega):\quad \bdiv(\bta )\in\bL^ t(\Omega)\Big\}\,,
+\end{equation*}
+equipped with the natural norm 
+\begin{equation*}
+    \|\bta \|_{\bdiv_t;\Omega} \,:=\, \|\bta \|_{0,\Omega} + \|\bdiv(\bta )\|_{0,t;\Omega} \quad \forall\,\bta \, \in \bbH(\bdiv_t;\Omega)\,.
+\end{equation*}
+Additionally, we recall that, proceeding as in \cite[eq. (1.43), Section 1.3.4]{g-SPRINGER-2014} (see also \cite[Section 4.1]{cmo2018} 
+and \cite[Section 3.1]{cgm-M2AN-2020}), one can prove that for $t \in \left\lbrace \begin{array}{cc}
+     (1,+\infty]\,\,\mathrm{in}\,\,\R^2\,, \\[0.5ex]
+     [\frac{6}{5},+\infty]\,\,\mathrm{in}\,\,\R^3\,,
+\end{array}\right.$ there holds
+\begin{equation}\label{ibp-Hdiv-tensorial}
+    \pil\bta \bn,\bv\pir = \int_\Omega \Big\{\bta :\nabla \bv + \bv\cdot\bdiv(\bta )\Big\}\,\quad \forall\,(\bta ,\bv) \in \bbH(\bdiv_t;\Omega) \,\times\,\bH^1(\Omega)\,,
+\end{equation}
+where $\pil\cdot,\cdot\pir$ denotes in \eqref{ibp-Hdiv-tensorial} the 
+duality pairing between $\bH^{-1/2}(\Gamma)$ and $\bH^{1/2}(\Gamma)$. 
+
+\section{The model problem}\label{section2}
+
+We consider a porous medium occupying the region $\Omega$, and assume that a viscous fluid governed 
+by the Brinkman-Forchheimer equations flows through it, so that the sought variables are its pressure 
+$p$ and velocity $\bu$. In addition, we let $\phi$ be the concentration of a chemical component 
+transported by the fluid, which is advected and diffused in $\Omega$ according to the corresponding 
+physical principle. Alternatively, $\phi$ could represent the temperature of the fluid, among several 
+other possibilities. In this way, the coupled model of interest is given by the following system 
+of partial differential equations:
+\begin{equation}\label{BF-transport}
+\begin{array}{rcll}
+\ds
+-\,\mu \, \Delta\bu \,+\, \tD\,\bu \,+\, \tF\,|\bu|^{\rho-2}\,\bu \,+\, \nabla p &=& \phi\,\f & \qin \Omega\,, \\[1.5ex]
+\ds
+\div(\bu) &=& 0 & \qin \Omega\,, \\[1.5ex]
+\ds
+\div\big( \vartheta(|\nabla\phi|) \, \nabla\phi - \phi\,\bu \,-\,f(\phi) \,\mathbf g\big) &=& g & \qin \Omega\,, \\[1.5ex]
+\bu \,=\, \bu_\rD \qan \phi &=&\phi_\rD & \qon \Gamma\,,
+\end{array}
+\end{equation}
+where $\mu$ is the constant viscosity of the fluid, $\tD, \, \tF > 0$ are the Darcy 
+and Forchheimer coefficients, respectively, $\rho$ is a given number in $[3,4]$, 
+$\vartheta : \R^+ \to \R^+$ is a nonlinear diffusivity function, $f$ is a nonlinear 
+flux acting in the direction of $\g$, which, in turn, is a constant vector pointing 
+in the direction of gravity, $\f$ and $g$ are given source functions, and $\bu_\rD$ and 
+$\phi_\rD$ are Dirichlet data for $\bu$ and $\phi$, respectively. Regarding $\vartheta$, 
+we assume that there exist constants $\vartheta_1, \, \vartheta_2 > 0$ such that
+\begin{equation}\label{assumption-mu}
+\vartheta_1 \le \vartheta(t) \le \vartheta_2 \qan \vartheta_1 \le \vartheta(t) + t\,\vartheta'(t) \le \vartheta_2
+\qquad\forall\, t\in \R^+\,.
+\end{equation}
+In addition, $f$ is required to be bounded and Lipschitz-continuous, which means that
+there exist constants $f_1, \, f_2, \, \L_f > 0$ such that
+\begin{equation}\label{assumption-f}
+f_1 \le f(t) \le f_2 \qan |f(t) - f(s)| \,\le\, \L_f\,|s-t| \qquad \forall\,s, \, t \in \R^+\,.
+\end{equation}
+
+Now, due to the incompressibility of the fluid (cf. second row of \eqref{BF-transport}),
+$\bu_\rD$ must formally satisfy the compatibility condition
+\begin{equation}\label{eq:compatibility-condition}
+\int_{\Gamma} \bu_\rD\cdot\bn \,=\, 0 \,.
+\end{equation}
+On the other hand, for the uniqueness of $p$ we look for this unknown in the space
+\begin{equation*}
+\L^2_0(\Omega) \,:=\, \left\{ q\in \L^2(\Omega) :\quad \int_{\Omega} q = 0 \right\} \,.
+\end{equation*}
+
+Next, in order to derive a mixed-primal formulation for \eqref{BF-transport}, 
+we first define as an auxiliary unknown the fluid pseudostress 
+\begin{equation}\label{def-bsi}
+\bsi \,:=\, \mu\, \nabla\bu \,-\, p\,\bI\,,
+\end{equation}
+so that the first row of \eqref{BF-transport} becomes
+\begin{equation}\label{eq-BF-1}
+-\,\bdiv(\bsi) \,+\, \tD\,\bu \,+\, \tF\,|\bu|^{\rho-2}\,\bu \,=\, \phi\,\f \,.
+\end{equation}
+Thus, taking matrix trace along with the fact that $\tr(\nabla\bu) = \div(\bu) = 0$,
+and then applying the deviatoric operator, we deduce from \eqref{def-bsi} that
+\begin{equation}\label{p-bsi}
+p\,=\, -\dfrac{1}{n} \,\tr(\bsi) \qan \dfrac{1}{\mu}\,\bsi^\rd\,=\, \nabla \bu \,,
+\end{equation}
+which are equivalent to the pair of equations formed by the incompressibility condition
+and \eqref{def-bsi}. 
+Hence, eliminating the unknown $p$, and computing it afterwards according to the identity
+provided in \eqref{p-bsi}, the original system \eqref{BF-transport} can be stated, equivalently,
+as: Find $\bsi$, $\bu$, and $\phi$ in suitable spaces to be indicated below, such that
+\begin{equation}\label{BF-transport-equivalent}
+\begin{array}{rcll}
+\ds
+\dfrac{1}{\mu}\,\bsi^\rd &=& \nabla \bu & \qin \Omega\,, \\[3ex]
+\ds
+-\,\bdiv(\bsi) \,+\, \tD\,\bu \,+\, \tF\,|\bu|^{\rho-2}\,\bu &=& \phi\,\f & \qin \Omega\,, \\[1.5ex]
+\ds
+\div\big(\vartheta(|\nabla\phi|) \, \nabla\phi - \phi\,\bu \,-\,f(\phi) \,\mathbf g\big) &=& g & \qin \Omega\,, \\[2ex]
+\ds
+\bu \,=\, \bu_\rD \qan \phi &=&\phi_\rD & \qon \Gamma\,, \\[2ex]
+\ds
+\int_\Omega \tr(\bsi) &=& 0 \,. & 
+\end{array}
+\end{equation}
+
+
+\section{The variational formulation}\label{section3}
+
+{\color{blue}
+\noindent
+Find $(\bsi,\bu) \in \H \times \Q$ and $(\phi,\xi) \in \X \times \Y$ such that
+\begin{equation}\label{mixed-formulation}
+\begin{array}{lcll}
+\ds
+\ba(\bsi,\bta) + \bb(\bta,\bu)&=&\bF(\bta)&
+\quad\forall\,\bta \in \H\,,\\[2ex]
+\ds
+\bb(\bsi,\bv)\,-\, \bc_\bu(\bu,\bv) &=& \bG_\phi(\bv)& \quad\forall\,\bv\in \Q\,,\\[2ex]
+[\A_\bu(\phi),\varphi] + \B(\varphi,\xi) &=& \F_\phi(\varphi) & \quad\forall\,\varphi \in \X\,,\\[2ex]
+\B(\phi,\eta) &=& \G(\eta) & \quad\forall\,\eta\in \Y\,,
+\end{array}
+\end{equation}
+where the bilinear forms $\ba : \H \times \H \to \R$, $\bb : \H \times \Q \to \R$, and
+$\bc_\bz : \Q \times\Q \to \R$, and the nonlinear operator $\A_\bz : \X \to \X'$, for each $\bz \in \Q$, 
+and the bilinear form $\B : \X \times \Y \to \R$, and the linear functionals $\bF : \H \to \R$, $\bG_\psi : \Q \to \R$
+and $\F_\psi : \X\to \R$, for each $\psi \in \X$, and $\G : \Y \to \R$, are defined as
+\begin{equation}\label{def-ba}
+\ba(\bze,\bta) \,:=\, \dfrac1\mu \int_\Omega \bze^\rd : \bta^\rd \qquad\forall\,\bze, \, \bta \in \H \,,
+\end{equation}
+\begin{equation}\label{def-bb}
+\bb(\bta,\bv) \,:=\, \int_\Omega \bv \cdot \bdiv(\bta) \qquad\forall\,(\bta,\bv) \in \H \times \Q\,,
+\end{equation}
+\begin{equation}\label{def-bc-z}
+\bc_\bz(\bw,\bv) \,:=\, \tD \int_\Omega\bw\cdot\bv \,+\, \tF \int_\Omega |\bz|^{\rho-2} \bw\cdot\bv
+\qquad \forall\,\bw, \, \bv \in \Q\,,
+\end{equation}
+\begin{equation}\label{def-A-z}
+[\A_\bz(\psi),\varphi] \,:=\, \int_\Omega 
+\vartheta(|\nabla\psi|) \, \nabla\psi \cdot \nabla\varphi - \int_\Omega \psi\,\bz \cdot \nabla\varphi
+\qquad\forall\, \psi, \, \varphi \in \X\,, 
+\end{equation}
+\begin{equation}\label{def-B}
+\B(\varphi,\eta) \,:=\, \langle\eta,\varphi\rangle \qquad\forall\,(\varphi,\eta) \in \X \times \Y\,,
+\end{equation}
+\begin{equation}\label{def-bF}
+\bF(\bta) \,:=\, \langle \bta\,\bn,\bu_\rD\rangle \qquad\forall\,\bta \in \H\,,
+\end{equation}
+\begin{equation}\label{def-bG-psi}
+\bG_\psi(\bv) \,:=\, - \int_\Omega \psi \,\f \cdot \bv \qquad\forall\, \bv \in \Q\,,
+\end{equation}
+\begin{equation}\label{def-F-psi}
+\F_\psi(\varphi) \,:=\, \int_\Omega f(\psi)\,\g \cdot \nabla\varphi \,-\, \int_\Omega g\,\varphi 
+\qquad\forall\,\varphi \in \X\,,
+\end{equation}
+and
+\begin{equation}\label{def-G}
+\G(\eta)\,:=\, \langle \eta,\phi_\rD\rangle \qquad\forall\, \eta \in \Y\,.
+\end{equation}
+Note here that $[\,\cdot,\cdot\,]$ represents  the duality pairing between $\X'$ and $\X$.
+In turn, in the definitions of $\B$ (cf. \eqref{def-B}) and $\G$ (cf. \eqref{def-G}),
+$\langle\,\cdot,\cdot\,\rangle$ stands for the duality pairing between $\H^{-1/2}(\Gamma)$
+and $\H^{1/2}(\Gamma)$, whereas in the definition of $\bF$ (cf. \eqref{def-bF}) $\langle\,\cdot,\cdot\,\rangle$  
+denotes the duality pairing between $\bH^{-1/2}(\Gamma)$ and $\bH^{1/2}(\Gamma)$.}
+
+
+
+
+
+\section{The Galerkin scheme}\label{sec:Galerkin-scheme}
+
+
+\section{A priori error analysis}\label{sec:a-priori-error-analysis}
+
+
+\section{Numerical results}\label{sec:numerical-results}
+
+
+\begin{thebibliography}{99}
+
+%\bibitem{bcgh2020}
+%{\sc G.A. Benavides, S. Caucao, G.N. Gatica and A.A. Hopper},
+%{\it A Banach spaces-based analysis of a new mixed-primal finite element method for a coupled flow-transport problem}. 
+%Comput. Methods Appl. Mech. Engrg. 371 (2020), 113285, 29 pp.
+%
+%\bibitem{bcgh2022}
+%{\sc G.A. Benavides, S. Caucao, G.N. Gatica and A.A. Hopper},
+%{\it A new non-augmented and momentum-conserving fully-mixed finite element method for a coupled flow-transport problem}. 
+%Calcolo 59 (2022), no. 1, Paper No. 6, 44 pp.
+%
+%\bibitem{Brezzi-Fortin}
+%{\sc F. Brezzi and M. Fortin},
+%{\it Mixed and Hybrid Finite Element Methods}.
+%Springer Series in Computational Mathematics, 15. Springer-Verlag, New York, 1991.
+
+%\bibitem{cgo2021}
+%{\sc J. Cama\~no, C. Garc\'ia and R. Oyarz\'ua},
+%{\it Analysis of a momentum conservative mixed-FEM for the stationary Navier-Stokes problem}.
+%Numer. Methods Partial Differential Equations 37 (2021), no. 5, 2895--2923. 
+%
+%\bibitem{cgot2016}
+%{\sc J. Cama\~no, G.N. Gatica, R. Oyarz\'ua and G. Tierra},
+%{\it An augmented mixed finite element method for the Navier-Stokes equations with variable viscosity}.
+%SIAM J. Numer. Anal. 54 (2016), no. 2, 1069--1092.
+
+\bibitem{cmo2018}
+{\sc J. Cama\~no, C. Mu\~noz and R. Oyarz\'ua},
+{\it Numerical analysis of a dual-mixed problem in non-standard Banach spaces}.
+Electron. Trans. Numer. Anal. 48 (2018), 114--130.
+
+%{\color{blue}
+%\bibitem{ccgi-2023}
+%{\sc S. Caucao, E. Colmenares, G.N. Gatica and C. Inzunza},
+%{\it A Banach spaces-based fully-mixed finite element method for the stationary chemotaxis-Navier--Stokes problem}.
+%Comp. Math. Appl. 145 (2023), 65--89. 
+%}
+
+%\bibitem{ce2023-pp}
+%{\sc S. Caucao and J. Esparza},
+%{\it An augmented mixed FEM for the convective Brinkman--Forchheimer problem: a priori and a posteriori error analysis}.
+%arXiv:2209.02894 [math.NA], (2023).
+
+%\bibitem{cgos2020}
+%{\sc S. Caucao, G.N. Gatica, R. Oyarz\'ua and N. S\'anchez},
+%{\it A fully-mixed formulation for the steady double-diffusive convection system based upon Brinkman--Forchheimer equations}.
+%J. Sci. Comput. 85 (2020), no. 2, Paper No. 44, 37 pp. 
+
+%\bibitem{cov2020}
+%{\sc S. Caucao, R. Oyarz\'ua and S. Villa-Fuentes},
+%{\it A new mixed-FEM for steady-state natural convection models allowing conservation of momentum and thermal energy}.
+%Calcolo 57 (2020), no. 4, Paper No. 36, 39 pp. 
+%
+%\bibitem{covy2022}
+%{\sc S. Caucao, R. Oyarz\'ua, S. Villa-Fuentes and I. Yotov},
+%{\it A three-field Banach spaces-based mixed formulation for the unsteady Brinkman--Forchheimer equations}.
+%Comput. Methods Appl. Mech. Engrg. 394 (2022), Paper No. 114895, 32 pp. 
+%
+%\bibitem{cy2021}
+%{\sc S. Caucao and I. Yotov,}
+%{\it A Banach space mixed formulation for the unsteady Brinkman-Forchheimer equations}. 
+%IMA J. Numer. Anal. 41 (2021), no. 4, 2708--2743.
+
+%\bibitem{cku2005}
+%{\sc A.O. Celebi, V.K. Kalantarov and D. Ugurlu},
+%{\it Continuous dependence for the convective Brinkman--Forchheimer equations}.
+%Appl. Anal. 84 (2005), no. 9, 877--888.
+
+%\bibitem{Ciarlet}
+%{\sc P.G. Ciarlet},
+%{\it Linear and Nonlinear Functional Analysis with Applications}.
+%Society for Industrial and Applied Mathematics, Philadelphia, PA, 2013.
+
+\bibitem{cgm-M2AN-2020}
+{\sc E. Colmenares, G.N. Gatica and S. Moraga},
+{\it A Banach spaces-based analysis of a new fully-mixed finite element method for the Boussinesq problem}.
+ESAIM Math. Model. Numer. Anal. 54 (2020), no. 5, 1525--1568.
+
+%\bibitem{cn-CAMWA-2016}
+%{\sc E. Colmenares and M. Neilan}, 
+%{\it Dual-mixed finite element methods for the stationary Boussinesq problem}. 
+%Comp. Math. Appl. 72 (2016), no. 7, 1828--1850.
+
+%{\color{blue}
+%\bibitem{crrb2021}
+%{\sc P.-H. Cocquet, M. Rakotobe, D. Ramalingom, and A. Bastide}, 
+%{\it Error analysis for the finite element approximation of the Darcy--Brinkman--Forchheimer model for porous media with mixed boundary conditions}.
+%J. Comput. Appl. Math. 381 (2021), 113008, 24 pp.
+%}
+
+%\bibitem{cg-CAMWA-2022}
+%{\sc C.I. Correa and G.N. Gatica},
+%{\it On the continuous and discrete well-posedness of perturbed saddle-point formulations in Banach spaces}.
+%Comput. Math. Appl. 117 (2022), 14--23.
+%
+%\bibitem{cgr-M2AN-2023}
+%{\sc C.I. Correa, G.N. Gatica and R. Ruiz-Baier},
+%{\it New mixed finite element methods for the coupled Stokes and Poisson-Nernst-Planck equations in Banach spaces}.
+%ESAIM Math. Model. Numer. Anal., https://doi.org/10.1051/m2an/2023024.
+
+%\bibitem{Ern-Guermond}
+%{\sc A. Ern and J.-L. Guermond},
+%{\it Theory and Practice of Finite Elements}.
+%Applied Mathematical Sciences, 159. Springer-Verlag, New York, 2004.
+
+\bibitem{g-SPRINGER-2014}
+{\sc G.N. Gatica},
+{\it A Simple Introduction to the Mixed Finite Element Method. Theory and Applications}.
+SpringerBriefs in Mathematics. Springer, Cham, 2014.
+
+%\bibitem{ggm2014}
+%{\sc G.N. Gatica, L.F. Gatica, and A. M\'arquez},
+%{\it Analysis of a pseudostress-based mixed finite element method for the Brinkman model of porous media flow}.
+%Numer. Math. 126 (2014), no. 4, 635--677.
+
+%\bibitem{gnr2023}
+%{\sc G.N. Gatica, N. N\'u\~nez and R. Ruiz-Baier},
+%{\it New non-augmented mixed finite element methods for the Navier--Stokes--Brinkman equations using Banach spaces}.
+%J. Numer. Math., https://doi.org/10.1515/jnma-2022-0073.
+%
+%\bibitem{gos2018}
+%{\sc L.F. Gatica, R. Oyarz\'ua and N. S\'anchez},
+%{\it A priori and a posteriori error analysis of an augmented mixed-FEM for the Navier-Stokes-Brinkman problem}.
+%Comput. Math. Appl. 75 (2018), no. 7, 2420--2444. 
+%
+%{\color{blue}	
+%\bibitem{Girault-Raviart}
+%{\sc V. Girault and P.A. Raviart},
+%{\it Finite Element Methods for Navier--Stokes Equations. Theory and Algorithms}.
+%Springer Series in Computational Mathematics, 5. Springer-Verlag, Berlin, 1986.}
+
+%\bibitem{gm1975}
+%{\sc R. Glowinski and A. Marrocco},
+%{\it Sur l'approximation, par éléments finis d'ordre un, et la résolution, par pénalisations-dualité d'une classe de probl\'emes de Dirichlet non lineaires}.
+%R.A.I.R.O. tome 9, no 2 (1975), p. 41-76.
+%	
+%\bibitem{Hecht2012}
+%{\sc F. Hecht},
+%{\it New development in FreeFem++}.
+%J. Numer. Math. 20 (2012), 251-–265.
+
+%\bibitem{ll2019}
+%{\sc D. Liu and K. Li},
+%{\it Mixed finite element for two-dimensional incompressible convective Brinkman-Forchheimer equations}.
+%Appl. Math. Mech. (English Ed.) 40 (2019), no. 6, 889--910. 
+
+%{\color{blue}
+%\bibitem{mr2009}
+%{\sc V. Maz'ya and J. Rossmann},
+%{\it Mixed boundary value problems for the stationary Navier--Stokes system in polyhedral domains}.
+%Arch. Rational Mech. Anal. 194 (2009), 669--712.
+%}
+
+%{\color{blue}
+%\bibitem{sw2017}
+%{\sc P. Skrzypacz and D. Wei}, 
+%{\it Solvability of the Brinkman--Forchheimer--Darcy equation}.
+%J. Appl. Math. 2017, Art. ID 7305230, 10 pp.
+%}
+%
+%{\color{blue}
+%\bibitem{vp2017}
+%{\sc C. Varsakelis and M.V. Papalexandris}, 
+%{\it On the well-posedness of the Darcy--Brinkman--Forchheimer equations for coupled porous media-clear fluid flow}.
+%Nonlinearity 30 (2017), no. 4, 1449--1464.
+%}
+
+%\bibitem{y2023}
+%{\sc H. Yu},
+%{\it Axisymmetric solutions to the convective Brinkman-Forchheimer equations}.
+%J. Math. Anal. Appl. 520 (2023), no. 2, Paper No. 126892, 12 pp.
+%
+%\bibitem{zy2012}
+%{\sc C. Zhao and Y. You},
+%{\it Approximation of the incompressible convective Brinkman--Forchheimer equations}.
+%J. Evol. Equ. 12 (2012), no. 4, 767--788.
+	
+\end{thebibliography}
+\end{document}
+
+
+
+
+%*********************************************************************************************

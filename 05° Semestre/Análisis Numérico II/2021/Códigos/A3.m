@@ -1,0 +1,13 @@
+clear all;close all;clc;
+a = 4;b = 6;c = 8;
+alpha = 5;beta = 7; gamma = 2; 
+p = @(t) (c + b.*t + a.*t.^2);
+q = @(t) (alpha + beta.*t + gamma.*t.^2);
+s = (alpha + (beta + gamma)/2 - gamma/6);
+r = (beta + gamma)/sqrt(12);
+Tadq = @(t) (r*10*sqrt(3) - s*6 + (12*s-r*60*sqrt(3)).*t + r*60*sqrt(3).*t.^2);
+Tp = @(t) (b + 2.*a.*t);
+pin1 = @(t) Tp(t).*q(t);
+pint1 = integral(pin1,0,1);
+pin2 = @(t) p(t).*Tadq(t);
+pint2 = integral(pin2,0,1);

@@ -1,0 +1,47 @@
+Integracion Numerica
+
+1. Punto medio
+I=punto_medio(a,b,f,N)
+
+aca se pueden definir analogamente las funciones trapecios y simpson.
+
+Comando integral en Matlab
+
+Comando integral2
+
+EDO
+
+euler_explicito, euler_implicito.
+
+[t,y] = ode45 (f,[t0 tf],y0);
+
+donde f es f(t,y)
+[t0 tf] es el intervalo
+y_0 condicion inicial
+
+si solo quieres conocer el valor en algunos puntos.
+
+1. guardalos en tspan= [x1,x2,..]
+2. [t,y] = ode45(f,tspan,y0)
+luego t=tspan.
+
+La tolerancia predeterminada es 10^-3 para error relativo, y 10^-6 error absoluto. para cambiarlo
+
+
+options = odeset('RelTol','1e-6','AbsTol','1e-8');
+[t,y] = ode45 (f,tspan,y0,options)
+
+ode15s
+
+PROBLEMAS STIFF
+para problemas stiff usar ode15s.
+
+
+Sistemas de EDO (2)
+
+aca usar codigos q me dieron xd.
+
+
+
+
+

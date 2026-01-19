@@ -1,0 +1,107 @@
+-- FreeFem++ v4.12 (Tue Dec  6 18:35:04 CET 2022 - git v4.12)
+   file : C:\Users\braya\Desktop\Finitos\Años anteriores\curso\codigos\elast3D.edp
+ Load: lg_fem lg_mesh lg_mesh3 eigenvalue
+    1 : /*
+    2 :
+    3 : Solucion de un problema de elasticidad en 3D
+    4 :
+    5 :  */
+    6 : load "medit"(load: loadLibary C:\Program Files (x86)\FreeFem++\\.\medit = 0)
+    7 : include "cube.idp"load "msh3"(load: loadLibary C:\Program Files (x86)\FreeFem++\\.\msh3 = 0)
+    2 : load "medit" (already loaded: medit)
+    3 : // ! basic functions to build regular mesh of a cube
+    4 : /*
+    5 :   mesh3   Cube(NN,BB,L);
+    6 :     --   build the surface mesh of a 3d box
+    7 :     where: for exqmple:
+    8 :   int[int]  NN=[nx,ny,nz]; //  the number of seg in the 3 direction
+    9 :   real [int,int]  BB=[[xmin,xmax],[ymin,ymax],[zmin,zmax]]; // bounding bax
+   10 :   int [int,int]  L=[[1,2],[3,4],[5,6]]; // the label of the 6 face left,right, front, back, down, right
+   11 : */
+   12 : func mesh3 Cube(int[int] & NN,real[int,int] &BB ,int[int,int] & L)
+   13 : {
+   14 :   //  first  build the 6 faces of the hex.
+   15 :   real x0=BB(0,0),x1=BB(0,1);
+   16 :   real y0=BB(1,0),
+ *** Warning  The identifier y0 hide a Global identifier
+y1=BB(1,1);
+ *** Warning  The identifier y1 hide a Global identifier
+ 
+   17 :   real z0=BB(2,0),z1=BB(2,1);
+   18 :
+   19 :   int nx=NN[0],ny=NN[1],nz=NN[2];
+   20 :   mesh Thx = square(nx,ny,[x0+(x1-x0)*x,y0+(y1-y0)*y]);
+   21 :
+   22 :   int[int] rup=[0,L(2,1)],  rdown=[0,L(2,0)],
+   23 :     rmid=[1,L(1,0),  2,L(0,1),  3, L(1,1),  4, L(0,0) ];
+   24 :   mesh3 Th=buildlayers(Thx,nz,   zbound=[z0,z1],
+   25 :                        labelmid=rmid,   labelup = rup,
+   26 :                        labeldown = rdown);
+   27 :
+   28 :   return Th;
+   29 : }
+   30 :
+   31 :
+   32 :
+   33 :
+   34 :
+    8 :
+    9 : // Generacion de la malla
+   10 : int[int]  Nxyz=[20,5,5];
+   11 : real [int,int]  Bxyz=[[0.,5.],[0.,1.],[0.,1.]];
+   12 : int [int,int]  Lxyz=[[1,2],[2,2],[2,2]];
+   13 : mesh3 Th=Cube(Nxyz,Bxyz,Lxyz);
+   14 :
+   15 : // Coeficientes fisicos
+   16 : real E = 21.5e4;
+   17 : real sigma = 0.29;
+   18 :
+   19 : real mu = E/(2*(1+sigma));
+   20 : real lambda = E*sigma/((1+sigma)*(1-2*sigma));
+   21 : real gravity = -0.05;
+   22 :
+   23 : // Definicion del espacio (P_1 en cada variable)
+   24 : fespace Vh(Th,[P1,P1,P1]);
+   25 : Vh [u1,u2,u3], [v1,v2,v3];
+   26 : cout << "lambda,mu,gravity ="<<lambda<< " " << mu << " " << gravity << endl;
+   27 :
+   28 : // Definicion de los tensores de deformacion y esfuerzo
+   29 : real sqrt2=sqrt(2.);
+   30 : macro epsilon(u1,u2,u3)  [dx(u1),dy(u2),dz(u3),(dz(u2)+dy(u3))/sqrt2,(dz(u1)+dx(u3))/sqrt2,(dy(u1)+dx(u2))/sqrt2]  )  // EOM
+   31 : macro div(u1,u2,u3) ( dx(u1)+dy(u2)+dz(u3) )  )  // EOM
+   32 :
+   33 : //Solucion del problema
+   34 : solve Lame([u1,u2,u3],[v1,v2,v3])=
+   35 :   int3d(Th)(
+   36 :             lambda*div(u1,u2,u3)     ( dx(u1)+dy(u2)+dz(u3) ) *div(v1,v2,v3)     ( dx(v1)+dy(v2)+dz(v3) )
+ 
+   37 :             +2.*mu*( epsilon(u1,u2,u3)     [dx(u1),dy(u2),dz(u3),(dz(u2)+dy(u3))/sqrt2,(dz(u1)+dx(u3))/sqrt2,(dy(u1)+dx(u2))/sqrt2] '*epsilon(v1,v2,v3)     [dx(v1),dy(v2),dz(v3),(dz(v2)+dy(v3))/sqrt2,(dz(v1)+dx(v3))/sqrt2,(dy(v1)+dx(v2))/sqrt2]  ) //')
+   38 :               )
+   39 :   - int3d(Th) (gravity*v3)
+   40 :   + on(1,u1=0,u2=0,u3=0)
+   41 :   ;
+   42 :
+   43 : // Visualizacion de la malla original y la desplazada
+   44 : real dmax= u1[].max;
+   45 : cout << " max deplacement = " << dmax << endl;
+   46 : real coef= 0.1/dmax;
+   47 : int[int] ref2=[1,0,2,0];
+   48 : mesh3 Thm=movemesh3(Th,transfo=[x+u1*coef,y+u2*coef,z+u3*coef],label=ref2);
+   49 : Thm=change(Thm,label=ref2);
+   50 : plot(Th,Thm, wait=1,cmm="coef  amplification = "+coef );
+   51 :
+   52 :  sizestack + 1024 =3608  ( 2584 )
+ 
+  -- Square mesh : nb vertices  =126 ,  nb triangles = 200 ,  nb boundary edges 50
+  -- FESpace: Nb of Nodes 756 Nb of DoF 2268
+lambda,mu,gravity =115079 83333.3 -0.05
+  -- Solve :
+          min -0.000187202  max 2.50128e-05
+ max deplacement = 2.50128e-05
+  Plot::  Sorry no ps version for this type of plot 5
+  Plot::  Sorry no ps version for this type of plot 5
+times: compile 0.358s, execution 0.117s,  mpirank:0
+ ######## We forget of deleting   77 Nb pointer,   0Bytes  ,  mpirank 0, memory leak =0
+ CodeAlloc : nb ptr  4242,  size :533088 mpirank: 0
+Ok: Normal End
+ try getConsole C:\Users\braya\Desktop\Finitos\Años anteriores\curso\codigos\elast3D.edp

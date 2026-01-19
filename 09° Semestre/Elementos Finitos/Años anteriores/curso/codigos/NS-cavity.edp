@@ -1,0 +1,54 @@
+/*
+  Problema de la cavidad 2D para Navier Stokes
+  usando P2/P1 (Taylor-Hood) y un esquema de Newton
+*/
+
+real Reynold = 100.;          // numero de Reynolds del problema
+real nu      = 1.0/Reynold; // viscosidad del problema
+int maxiter  = 50;          // Numero maximo de iteraciones del Newton
+int it;
+
+mesh Th=square(10,10);      // malla del dominio Omega:=]0,1[x]0,1[
+
+fespace Hh(Th,P2);          // espacio FEM: P2 para la velocidad
+fespace Qh(Th,P1);          // espacio FEM: P1 para la presion
+
+Hh u1,u2,v1,v2,deltau1,deltau2; // declaracion de que variables son P2
+Qh p,q,deltap;                  // declaracion de que variables son P1
+
+macro aa(ux,uy,vx,vy) ( nu*(dx(ux)*dx(vx) + dy(ux)*dy(vx) +  dx(uy)*dx(vy) + dy(uy)*dy(vy)) )// forma bilineal a
+macro bb(vx,vy,qq) (-qq*(dx(vx)+dy(vy)))                                                     // forma bilineal b
+macro cc(ux,uy,vx,vy,wx,wy) (wx*(ux*dx(vx)+uy*dy(vx)) + wy*(ux*dx(vx)+uy*dy(vy)))            // forma trilineal c
+macro div(vx,vy) (dx(vx)+dy(vy))                                                             // divergencia
+
+//
+// Iniciamos el esquema de Newton con una solucion provista por
+// el problema de Stokes
+//
+
+solve Stokes ([u1,u2,p],[v1,v2,q]) =
+int2d(Th) (aa(u1,u2,v1,v2) + bb(u1,u2,q) + bb(v1,v2,p))
++ on(1,2,4,u1=0,u2=0)
++ on(3,u1=1,u2=0);
+
+//
+// Definicion del sistema de Newton a resolver en cada iteracion
+//
+
+problem NS([deltau1,deltau2,deltap],[v1,v2,q],init=it) =
+ int2d(Th)(aa(deltau1,deltau2,v1,v2) + bb(deltau1,deltau2,q) + bb(v1,v2,deltap) - 0.00001*deltap*q)
++ int2d(Th)(cc(deltau1,deltau2,u1,u2,v1,v2))
++ int2d(Th)(cc(u1,u2,deltau1,deltau2,v1,v2))
++ int2d(Th)(aa(u1,u2,v1,v2) + bb(u1,u2,q) + bb(v1,v2,p) + cc(u1,u2,u1,u2,v1,v2))
++ on(1,2,3,4,deltau1=0,deltau2=0);                 // condiciones de frontera nulas para deltau
+
+for(it=0; it<maxiter; it++)  // iteraciones del Newton
+{
+NS;                          // resolviendo el sistema del Newton
+
+u1 =  u1 + deltau1;          //
+u2 =  u2 + deltau2;          // actualizando las soluciones
+p  =  p  + deltap;           //
+};
+plot(Th,p,fill=1,wait=1);     // Dibujo de la presion
+ plot(Th,[u1,u2],fill=1);     // Dibujo de la velocidad

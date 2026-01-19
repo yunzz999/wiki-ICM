@@ -1,0 +1,267 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{braket}
+\usepackage{amsthm}
+\usepackage{dsfont}
+\usepackage{stmaryrd}
+\usepackage{stix}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval-León}}
+\newcommand{\asignatura}{\textbf{Taller III: Procesos Industriales}}
+\newcommand{\tarea}{\textbf{Tarea 1}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dy}{\textup{d}y}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\ds}{\textup{d}s}
+\newcommand{\dS}{\textup{d}S}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\tr}[1]{\textup{tr}\left(#1\right)}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+\renewcommand{\theequation}{\roman{equation}}
+
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+\graphicspath{{Imagenes/}}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Taller III}\\
+	\textbf{Tarea 1}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{titlepage}
+		
+		\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+		
+		\center % Center everything on the page
+		
+		%----------------------------------------------------------------------------------------
+		%	HEADING SECTIONS
+		%----------------------------------------------------------------------------------------
+		
+		\textsc{\LARGE Universidad de Concepción}\\[1.5cm] % Name of your university/college
+		\includegraphics[scale=1]{Udec}\\[1cm] % Include a department/university logo - this will require the graphicx package
+		\textsc{\Large Taller III: Procesos Industriales}\\[0.5cm] % Major heading such as course name
+		\textsc{\large 525590}\\[0.5cm] % Minor heading such as course title
+		
+		%----------------------------------------------------------------------------------------
+		%	TITLE SECTION
+		%----------------------------------------------------------------------------------------
+		
+		\HRule \\[0.4cm]
+		{ \huge \bfseries Tarea 1}\\[0.4cm] % Title of your document
+		\HRule \\[1.5cm]
+		
+		%----------------------------------------------------------------------------------------
+		%	AUTHOR SECTION
+		%----------------------------------------------------------------------------------------
+		
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushleft} \large
+				\emph{Author:}\\
+				Brayan \textsc{Sandoval-León}\\ % Your name
+			\end{flushleft}
+			
+		\end{minipage}\\[2cm]
+		
+		% If you don't want a supervisor, uncomment the two lines below and remove the section above
+		%\Large \emph{Author:}\\
+		%John \textsc{Smith}\\[3cm] % Your name
+		
+		%----------------------------------------------------------------------------------------
+		%	DATE SECTION
+		%----------------------------------------------------------------------------------------
+		
+		{\large \today}\\[2cm] % Date, change the \today to a set date if you want to be precise
+		
+		\vfill % Fill the rest of the page with whitespace
+		
+	\end{titlepage}
+    \tableofcontents
+	\chapter{Introducción}
+	En el ámbito de la mecánica clásica, la formulación y resolución de ecuaciones de movimiento para sistemas físicos complejos es un paso crucial para comprender y predecir su comportamiento dinámico. En este trabajo, abordamos dos sistemas distintos: el primero consta de dos péndulos colgados y conectados por un resorte, mientras que el segundo implica un sistema de poleas con amortiguamiento. Ambos sistemas presentan desafíos únicos en términos de formulación de las ecuaciones de Euler-Lagrange y su posterior solución numérica.\\~\\
+	La derivación de las ecuaciones de Euler-Lagrange nos permitirá describir con precisión el comportamiento de estos sistemas, teniendo en cuenta tanto las fuerzas conservativas como las no conservativas presentes. Posteriormente, utilizaremos técnicas numéricas para resolver las ecuaciones diferenciales ordinarias resultantes, lo que nos proporcionará una visión detallada de la evolución temporal de las variables de interés.\\~\\
+	Además, para enriquecer nuestra comprensión y visualizar de manera efectiva las dinámicas presentadas, llevaremos a cabo la representación gráfica de las soluciones mediante animaciones. Este enfoque no solo facilitará la interpretación de los resultados, sino que también brindará una representación visual intuitiva de los fenómenos estudiados.\\~\\
+	A lo largo de este trabajo, exploraremos detalladamente cada uno de estos pasos, con el objetivo de proporcionar una comprensión completa y una representación visualmente impactante de los sistemas en cuestión.
+	
+	\chapter{Problemas Propuestos}
+	\section{Dos péndulos unidos por un resorte}
+	Considerando el sistema planteado en \ref{fig:pendulos}. Deducir las ecuaciones de Euler-Lagrange y resolver numéricamente el sistema de EDO's resultante.
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.5\linewidth]{Imagenes/Pendulosmasresorte}
+		\caption{Péndulos acoplados por un resorte.}
+		\label{fig:pendulos}
+	\end{figure}
+    \subsection{Deducción de las ecuaciones de Euler-Lagrange}
+    Usando argumentos trigonometría, se puede deducir la posición en coordenadas cartesianas de las masas $m_{1}$ y $m_{2}$, la cual esta dada por
+    \begin{align*}
+    	p_{1} &= (-2l\sin(\phi_{1}),2l\cos(\phi_{1})),\\
+    	p_{2} &= (L-2l\sin(\phi_{2}),2l\cos(\phi_{2})).
+    \end{align*}
+    Las correspondientes velocidades entonces son
+    \begin{align*}
+    	v_{1} &= \dot{p}_{1} = (-2l\cos(\phi_{1}),-2l\sin(\phi_{1}))\dot{\phi}_{1},\\
+    	v_{2} &= \dot{p}_{2} = (-2l\cos(\phi_{2}),-2l\sin(\phi_{2}))\dot{\phi}_{2}.
+    \end{align*}
+    De esta forma, la energía cinética total es
+    \begin{align*}
+    	K &= \frac{1}{2}m_{1}|v_{1}|^{2} + \frac{1}{2}m_{2}|v_{2}|^{2}\\
+    	  &= \frac{1}{2}m_{1}4l^{2}|\dot{\phi}_{1}|^{2} + \frac{1}{2}m_{2}4l^{2}|\dot{\phi}_{2}|^{2}\\
+    	  &= 2m_{1}|\dot{\phi}_{1}|^{2} + 2m_{2}|\dot{\phi}_{2}|^{2}.
+    \end{align*}
+    De forma similar, la energía potencial total es
+    \begin{align*}
+    	U &= -2m_{1}gl\cos(\phi_{1}) - 2m_{2}gl\cos(\phi_{2}) + \frac{k}{2}\left(l\sin(\phi_{1})-l\sin(\phi_{2})\right)^{2} + \frac{k}{2}\left(l\cos(\phi_{1})-l\cos(\phi_{2})\right)^{2}\\
+    	&= -2m_{1}gl\cos(\phi_{1}) - 2m_{2}gl\cos(\phi_{2}) + kl^{2}\sin(\phi_{1})\sin(\phi_{2}) + kl^{2}\cos(\phi_{1})\cos(\phi_{2}).
+    \end{align*}
+    Usando que 
+    \begin{align*}
+    	\mathcal{L} = K - U,
+    \end{align*}
+    se deduce que el Lagrangiano asociado al sistema es
+    \begin{align*}
+    	\mathcal{L} = \sum_{i=1}^{2}\left[2l^{2}m_{i}\dot{\phi}^{2}_{i}   + 2m_{i}gl\cos(\phi_{i})\right] - kl^{2}\sin(\phi_{1})\sin(\phi_{2}) - kl^{2}\cos(\phi_{1})\cos(\phi_{2}),
+    \end{align*}
+    con lo cual se deduce
+    \begin{align*}
+    	\frac{\textup{d}}{\textup{d}t}\left(\frac{\partial\mathcal{L}}{\partial \dot{\phi}_{i}}\right) &= \frac{\textup{d}}{\textup{d}t}\left(4l^{2}m_{i}\dot{\phi}_{i} \right) = 4l^{2}m_{i}\ddot{\phi}_{i} \quad \forall i\in \{1,2\},\\
+    	\frac{\partial \mathcal{L}}{\partial \phi_{1}} &= -2m_{1}gl\sin(\phi_{1}) - kl^{2}\cos(\phi_{1})\sin(\phi_{2}) + kl^{2}\sin(\phi_{1})\cos(\phi_{2}) = -2m_{1}gl\sin(\phi_{1}) + kl^{2}\sin(\phi_{1}-\phi_{2}),\\
+    	\frac{\partial \mathcal{L}}{\partial \phi_{2}} &= -2m_{2}gl\sin(\phi_{2}) - kl^{2}\sin(\phi_{1})\cos(\phi_{2}) + kl^{2}\cos(\phi_{1})\sin(\phi_{2}) = -2m_{2}gl\sin(\phi_{2}) + kl^{2}\sin(\phi_{2}-\phi_{1}).
+    \end{align*}
+    Lo anterior nos permite representar las ecuaciones de Euler-Lagrange para $\phi_{1}$ y $\phi_{2}$ como el siguiente sistema de EDO's no lineales de segundo orden
+    \begin{align*}
+    	\ddot{\phi}_{1} &= \frac{k}{4m_{1}}\sin(\phi_{1}-\phi_{2}) - \frac{g}{2l}\sin(\phi_{1}),\\
+    	\ddot{\phi}_{2} &= -\frac{k}{4m_{2}}\sin(\phi_{1}-\phi_{2}) - \frac{g}{2l}\sin(\phi_{2}).
+    \end{align*}
+    Haciendo los cambios de variable $x_{1} = \phi_{1},\ x_{2} = \dot{\phi}_{1},\ x_{3} = \phi_{2}$ y $x_{4} = \dot{\phi}_{2}$, se deduce el sistema de EDO's no lineal de primer orden
+    \begin{align*}
+    	\dot{x}_{1} &= x_{2},\\
+    	\dot{x}_{2} &= \frac{k}{4m_{1}}\sin(x_{1}-x_{3}) - \frac{g}{2l}\sin(x_{1}),\\
+    	\dot{x}_{3} &= x_{4},\\
+    	\dot{x}_{4} &= -\frac{k}{4m_{2}}\sin(x_{1}-x_{3}) - \frac{g}{2l}\sin(x_{3}).
+    \end{align*}
+    La solución numérica junto a la animación correspondiente se encuentra en el archivo \textbf{Pendulosacoplados.m}, el cual esta en la carpeta del presente informe. 
+    \newpage
+	\section{Sistema de poleas}
+	Considerando el sistema planteado en \ref{fig:poleas}. Deducir las ecuaciones de Euler-Lagrange y resolver numéricamente el sistema de EDO's resultante.
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.3\linewidth]{Imagenes/Polea}
+		\caption{Sistema de poleas.}
+		\label{fig:poleas}
+	\end{figure}
+	\subsection{Deducción de las ecuaciones de Euler-Lagrange}
+	Tomamos el sentido positivo del eje $X$ hacia arriba. Las posiciones de las partículas son:
+	\begin{align*}
+		P_{1} &= y_{1}\\
+		P_{2} &= y_{2}\\
+	\end{align*}
+	Las correspondientes velocidades entonces son
+	\begin{align*}
+		v_{1} &= \dot{y}_{1},\\
+		v_{2} &= \dot{y}_{2}.
+	\end{align*}
+	De esta forma, la energía cinética total es
+	\begin{align*}
+		K &= \frac{1}{2}m_{1}|v_{1}|^{2} + \frac{1}{2}m_{2}|v_{2}|^{2} + \frac{1}{2}I_{1}\omega^{2}_{1} + \frac{1}{2}I_{2}\omega^{2}_{2}\\
+		&= \frac{1}{2}m_{1}(\dot{y}_{1})^{2}+\frac{1}{2}m_{2}(\dot{y}_{2})^{2} + \frac{1}{4}m_{2}(\dot{y}_{2})^{2} + \frac{1}{4}M(\dot{y}_{1})^{2}\\
+		&= \left(\frac{M}{4}+\frac{m_{1}}{2}\right)(\dot{y}_{1})^{2} + \frac{3}{4}m_{2}(\dot{y}_{2})^{2}
+	\end{align*}
+	De forma similar, la energía potencial total es
+	\begin{align*}
+		U &= \frac{k_{1}}{2}y^{2}_{1} + \frac{k_{2}}{2}y^{2}_{2} - m_{1}gy_{1} - m_{2}y_{2}\\
+		&=  \frac{k_{1}}{2}y^{2}_{1} + \frac{k_{2}}{2}y^{2}_{2} - m_{1}gy_{1} - m_{2}gy_{2}
+	\end{align*}
+	Usando que 
+	\begin{align*}
+		\mathcal{L} = K - U,
+	\end{align*}
+	se deduce que el Lagrangiano asociado al sistema es
+	\begin{align*}
+		\mathcal{L} = \left(\frac{M}{4}+\frac{m_{1}}{2}\right)(\dot{y}_{1})^{2} + \frac{3}{4}m_{2}(\dot{y}_{2})^{2} - \frac{k_{1}}{2}y^{2}_{1} - \frac{k_{2}}{2}y^{2}_{2}  + m_{1}gy_{1} + m_{2}gy_{2}
+	\end{align*}
+	con lo cual se deduce
+	\begin{align*}
+		\frac{\textup{d}}{\textup{d}t}\left(\frac{\partial\mathcal{L}}{\partial \dot{y}_{1}}\right) &= \frac{\textup{d}}{\textup{d}t}\left(\left(\frac{M}{2}+m_{1}\right)\dot{y}_{1}\right) =\left(\frac{M}{2}+m_{1}\right)\ddot{y}_{1} ,\\
+		\frac{\textup{d}}{\textup{d}t}\left(\frac{\partial\mathcal{L}}{\partial \dot{y}_{2}}\right) &= \frac{\textup{d}}{\textup{d}t}\left(\frac{3}{2}m_{2}\dot{y}_{2}\right) = \frac{3}{2}m_{2}\ddot{y}_{2} ,\\
+		\frac{\partial \mathcal{L}}{\partial y_{1}} &= -k_{1}y_{1} + m_{1}g,\\
+		\frac{\partial \mathcal{L}}{\partial y_{2}} &= -k_{2}y_{2} + m_{2}g.
+	\end{align*}
+	Lo anterior nos permite representar las ecuaciones de Euler-Lagrange para $y_{1}$ y $y_{2}$ como el siguiente sistema de EDO's lineales de segundo orden
+	\begin{align*}
+		\ddot{y}_{1} &= \frac{2}{M+2m_{1}}\left(-k_{1}y_{1} + m_{1}g\right),\\
+		\ddot{y}_{2} &= \frac{2}{3m_{2}}\left(-k_{2}y_{2} + m_{2}g\right).
+	\end{align*}
+	Haciendo los cambios de variable $x_{1} = y_{1},\ x_{2} = \dot{y}_{1},\ x_{3} = y_{2}$ y $x_{4} = \dot{y}_{2}$, se deduce el sistema de EDO's lineal de primer orden
+	\begin{align*}
+		\dot{x}_{1} &= x_{2},\\
+		\dot{x}_{2} &= \frac{2}{M+2m_{1}}\left(-k_{1}x_{1} + m_{1}g\right),\\
+		\dot{x}_{3} &= x_{4},\\
+		\dot{x}_{4} &= \frac{2}{3m_{2}}\left(-k_{2}x_{3} + m_{2}g\right).
+	\end{align*}
+	
+	
+	
+	
+	\chapter{Conclusión}
+	En este estudio, hemos abordado dos sistemas dinámicos complejos: un sistema de dos péndulos colgados y conectados por un resorte, y un sistema de poleas con amortiguamiento. A través de la formulación de las ecuaciones de Euler-Lagrange, pudimos capturar de manera precisa la dinámica de estos sistemas, considerando tanto las fuerzas conservativas como las no conservativas involucradas.
+	\\~\\
+	La resolución numérica de las ecuaciones diferenciales ordinarias resultantes nos proporcionó una visión detallada de la evolución temporal de las variables de interés. Este enfoque no solo nos permitió comprender la evolución de los sistemas en el tiempo, sino que también nos brindó la capacidad de prever comportamientos futuros, destacando la utilidad de las técnicas numéricas en la mecánica de sistemas complejos.
+	\\~\\
+	Además, la representación gráfica y animada de las soluciones proporcionó una valiosa herramienta para visualizar y comunicar los resultados de manera efectiva. Las animaciones no solo facilitaron la interpretación de los fenómenos estudiados, sino que también añadieron un nivel de intuitividad que enriqueció nuestra comprensión de los sistemas analizados.
+	\\~\\
+	En última instancia, este trabajo destaca la importancia de la combinación de métodos analíticos y numéricos para abordar problemas complejos en la mecánica clásica. La formulación de las ecuaciones de movimiento y su posterior resolución numérica nos permite adentrarnos en el corazón de los sistemas dinámicos, proporcionando una visión detallada y cuantitativa de su comportamiento.
+\end{document}

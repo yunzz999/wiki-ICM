@@ -1,0 +1,198 @@
+//
+// This code solves the Stokes problem in pseudostress-velocity formulation
+// with nonhomogeneous Dirichlet boundary conditions 
+//  \bsi = 2\mu\nabla\bu - p\bI \qin \Omega, \bdiv(\bsi) = -\bf \qin \Omega,
+//   div(\bu) = 0 \qin \Omega,  \bu = \bg \qon \Gamma,  \int_\Omega p = 0.
+//
+// doi: 10.4208/cicp.010311.041011a
+//
+load "iovtk";           // for saving data in paraview format
+load "UMFPACK64";		// UMFPACK solver
+load "Element_Mixte";   // for using RT1
+//---------------------------------------------------------------------------------
+// 								Initial parameters
+//---------------------------------------------------------------------------------
+//----- Global parameters
+int nref = 4;
+real[int] H(nref);    // mesh size
+real[int] DOF(nref);  // degrees of freedom
+
+//----- errors
+real[int] Hdivsig(nref);
+real[int] L2u(nref);      
+real[int] L2p(nref);      
+
+//----- rate of convergence
+real[int] sigrate(nref-1);
+real[int] urate(nref-1);
+real[int] prate(nref-1);
+
+//---------------------------------------------------------------------------------
+//									 Global data
+//---------------------------------------------------------------------------------
+real mu = 1.;
+real Om = 1.;
+
+/*
+func p  =  x*cos(pi*y);
+func px =  cos(pi*y);
+func py = -pi*x*sin(pi*y);
+*/
+// L2(Omega) = L2_0(Omega) + C
+// p = p0 + c ---> c = 1/|Omega|*int_Omega p
+func p  =  x*exp(y) - 0.859141;
+func px =  exp(y);
+func py =  x*exp(y);
+
+func u1   = -cos(pi*x)*sin(pi*y);
+func u2   =  sin(pi*x)*cos(pi*y);
+func u1x  =  pi*sin(pi*x)*sin(pi*y);
+func u1y  = -pi*cos(pi*x)*cos(pi*y);
+func u2x  =  pi*cos(pi*x)*cos(pi*y);
+func u2y  = -u1x;
+func u1xx =  (pi^2)*cos(pi*x)*sin(pi*y);
+func u1yy =  (pi^2)*cos(pi*x)*sin(pi*y);
+func u2xx = -(pi^2)*sin(pi*x)*cos(pi*y);
+func u2yy = -(pi^2)*sin(pi*x)*cos(pi*y);
+
+func sig1 = 2.*mu*u1x - p;
+func sig2 = 2.*mu*u1y;
+func sig3 = 2.*mu*u2x;
+func sig4 = 2.*mu*u2y - p;
+
+func f1   = -2.*mu*(u1xx + u1yy) + px;
+func f2   = -2.*mu*(u2xx + u2yy) + py;
+
+//----- Global macros
+macro u [u1,u2] //
+macro sig [sig1,sig2,sig3,sig4] //
+macro F [f1,f2] //
+
+macro uh [uh1,uh2] //
+macro vh [vh1,vh2] //
+
+macro sigh [sigh1,sigh2,sigh3,sigh4] //
+macro tauh [tauh1,tauh2,tauh3,tauh4] //
+
+macro norm [N.x,N.y] //
+macro tr(tauh) (tauh[0] + tauh[3]) // 
+macro dev(tauh) [0.5*(tauh[0] - tauh[3]),tauh[1],tauh[2],0.5*(tauh[3] - tauh[0])] //
+macro Div(tauh) [dx(tauh[0]) + dy(tauh[1]),dx(tauh[2]) + dy(tauh[3])] //
+macro ph(tauh) ( -0.5*(tauh[0] + tauh[3]) ) //
+//---------------------------------------------------------------------------------
+//	 							   Defining The Domain
+//---------------------------------------------------------------------------------
+for(int n = 0; n < nref; n++){
+
+int size = 2^(n + 2); // space discretization
+
+real x0 = 0, x1 = 1;
+real y0 = 0, y1 = 1;
+int Gamma = 11;
+
+border GammaD1(t=x0,x1){x=t; y=y0; label = Gamma;};
+border GammaD2(t=y0,y1){x=x1; y=t; label = Gamma;};
+border GammaD3(t=x1,x0){x=t; y=y1; label = Gamma;};
+border GammaD4(t=y1,y0){x=x0; y=t; label = Gamma;};
+
+mesh Th = buildmesh(GammaD1(size) + GammaD2(size) + GammaD3(size) + GammaD4(size));
+//cout << " constant ph =" << int2d(Th)( p/Om ) <<endl;
+//               GammaD3
+//           --------------
+//           |            |
+//           |            |
+//   GammaD4 |   OmegaD   |GammaD2
+//           |            |
+//           |            |
+//           --------------
+//               GammaD1
+//
+//plot(Th,wait=true);
+//---------------------------------------------------------------------------------
+// 						Finite element spaces
+//---------------------------------------------------------------------------------
+fespace Hhsig(Th,[RT0,RT0]);
+fespace Qhu(Th,[P0,P0]);
+
+fespace Ph(Th,P1); // discrete space to compute the meshsize
+//---------------------------------------------------------------------------------
+// 			      			Defining the bilinear forms 
+//---------------------------------------------------------------------------------
+Hhsig sigh;
+Qhu uh;
+//----- bilinear forms
+varf a(sigh,tauh) = int2d(Th)( (dev(sigh)'*dev(tauh))/(2.*mu) );
+varf b(uh,tauh)   = int2d(Th)( uh'*Div(tauh) );
+
+varf lm(sigh,tauh) = int2d(Th)( tr(tauh) );
+
+//-----	RHS
+varf rhs1(sigh,tauh) = int1d(Th,Gamma)( u'*([[tauh[0],tauh[1]],[tauh[2],tauh[3]]]*norm) );
+varf rhs2(uh,vh)     = int2d(Th)( -(F'*vh) );
+//---------------------------------------------------------------------------------
+// 			      			Building matrices
+//---------------------------------------------------------------------------------
+matrix A = a(Hhsig,Hhsig);
+matrix B = b(Qhu,Hhsig);
+real[int] LM = lm(0,Hhsig);
+
+matrix M;{
+M = [[  A, B, LM],
+	 [ B', 0,  0],
+	 [LM', 0,  0]];}
+//---------------------------------------------------------------------------------
+// 			      					Load vector
+//---------------------------------------------------------------------------------
+real[int] RHS1 = rhs1(0,Hhsig);
+real[int] RHS2 = rhs2(0,Qhu);
+
+real[int] L(Hhsig.ndof + Qhu.ndof + 1);{
+L = 0;
+L(0:Hhsig.ndof - 1) = RHS1;
+L(Hhsig.ndof:Hhsig.ndof + Qhu.ndof - 1) = RHS2;
+} 	  
+            
+set(M,solver = sparsesolver);
+ 
+//----- calculating the solution
+real[int] sol = M^-1*L;
+
+//----- exporting data
+sigh1[] = sol(0:Hhsig.ndof - 1);
+uh1[]   = sol(Hhsig.ndof:Hhsig.ndof + Qhu.ndof - 1);
+
+//-----  calculating the errors
+Hdivsig[n] = sqrt(int2d(Th)( (sig - sigh)'*(sig - sigh) + (F + Div(sigh))'*(F + Div(sigh)) ));
+L2u[n]     = sqrt(int2d(Th)( (u - uh)'*(u - uh) ));
+L2p[n]     = sqrt(int2d(Th)( (p - ph(sigh))^2 ));
+
+//----- for the meshsize in Omega
+Ph h = hTriangle;
+H[n] = h[].max;
+
+DOF[n] = Hhsig.ndof + Qhu.ndof;
+//----- exporting to Praraview
+savevtk("Data_Paraview_2D/Stokes_aprox"+n+".vtk",Th,[sigh1,sigh2,0],[sigh3,sigh4,0],[uh1,uh2,0],ph(sigh),dataname="sig1h sig2h uh ph");
+savevtk("Data_Paraview_2D/Stokes_exact"+n+".vtk",Th,[sig1,sig2,0],[sig3,sig4,0],[u1,u2,0],p,dataname="sig1 sig2 u p");
+}
+
+//---------------------------------------------------------------------------------
+// 			      				showing the tables
+//---------------------------------------------------------------------------------
+cout << " sigerror =" << Hdivsig <<endl;
+for(int n = 1; n < nref; n++)
+sigrate[n-1] = log(Hdivsig[n-1]/Hdivsig[n]) / log(H[n-1]/H[n]);
+cout <<" convergence rate sig = " << sigrate <<endl;
+
+cout << " uerror =" << L2u <<endl;
+for(int n =1; n < nref; n++)
+urate[n-1] = log(L2u[n-1]/L2u[n]) / log(H[n-1]/H[n]);
+cout <<" convergence rate u = " << urate <<endl;
+
+cout << " perror " << L2p <<endl;
+for(int n = 1; n < nref; n++)
+prate[n-1] = log(L2p[n-1]/L2p[n]) / log(H[n-1]/H[n]);
+cout <<" convergence rate p = " << prate <<endl;
+
+cout <<" mesh size = " << H <<endl;
+cout <<" degrees of freedom = " << DOF <<endl;

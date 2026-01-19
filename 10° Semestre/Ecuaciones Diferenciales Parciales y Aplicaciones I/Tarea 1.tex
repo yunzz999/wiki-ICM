@@ -1,0 +1,277 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{stix}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{EDP I y Aplicaciones}}
+\newcommand{\tarea}{\textbf{Tarea 1}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dy}{\textup{d}y}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\ds}{\textup{d}s}
+\newcommand{\dS}{\textup{d}S}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+\renewcommand{\theequation}{\roman{equation}}
+
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{EDP I y Aplicaciones }\\
+	\textbf{Tarea 1}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+\begin{pro}
+	Sea $U$ un abierto de $\mathbb{R}^{n}$ y sea $u$ una función \textit{biarmónica}; esto es, $u\in C^{4}(U)$ y 
+	\begin{align*}
+		\Delta\Delta u = 0.
+	\end{align*}
+    \begin{itemize}
+    	\item[($a$)] Sea $x\in U$ y sea $r>0$ tal que $B(x,r)\subset U$. Pruebe
+    	\begin{align*}
+    		u(x) + \frac{r^{2}}{2n}\Delta u(x) = \intbar_{\partial B(x,r)} u(y)\ \dS(y)
+    	\end{align*}
+        \item[$(b)$] Bajo las mismas condiciones de la parte anterior, pruebe que
+        \begin{align*}
+        	u(x) = \intbar_{\partial B(x,r)} u(y)\ \dS(y) - \frac{1}{2}\intbar_{\partial B(x,r)} Du(y)\cdot(y-x)\ \dS(y)
+        \end{align*}
+    \end{itemize}
+\end{pro}
+\begin{proof}
+	\begin{itemize}
+		\item[($a$)] Dado $x\in U$, se define la función auxiliar $\varphi:I_{x}\longrightarrow\mathbb{R}$ donde 
+		\begin{align*}
+			\varphi(r) = \intbar_{\partial B(x,r)}u(y)\ \dS(y) - \frac{r^{2}}{2n}\Delta u(x),
+		\end{align*}
+	    con $I_{x} := \{r>0: B(x,r)\subset U\}$. Se puede observar que la función $\varphi$ se puede extender por continuidad en cero, ya que
+	    \begin{align*}
+	    	\lim_{r\to 0^{+}}\varphi(r) = \lim_{r\to 0^{+}}  \left(\intbar_{\partial B(x,r)}u(y)\ \dS(y) - \frac{r^{2}}{2n}\Delta u(x)\right) \overset{\textup{Álgebra de límites}}{=} \lim_{r\to 0^{+}}\intbar_{\partial B(x,r)}u(y)\ \dS(y) - \frac{\Delta u(x)}{2n}\lim_{r\to0^{+}}r^{2} = u(x), 
+	    \end{align*}
+	    de esta forma, se puede re-definir la función $\varphi: I_{x}\cup\{0\}\longrightarrow\mathbb{R}$ donde 
+	    \begin{align*}
+	    	\varphi(r) = \begin{cases}
+	    	\intbar_{\partial B(x,r)}u(y)\ \dS(y) - \frac{r^{2}}{2n}\Delta u(x)	& \text{ Si } r>0 \\ 
+	    	u(x)	& \text{ Si } r=0 
+	    	\end{cases}.
+	    \end{align*}
+	    Notar que demostrar $(a)$ es equivalente a probar que $\varphi$ es constante en $I_{x}$, esto es $\varphi'(r) = 0$, para todo $r\in I_{x}$. Derivar la función $\varphi$, puede ser complicado considerando que el dominio de integración depende de $r$, por esta razón se hace el cambio de variable $y = x + zr$ con $z\in\partial B(0,1)$, luego
+	    \begin{align*}
+	    	\varphi(r)  = \intbar_{\partial B(0,1)}u(x+rz)\ \dS(z) - \frac{r^{2}}{2n}\Delta u(x),
+	    \end{align*}
+        derivando $\varphi$ respecto a $r$ se obtiene que 
+        \begin{align*}
+        	\varphi'(r) = \intbar_{\partial B(0,1)}Du(x+rz)\cdot z\ \dS(z) - \frac{r}{n}\Delta u(x),
+        \end{align*}
+        haciendo el cambio de variable $y = x+rz$, se obtiene
+        \begin{align*}
+        	\varphi'(r) = \intbar_{\partial B(x,r)}Du(y)\cdot \frac{y-x}{r}\ \dS(y) - \frac{1}{n}\Delta u(x) =  \frac{1}{n\alpha(n)r^{n-1}}\int_{\partial B(x,r)}\frac{\partial u}{\partial \nu} \ \dS(y) - \frac{r}{n}\Delta u(x),
+        \end{align*}
+        usando la formula de Green
+        \begin{align}\tag{$\dagger$}
+        	\varphi'(r) = \frac{1}{n\alpha(n)r^{n-1}}\int_{B(x,r)}\Delta u(y)\ \dy - \frac{r}{n}\Delta u(x) = \frac{r}{n}\intbar_{B(x,r)}\Delta u(y)\ \dy - \frac{r}{n}\Delta u(x). \label{eq:a}
+        \end{align}
+        Luego, notando que $\Delta u(x)\in C^{2}(U)$ es armónica, se tiene
+        \begin{align*}
+        	\Delta u(x) = \intbar_{B(x,r)} \Delta u(y)\ \dS(y),
+        \end{align*}
+	    reemplazando en \eqref{eq:a}, se obtiene
+	    \begin{align*}
+	    	\varphi'(r) = \frac{r}{n}\Delta u(x) - \frac{r}{n}\Delta u(x) = 0.
+	    \end{align*} 
+        Así, $\varphi$ es constante en $I_{x}$ y dado que es continua en cero, se deduce que 
+        \begin{align*}
+        	\varphi(r) = \varphi(0) = \Delta u(x), 
+        \end{align*}
+        para todo $r\in I_{x}$. Lo cual muestra lo pedido.
+        \item[$(b)$] Sean $x\in U$ y $r>0$ tales que $B(x,r)\subset U$. De $(a)$ se tiene que 
+        \begin{align*}
+        	u(x) =  \intbar_{\partial B(x,r)} u(y)\ \dS(y) -\frac{r^{2}}{2n}\Delta u(x).
+        \end{align*}
+        Por tanto, probar $(b)$ es equivalente a mostrar que
+        \begin{align*}
+        	\Delta u(x) = \frac{n}{r^{2}}\intbar_{\partial B(x,r)} Du(y)\cdot(y-x)\ \dS(y),
+        \end{align*}
+        para esto, recordemos que $\Delta u(x)$ es armónica en $U$, por tanto satisface la formula del valor medio, esto es
+        \begin{align*}
+        	\Delta u(x)  = \intbar_{B(x,r)} \Delta u(y)\ \dy = \frac{1}{\alpha(n)r^{n}}\int_{B(x,r)}\Delta u(y)\ \dy.
+        \end{align*}
+        Usando formula de Green
+        \begin{align*}
+        	\Delta u(x) = \frac{1}{\alpha(n)r^{n}}\int_{\partial B(x,r)}\frac{\partial u}{\partial \nu}\ \dS(y) =\frac{1}{\alpha(n)r^{n}}\int_{\partial B(x,r)}Du(y)\cdot \nu\ \dS(y) = \frac{1}{\alpha(n)r^{n}}\int_{\partial B(x,r)}Du(y)\cdot \frac{y-x}{r}\ \dS(y)
+        \end{align*}
+        Desarrollando la ultima igualdad
+        \begin{align*}
+        	\Delta u(x) = \frac{n}{r^{2}}\frac{1}{n\alpha(n)r^{n-1}}\int_{\partial B(x,r)}Du(y)\cdot (y-x)\ \dS(y) = \frac{n}{r^{2}}\intbar_{\partial B(x,r)} Du(y)\cdot (y-x)\ \dS(y),
+        \end{align*}
+        mostrando lo pedido.
+	\end{itemize}
+\end{proof}
+\begin{pro}
+	Dé una fórmula explícita para una solución de 
+	\begin{align*}
+		u_{t} - \Delta u + cu &= f\quad	\textup{en} \quad \mathbb{R}^{n}\times(0,\infty),\\ 
+			                u &= g\quad \textup{sobre} \quad \mathbb{R}^{n}\times\{t=0\},
+	\end{align*}
+    donde $c\in\mathbb{R}$.
+\end{pro}
+\begin{proof}
+	Considere la función 
+	\begin{align*}
+		v:\ &\mathbb{R}^{n}\times(0,\infty) \longrightarrow\mathbb{R}\\
+		&(x,t) \mapsto v(x,t) := e^{\beta t}u(x,t),
+	\end{align*}
+    donde $\beta$ es una constante real a determinar. Derivando respecto a $t$ y $x_{i}$ con $i\in\{1,...,n\}$, se obtiene
+    \begin{align*}
+    	v_{t}(x,t) &= \beta e^{\beta t}u(x,t) + e^{\beta t}u_{t}(x,t),\\
+    	v_{x_{i}}(x,t) &= e^{\beta t}u_{x_{i}}(x,t),\\
+    	v_{x_{i}x_{i}}(x,t) &= e^{\beta t}u_{x_{i}x_{i}}(x,t).
+    \end{align*}
+    Luego, 
+    \begin{align*}
+    	v_{t} - \Delta v = \beta e^{\beta t}u + e^{\beta t}u_{t} - e^{\beta t}\Delta u = e^{\beta t}\left(u_{t} - \Delta u + \beta u\right),
+    \end{align*}
+    considerando $\beta = c$ se obtiene,
+    \begin{align*}
+    		v_{t}(x,t) - \Delta v(x,t) = e^{c t}\left(u_{t}(x,t) - \Delta u(x,t) + c u(x,t)\right) = e^{ct}f(x,t),\quad \forall(x,t)\in\mathbb{R}^{n}\times(0,\infty),
+    \end{align*}
+    además, 
+    \begin{align*}
+    	v(x,0) = e^{0}u(x,0) = u(x,0) = g(x),\quad \forall x\in \mathbb{R}^{n}.
+    \end{align*}
+    Lo anterior nos dice que $v$ es solución de
+    \begin{align*}
+    	v_{t}(x,t) - \Delta v(x,t) &= e^{ct}f(x,t)\quad (x,t)\in\mathbb{R}^{n}\times (0,\infty),\\
+    	v(x,0) &= g(x), \quad \forall x\in \mathbb{R}^{n},
+    \end{align*}
+    luego, por teorema visto en clases $v$ tiene la forma explícita
+    \begin{align*}
+    	v(x,t) = \int_{\mathbb{R}^{n}} \Phi(x-y,t)g(y)\ \dy + \int_{0}^{t}\int_{\mathbb{R}^{n}}\Phi(x-y,t-s)e^{cs}f(y,s)\ \dy\ds,
+    \end{align*} 
+    por tanto
+    \begin{align*}
+    	u(x,t) = e^{-ct}\int_{\mathbb{R}^{n}} \Phi(x-y,t)g(y)\ \dy + e^{-ct}\int_{0}^{t}\int_{\mathbb{R}^{n}}\Phi(x-y,t-s)e^{cs}f(y,s)\ \dy\ds.
+    \end{align*}
+\end{proof}
+\begin{pro}
+	Sea $u$ una solución del problema de valores iniciales para la ecuación de la onda unidimensional 
+	\begin{align*}
+		u_{tt}-u_{xx} &= 0\quad\textup{en}\quad \mathbb{R}\times(0,\infty),\\
+		u = g,\ u_{t} &= h\quad\textup{sobre}\quad \mathbb{R}\times\{t=0\}.
+	\end{align*} 
+    Suponga que $g$ y $h$ tienen soporte compacto. La \textit{energía cinética} es $k(t):=\frac{1}{2}\int^{\infty}_{-\infty}u^{2}_{t}(x,t)\ \dx$ y la \textit{energía potencial} es $p(t):=\frac{1}{2}\int^{\infty}_{-\infty}u^{2}_{x}(x,t)\ \dx$. Pruebe que
+    \begin{itemize}
+    	\item[$(a)$] $k(t) + p(t)$ es constante respecto a $t$, y que
+    	\item[$(b)$] $k(t) = p(t)$ para todos los tiempos $t$ suficientemente grandes.
+    \end{itemize}
+\end{pro}
+\begin{proof}
+	\begin{itemize}
+		\item[$(a)$]
+		Dado que $u$ es solución de la ecuación de la onda unidimensional, por formula de d'Alembert
+		\begin{align*}
+			u(x,t) = \frac{1}{2}\left[g(x-t) + g(x+t)\right] + \frac{1}{2}\int_{x-t}^{x+t}h(s)\ \ds,
+		\end{align*}
+		luego, usando las hipótesis sobre $h$ y $g$ se deduce que $u$ también tiene soporte compacto.
+		\\~\\
+	    Sea la función $E:(0,\infty)\longrightarrow \mathbb{R}$, definida por 
+		\begin{align*}
+			E(t) := k(t) + p(t)\quad \forall t>0,
+		\end{align*}
+		derivando $E$ respecto a $t$
+		\begin{align*}
+			E'(t) = \frac{1}{2}\frac{\textup{d}}{\textup{d}t}\left(\int_{-\infty}^{+\infty}u^{2}_{t}(x,t)\ \dx\right) + \frac{1}{2}\frac{\textup{d}}{\textup{d}t}\left(\int_{-\infty}^{+\infty}u^{2}_{x}(x,t)\ \dx\right),
+		\end{align*}
+		para poder pasar la derivada bajo el signo de la integral, usaremos que $u$ es lo suficientemente regular y de soporte compacto, luego
+		\begin{align*}
+			E'(t) = \int_{-\infty}^{+\infty}u_{t}u_{tt}(x,t)\ \dx + \int_{-\infty}^{+\infty}u_{x}u_{tx}(x,t)\ \dx,
+		\end{align*}
+		lo cual al integrar por partes 
+	    \begin{align*}
+	    	E'(t) = \int_{-\infty}^{+\infty}u_{t}(x,t)u_{tt}(x,t)\ \dx - \int_{-\infty}^{+\infty}u_{xx}(x,t)u_{t}(x,t)\ \dx = \int_{-\infty}^{\infty}u_{t}(x,t)\left(u_{tt}(x,t)-u_{xx}(x,t)\right)\ \dx = 0.
+	    \end{align*}   
+        Por tanto, $E$ es constante en $(0,\infty)$.
+        \item[$(b)$] Calculando $u_{t}$ y $u_{x}$, usando el hecho que $u$ se puede representar mediante la formula de d'Alembert
+        \begin{align*}
+        	u_{x}(x,t) &= \frac{1}{2}\left[g'(x-t) + g'(x+t)\right] + \frac{1}{2}\left[h(x+t) - h(x-t)\right],\\
+        	u_{t}(x,t) &= \frac{1}{2}\left[g'(x+t) - g'(x-t)\right] + \frac{1}{2}\left[h(x+t) +h(x-t)\right],
+        \end{align*} 
+        restando y sumando ambas funciones
+        \begin{align*}
+        	u_{x}(x,t) - u_{t}(x,t) = g'(x-t) - h(x-t), \\
+        	u_{x}(x,t) + u_{t}(x,t) = g'(x+t) + h(x+t),	
+        \end{align*}
+        multiplicando ambas ecuaciones
+        \begin{align*}
+        	u^{2}_{x}(x,t) - u^{2}_{t}(x,t) = \left(g'(x-t) - h(x-t)\right)\left(g'(x+t) + h(x+t)	\right),
+        \end{align*}
+        integrando a ambos lados y multiplicando por $\frac{1}{2}$
+        \begin{align*}
+        	p(t) - k(t) = \frac{1}{2}\int_{-\infty}^{\infty}\left(g'(x-t) - h(x-t)\right)\left(g'(x+t) + h(x+t)	\right)\ \dx.
+        \end{align*}
+        Como $k$ y $p$ tienen soporte compacto, se puede considerar
+        \begin{align*}
+        	t\geq \frac{\max\{|\textup{sop}(h)|,|\textup{sop}(g)|\}}{2} =: R,
+        \end{align*}
+        y así
+        \begin{align*}
+        	k(t) = p(t)\quad \forall t>R.
+        \end{align*}
+	\end{itemize}
+\end{proof}
+\end{document}

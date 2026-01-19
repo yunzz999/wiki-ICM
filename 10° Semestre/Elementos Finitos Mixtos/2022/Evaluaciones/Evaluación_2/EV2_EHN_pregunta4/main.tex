@@ -1,0 +1,367 @@
+\documentclass{beamer}
+
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  \usetheme{Boadilla}       % or try default, Darmstadt, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{serif}    % or try default, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{chemfig}
+\usepackage[version=3]{mhchem}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{ragged2e}
+\usepackage{textpos}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath, amsthm, amsfonts}
+\usepackage{bm}
+
+\DeclareMathOperator{\Div}{\nabla\cdot}
+\DeclareMathOperator{\Divv}{div}
+\DeclareMathOperator{\Rot}{\nabla\times}
+\DeclareMathOperator{\Rott}{rot}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+\providecommand{\bf}[2]{\mathbf{#2}}
+\DeclareMathOperator{\tr}{tr}
+
+
+%\newtheorem{theorem}{Theorem}[section]
+%newtheorem{theorem}{Theorem}
+
+
+\providecommand{\norm}[1]{\lVert#1\rVert}
+
+% On Overleaf, these lines give you sharper preview images.
+% You might want to `comment them out before you export, though.
+\usepackage{pgfpages}
+\pgfpagesuselayout{resize to}[%
+  physical paper width=8in, physical paper height=6in]
+
+% Here's where the presentation starts, with the info for the title slide
+
+\title[MEF Mixtos]{Evaluación 2, pregunta 4}
+\author[Esteban Henríquez N.]{MEF Mixtos}
+\author{Esteban Henríquez N.}
+\institute[]{Prof. Gabriel N. Gatica}
+\date{7 de enero, 2022}
+\begin{document}
+
+
+
+
+\begin{frame}
+\includegraphics[width=12cm, height=2cm]{escudo_y_logo_icm.png}
+\titlepage
+\end{frame}
+\addtobeamertemplate{frametitle}{}{%
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north east,yshift=2pt] at (current page.north east) {\includegraphics[width=2cm, height=1cm]{icm.png}};
+\end{tikzpicture}}
+
+
+%-------------------------------------------------------------
+\begin{frame}{Pregunta 4.}
+    El propósito de este ejercicio es demostrar las propiedades de aproximación del interpolante $\Pi_K^k$ (resp. global $\Pi_h^k$) de Raviart-Thomas con respecto a la norma $\norm{\cdot}_{0,K}$ (resp. $\norm{\cdot}_{0,\Omega}$) y la seminorma del espacio de Sobolev $W^{l,p}(K)$ (resp. $W^{l,p}(\Omega)$), donde $l$ es un entero tal que $1\leq l\leq k+1$. Más precisamente, se pide lo que se indica a continuación.
+
+\end{frame}
+
+%\section{Introducción}
+%---------------------------------------------------------------------
+\begin{frame}{ítem a)}
+%\begin{columns}
+%\column{.7\textwidth}
+Dado $K\in \mathcal{T}_h$, use escalamiento con respecto a la composición con la aplicación afín $T_K$, la inyección continua $i: W^{1,p}(\widehat K)\to L^2(\widehat K)$ para todo $p>\frac{2n}{n+2}$, lo cual significa que existe una constante $\widehat c>0$ tal que
+\[\norm{\widehat{\bm\tau}}_{0,\widehat K}\leq \widehat c\,\norm{\widehat{ \bm\tau}}_{1,p;\widehat K}\quad \forall \widehat{\bm\tau}\in W^{1,p}(\widehat K),\]
+las propiedades de aproximación ya conocidas de $\Pi_K^k$, y las desigualdades geométricas asociadas a $T_K$, para probar que existe una constante $\widetilde C>0$, independiente de $K$, tal que 
+\begin{equation}
+    \norm{\bm\tau- \Pi_K^k(\bm\tau)}_{0,K}\leq \widetilde C h_{K}^{l-n(2-p)/(2p)}|\bm\tau|_{l,p;K}\quad \forall \bm\tau\in W^{l,p}(K).
+\end{equation}
+
+
+\end{frame}
+%---------------------------------------------------------------------
+\begin{frame}
+    \begin{block}{Demostración}
+        Sea $K\in \mathcal{T}_h$, considerando propiedades de escalamiento, para todo $\bm\tau\in W^{l,p}(K)$
+        \begin{align*}
+            \norm{\bm\tau-\Pi_K^k(\bm\tau)}_{0,K}&\leq C \norm{B_k^{-1}}^0|\det B_K|^{1/2}\norm{\widehat{\bm\tau}-\widehat{\Pi_K^k(\bm\tau)}}_{0,\widehat{K}}\\
+            &= C |\det B_k|^{1/2}\norm{\widehat{\bm\tau}-\widehat{\Pi_K^k(\bm\tau)}}_{0,\widehat{K}},
+        \end{align*}
+        luego, como $\exists \,\widehat C >0$ tal que
+        \[\norm{\widehat{\bm\tau}}_{0,\widehat{K}}\leq \widehat{C}\norm{\widehat{\bm\tau}}_{1,p;\widehat{K}}\quad \forall\widehat{\bm\tau}\in W^{1,p}(\widehat{K}),\]
+    \end{block}
+\end{frame}
+%----------------------------------------------------------------
+\begin{frame}
+    \begin{block}{}
+        se tiene que
+        \begin{align*}
+            &\norm{\bm\tau-\Pi_K^k(\bm\tau)}_{0,K}\leq \widehat C|\det B_{K}|^{1/2}\norm{\widehat{\bm\tau}-\widehat{\Pi_K^k(\bm\tau)}}_{1,p;\widehat{K}}\\
+            &=\, \widehat{C}|\det B_K|^{1/2}\left\{\norm{\widehat{\bm\tau}-\widehat{\Pi_K^k(\bm\tau)}}_{0,p;\widehat{K}}+|\widehat{\bm\tau}-\widehat{\Pi_K^k(\bm\tau)}|_{1,p;\widehat{K}}\right\}\\
+            &\leq C |\det B_K|^{1/2}\left\{\norm{B_K}^{0}|\det B_K|^{-1/p}\norm{\bm\tau-\Pi_K^k(\bm\tau)}_{0,p;K}\right.\\
+            &\quad\left.+\norm{B_K}^1|\det B_{k}|^{-1/p}|\bm\tau-\Pi_K^k(\bm\tau)|_{1,p;K}\right\}\\
+            &= C |\det B_K|^{-(2-p)/(2p)}\left\{\norm{\bm\tau-\Pi_K^k(\bm\tau)}_{0,p;K}+\norm{B_K}|\bm\tau-\Pi_K^k(\bm\tau)|_{1,p;K}\right\},
+        \end{align*}
+        es decir,
+        \begin{equation}
+            \begin{array}{c}
+                \norm{\bm\tau-\Pi_K^k(\bm\tau)}_{0,K}   \\\\
+                 \leq C |\det B_K|^{\frac{-(2-p)}{2p}}\left\{\norm{\bm\tau-\Pi_K^k(\bm\tau)}_{0,p;K}+\norm{B_K}|\bm\tau-\Pi_K^k(\bm\tau)|_{1,p;K}\right\}
+            \end{array}
+        \end{equation}
+    \end{block}
+\end{frame}
+
+%-------------------------------------------------------------
+\begin{frame}
+    \begin{block}{}
+        Por su parte, de las estimaciones del error de interpolación, con $1\leq l\leq k+1$, $m=0$, $\exists\, C_0>0$ tal que
+        \[\norm{\bm\tau-\Pi_K^k(\bm \tau)}_{0,p;K}\leq C_0 h_K^l|\bm\tau|_{l,p;K}\quad \forall \bm\tau \in W^{l,p}(K),\]
+        luego, con $1\leq l\leq k+1$, $m=1$,  $\exists\, C_1>0$ tal que
+        \[|\bm\tau-\Pi_K^k(\bm\tau)|_{1,p;K}\leq C_1 h_{K}^{l-1}|\bm\tau|_{l,p;K}\quad\forall \bm\tau\in W^{l,p}(K).\]
+    \end{block}
+\end{frame}
+
+%--------------------------------------------
+
+\begin{frame}
+    \begin{block}{}
+        Ahora, aplicando estos resultados en (2), se obtiene
+        \begin{align*}
+            \norm{\bm\tau-\Pi_K^k(\bm\tau)}_{0,K}&\leq C |\det B_K|^{\frac{-(2-p)}{2p}}\left\{C_0h_K^l|\bm\tau|_{l,p;K}+C_1 h_K^{l-1}|\bm\tau|_{l,p;K}\right\}\\
+            &\leq C|\det B_K|^{\frac{-(2-p)}{2p}}h_K^l|\bm\tau|_{l,p;K},
+        \end{align*}
+        para todo $\bm\tau\in W^{l,p}(K) $, con $1\leq l\leq  k+1$.
+    \end{block}
+\end{frame}
+%-----------------------------------------------------
+\begin{frame}
+    \begin{block}{}
+        Recordemos de las propiedades geométricas del escalamiento que
+        \[|\det B_K|=\frac{|K|}{|\widehat K|}\]
+        y que $\exists\, \alpha_1,\alpha_2 >0$ tales que
+        \[\alpha_1 h_K^n \leq |K|\leq \alpha_2 h_K^n,\]
+        así, se deduce que
+        \begin{align*}
+            \norm{\bm\tau-\Pi_K^k(\bm\tau)}_{0,K}&\leq C|\det B_K|^{\frac{-(2-p)}{2p}}h_K^l|\bm\tau|_{l,p;K}\\
+            &\leq \widetilde C h_K^{l-\frac{n(2-p)}{2p}}|\bm\tau|_{l,p;K},
+        \end{align*}
+        para todo $\bm\tau\in W^{l,p}(K)$, con $1\leq l\leq k+1$.
+    \end{block}
+\end{frame}
+%______________________________________________
+\begin{frame}{ítem b)}
+    En el caso $p\in \left(\frac{2n}{n+2},2\right],$ aplique la propiedad sub-aditiva, la cual establece que, dados $n$ escalares no negativos $a_j$, $j\in \{1,2,\ldots,n\}$, y $r\in (0,1)$, se tiene que
+    \[\left(\sum_{j=1}^n a_j\right)^r\leq \sum_{j=1}^n a_j^r,\]
+    para demostrar, a partir de (1), que
+    \begin{equation}\norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}\leq \widetilde C h^{l-n(2-p)/(2p)}|\bm\tau|_{l,p;\Omega}\quad \forall\bm\tau\in W^{l,p}(\Omega).\end{equation}
+\end{frame}
+%-------------------------------------------------------
+
+\begin{frame}
+    \begin{block}{Demostración}
+        Notemos que, elevando al cuadrado la desigualdad (1) y sumando para cada $K\in \mathcal{T}_h$, se tiene que
+        \begin{align*}
+            \sum_{K\in \mathcal{T}_h}\norm{\bm\tau-\Pi_K^k(\bm\tau)}_{0,K}^2 &=\norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}^2\leq C^2\sum_{K\in \mathcal{T}_h}h_{K}^{2\left(l-\frac{n(2-p)}{2p}\right)}|\bm\tau|_{l,p;K}^2,
+        \end{align*}
+        teniendo en cuenta que $\displaystyle h:= \max_{K\in\mathcal{T}_h}h_K$, entonces
+        \begin{align*}
+            \norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}^2&\leq  C^2\sum_{K\in \mathcal{T}_h}h^{2\left(l-\frac{n(2-p)}{2p}\right)}|\bm\tau|_{l,p;K}^2\\
+            &=C^2 h^{2\left(l-\frac{n(2-p)}{2p}\right)}\left(\left(\sum_{K\in\mathcal{T}_h}|\bm\tau|_{l,p;K}^2\right)^{p/2}\right)^{2/p},
+        \end{align*}
+    \end{block}
+\end{frame}
+
+%---------------------------------------------------
+
+\begin{frame}
+    \begin{block}{}
+        aplicando la propiedad sub-aditiva, con $p\in \left(\frac{2n}{n+2},2\right]$ queda
+        \begin{align*}
+            \norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}^2&\leq C^2 h^{2\left(l-\frac{n(2-p)}{2p}\right)}\left(\sum_{K\in \mathcal{T}_h}|\bm\tau|_{l,p;\Omega}^p\right)^{2/p}\\
+            &= C^2 h^{2\left(l-\frac{n(2-p)}{2p}\right)}|\bm\tau|_{l,p;\Omega}^2,
+        \end{align*}
+        tomando raíz cuadrada, se tiene
+        \[\norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}\leq C h^{l-n(2-p)/(2p)}|\bm\tau|_{l,p;\Omega}\quad\forall\bm\tau\in W^{l,p}(\Omega).\]
+        
+    \end{block}
+\end{frame}
+
+%--------------------------------------------------------
+
+\begin{frame}{ítem c)}
+
+    En el caso $p\in (2,+\infty)$, use la desigualdad de Hölder discreta para probar, a partir de (1), que existe una constante $\overline C >0$, que depende de $\widetilde C$ y $|\Omega|$, tal que 
+    \begin{equation}
+        \norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}\leq \overline{C} h^{l-n/(2p)}|\bm\tau|_{l,p;\Omega}\quad \forall\bm\tau\in W^{l,p}(\Omega)
+    \end{equation}
+\end{frame}
+
+%--------------------------------------------------------
+\begin{frame}
+    \begin{block}{Demostración}
+        Ahora, sea $p\in (2,+\infty)$, de manera análoga al caso anterior, elevando al cuadrado (1) y sumando para cada $K\in \mathcal{T}_h$, se tiene
+        \[\norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}^2\leq C^2\sum_{K\in\mathcal{T}_h}h_{K}^{2\left(l-\frac{n(2-p)}{2p}\right)}|\bm\tau|_{l,p;K}^2,\]
+        luego, usando desigualdad de Hölder discreta
+        \[\norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}^2\leq\left(\sum_{K\in\mathcal{T}_h}h_K^{2\left(l-\frac{n(2-p)}{2p}\right)p'}\right)^{1/p'}\left(\sum_{K\in \mathcal{T}_h}|\bm\tau|_{l,p;K}^{2p}\right)^{1/p},\]
+        donde $\frac{1}{p}+\frac{1}{p'}=1$.
+    \end{block}
+\end{frame}
+%--------------------------------------------------------
+\begin{frame}
+    \begin{block}{}
+        A su vez, se sabe que si para todo $a_i>0$, entonces $\sum_i a_i^2\leq \left(\sum_i b_i\right)^2 $, luego
+        \begin{align*}
+            \norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}^2&\leq C^2 \left(\sum_{K\in\mathcal{T}_h}h_K^{2\left(l-\frac{n(2-p)}{2p}\right)p'}\right)^{1/p'}\left(\sum_{K\in \mathcal{T}_h}|\bm\tau|_{l,p;K}^{p}\right)^{2/p}\\
+            &= C^2 \left(\sum_{K\in\mathcal{T}_h}h_K^{2\left(l-\frac{n(2-p)}{2p}\right)p'}\right)^{1/p'}|\bm\tau|_{l,p;\Omega}^2\\
+            &= C^2 \left(\sum_{K\in\mathcal{T}_h}h_K^{2\left(l-\frac{n(2-p)}{2p}\right)p'-n}h_K^{n}\right)^{1/p'}|\bm\tau|_{l,p;\Omega}^2\\
+            &\leq C^2 h^{2\left(l-\frac{n(2-p)}{2p}\right)-n/p'}\left(\sum_{K\in\mathcal{T}_h}h_K^n\right)^{1/p'}|\bm\tau|_{l,p;\Omega}^2\\
+            &\leq C^2 h^{2\left(l-\frac{n(2-p)}{2p}\right)-n/p'}|\Omega|^{1/p'}|\bm\tau|_{l,p;\Omega}^2,
+        \end{align*}
+    \end{block}
+\end{frame}
+%------------------------------------------------------
+\begin{frame}
+    \begin{block}{}
+        en conclusión, existe $\overline{C}>0$ tal que 
+        \[\norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}\leq\overline{C}h^{\left(l-\frac{n(2-p)}{2p}\right)-n/2p'}|\bm\tau|_{l,p;\Omega},\]
+        notando que 
+        \[\left(l-\frac{n(2-p)}{2p}\right)-n/2p'=l-n/(2p),\]
+        se reescribe como 
+        \[\norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}\leq\overline{C}h^{l-n/(2p)}|\bm\tau|_{l,p;\Omega}\quad\forall \bm\tau\in W^{l,p}(\Omega),\]
+        con $1\leq l\leq k+1$.
+    \end{block}
+\end{frame}
+%------------------------------------------
+\begin{frame}{ítem d)}
+    Ilustre la aplicabilidad de (3) y (4) con la demostración de alguna condición inf-sup discreta que Ud. conozca.
+\end{frame}
+%-----------------------------------------------
+
+\begin{frame}
+    \begin{block}{Demostración}
+        Hallar $(\bm\sigma, \varphi)\in H\times Q$ tal que
+        \begin{equation*}
+            \begin{array}{l c c}
+                a(\bm\sigma,\bm\tau) + b(\tau,\varphi) & = & F(\bm\tau), \\
+                b(\bm\sigma,\phi) &=& G(\phi), 
+            \end{array}
+        \end{equation*}
+        $\forall (\bm\tau,\phi)\in H\times Q$, donde:
+        \begin{equation*}
+            \begin{array}{l}
+                H:= \mathbf{H}(\mbox{div}_{\varrho};\Omega)=\left\{\bm\tau\in \mathbf{L}^2(\Omega): \Divv\bm\tau\in L^{\varrho}(\Omega)\right\}   \\
+                Q:= L^{\rho}(\Omega),  
+            \end{array}
+        \end{equation*}
+        con $\rho,\varrho\in (1,+\infty)$, $\frac{1}{\rho}+\frac{1}{\varrho}=1$,
+        \begin{equation*}
+            \begin{array}{l}
+                \displaystyle a(\bm\sigma,\bm\tau):=\int_{\Omega} \bm\sigma\cdot\bm\tau\\
+                \displaystyle
+                b(\bm\tau,\phi):= \int_{\Omega}\phi\Divv \bm\tau,
+            \end{array}
+        \end{equation*}
+        con $F$ y $G$ funcionales lineales y acotados.
+    \end{block}
+\end{frame}
+%----------------------------------------------
+\begin{frame}
+    \begin{block}{}
+        Para el esquema de Galerkin, consideremos un entero $k\geq 0$, y los espacios
+        \begin{equation*}
+            \begin{array}{l}
+                H_h:=\left\{\bm\tau_h\in \mathbf{H}(\Divv_{\varrho};\Omega):\bm\tau_h|_{K}\in RT_k(K)\,\forall K\in \mathcal{T}_h\right\},  \\
+                Q_h:= \left\{\phi_h\in L^{\rho}(\Omega):\phi|_{K}\in \mathcal{P}_k(K)\,\forallK\in \mathcal{T}_h\right\}. 
+            \end{array}
+        \end{equation*}
+        A continuación se probará la condición inf-sup discreta para la forma bilineal $b$, esto es, demostrar que $\exists \beta>0$ independiente de $h$ tal que 
+        \begin{equation*}
+            \sup\limits_{\substack{\bm\tau_h\in H_h\\ \bm\tau_h\not = \theta}}\frac{\displaystyle\int_{\Omega}\psi_h\Divv\bm\tau_h}{\norm{\bm\tau_{h}}_{\Divv_\varrho;\Omega}}\geq \beta \norm{\psi_h}_{0,\rho;\Omega}\quad\forall\psi_h\in Q_h.
+        \end{equation*}
+    \end{block}
+\end{frame}
+%-----------------------------------------
+\begin{frame}
+    \begin{block}{}
+        Dado $\varphi_h\in Q_h$, consideremos un dominio convexo $\mathcal{G}$, tal que $\overline{\Omega}\subseteq\mathcal{G}$, y definimos
+        \begin{equation*}
+            g:=\left\{
+            \begin{array}{c c c}
+                |\psi_h|^{\rho-2}\psi_h & en &\Omega,  \\
+                0 & en & \mathcal{G}\backslash \overline{\Omega},
+            \end{array}
+            \right.
+        \end{equation*}
+        usando regularidad de EDPs se deduce que existe un único $z\in W^{2,\varrho}(\mathcal{G})\cap W_0^{1,\varrho}(\mathcal{G})$ tal que
+        \[\Delta z=g\mbox{ en }\mathcal{G}, \quad z=0\mbox{ en }\partial\mathcal{G},\]
+        notar que $|\psi_h|^{\rho-2}\psi_h\in L^{\varrho}(\Omega)$, y por lo tanto $g\in L^{\varrho}(\mathcal{G})$, además, $\exists\, C_{reg}>0$ tal que 
+        \begin{align*}
+            \norm{z}_{2,\varrho;\mathcal{G}}&\leq C_{reg}\norm{g}_{0,\varrho;\mathcal{G}}\\
+            &= C_{reg}\norm{\psi_h}_{0,\rho;\Omega}^{\rho-1}.
+        \end{align*}
+    \end{block}
+\end{frame}
+%--------------------------------------------
+\begin{frame}
+    \begin{block}{}
+        Definiendo $\zeta:=\nabla z|_{\Omega}\in \mathbf{W}^{1,\varrho}(\Omega)$, se tiene que
+        \[\Divv\zeta= |\psi_h|^{\rho-2}\psi_h\mbox{ en }\Omega\]
+        y
+        \[\norm{\zeta}_{1,\varrho;\Omega}\leq \norm{z}_{2,\varrho;\Omega}\leq C_{reg}\norm{\psi_h}_{0,\rho;\Omega}^{\rho-1},\]
+        luego, definiendo $\zeta_h:=\Pi_h^K(\zeta)\in H_h$, se tiene que $\Divv \zeta_h = \mathcal{P}_{h}^k(\Divv\zeta)$ y por lo tanto
+        \begin{align*}
+            \norm{\Divv \zeta_h}_{0,\varrho;\Omega}&= \norm{\mathcal{P}_h^k(\Divv\zeta)}_{0,\varrho;\Omega}\\
+            &\leq \widehat{C} \norm{\Divv\zeta}_{0,\varrho;\Omega}\\
+            &= \widehat{C}\norm{|\psi_h|^{\rho-2}\psi_h}_{0,\varrho;\Omega}\\
+            &= \widehat{C}\norm{\psi_h}_{0,\rho;\Omega}^{\rho-1},
+        \end{align*}
+        es decir,
+        \[\norm{\Divv\zeta_h}_{0,\varrho;\Omega}\leq \widehat{C}\norm{\psi_h}_{0,\rho;\Omega}^{\rho-1},\]
+    \end{block}
+\end{frame}
+%-----------------------------------------------
+\begin{frame}
+    \begin{block}{}
+        a su vez, usando (3)
+        \[\norm{\bm\tau-\Pi_h^k(\bm\tau)}_{0,\Omega}\leq C h^{l-\frac{n(2-p)}{(2p)}}|\bm\tau|_{l,p;\Omega}\quad \forall\bm\tau\in \mathbf{W}^{l,p}(\Omega),\]
+        pero en este caso con $n=2$, $l=1$, $p= \varrho$ y $\bm\tau= \zeta$, se tiene que
+        \begin{align*}
+            \norm{\zeta-\Pi_h^k(\zeta)}_{0,\Omega}&\leq C h^{1-\frac{2(2-\varrho)}{2\varrho}}|\zeta|_{1,\varrho;\Omega}\\
+            &= C h^{2(1-\frac{1}{\varrho})}|\zeta|_{1,\varrho;\Omega},
+        \end{align*}
+        se sigue que
+        \begin{align*}
+            \norm{\zeta_h}_{0,\Omega}&= \norm{\Pi_h^k(\zeta)}_{0,\Omega}\\
+            &\leq \norm{\zeta-\Pi_h^k(\zeta)}_{0,\Omega}+\norm{\zeta}_{0,\Omega}\\
+            &\leq \widetilde C|\zeta|_{1,\varrho;\Omega}+\norm{\zeta}_{0,\Omega}
+        \end{align*}
+        y usando la intección continua de $\mathbf{W}^{1,\varrho}(\Omega)$ en $\mathbf{L}^{2}(\Omega)$, se obtiene
+        \[\norm{\zeta_h}_{0,\Omega}\leq \overline{C}\norm{\zeta}_{1,\varrho;\Omega}\leq\overline{C}C_{reg}\norm{\psi_h}^{\rho-1}_{0,\rho;\Omega}\]
+    \end{block}
+\end{frame}
+%----------------------------------------------
+\begin{frame}
+    \begin{block}{}
+        en conclusión 
+        \[\norm{\zeta_h}_{\Divv_\varrho,\Omega}\leq \norm{\zeta_h}_{0,\Omega}+\norm{\Divv \zeta_h}_{0,\varrho;\Omega}\leq \widetilde C_0\norm{\psi_h}_{0,\rho;\Omega}^{\rho-1},\]
+        finalmente
+        \begin{align*}
+            \sup\limits_{\substack{\bm\tau_h\in H_h\\ \bm\tau_h\not = \theta}}\frac{\displaystyle\int_{\Omega}\psi_h\Divv\bm\tau_h}{\norm{\bm\tau_{h}}_{\Divv_\varrho;\Omega}}&\geq \frac{\displaystyle\int_{\Omega}\psi_h\Divv\zeta_h}{\norm{\zeta_h}_{\Divv_{\varrho};\Omega}}\\
+            &=\frac{\displaystyle \int_{\Omega}\psi_h\mathcal{P}_h^k(|\psi_h|^{\rho-2}\psi_h)}{\norm{\zeta_h}_{\Divv_{\varrho};\Omega}}\\
+            &= \frac{\displaystyle\int_{\Omega}\psi_h|\psi_h|^{\rho-2}\psi_h}{\norm{\zeta_h}_{\Divv_{\varrho};\Omega}}\\
+            &=\frac{\norm{\psi_h}_{0,\rho;\Omega}^{\rho}}{\norm{\zeta_h}_{\Divv_{\varrho};\Omega}}
+            \geq \frac{1}{\widetilde C_0}\norm{\psi_h}_{0,\rho;\Omega}.
+        \end{align*}
+    \end{block}
+\end{frame}
+\end{document}

@@ -1,0 +1,152 @@
+//
+// This code solves the Poisson problem in mixed formulation
+// with nonhomogeneous Dirichlet boundary conditions 
+//  \bsi = \nabla u \qin \Omega, \div(\bsi) = -f \qin \Omega,
+//  u = uD \qon \Gamma.
+//
+// Global information
+load "iovtk";           // for saving data in paraview format
+load "UMFPACK64";		// UMFPACK solver
+load "Element_Mixte";
+//---------------------------------------------------------------------------------
+// 								Initial parameters
+//---------------------------------------------------------------------------------
+//----- Global parameters
+int nref = 5;
+real[int] H(nref);    // mesh size
+real[int] DOF(nref);  // degrees of freedom
+
+//----- errors
+real[int] Hdivsig(nref);
+real[int] L2u(nref);      
+
+//----- rate of convergence
+real[int] sigrate(nref-1);
+real[int] urate(nref-1);
+//---------------------------------------------------------------------------------
+//									 Global data
+//---------------------------------------------------------------------------------
+//--- Data RHS
+func u   = cos(pi*x)*sin(pi*y);
+func ux  = -pi*sin(pi*x)*sin(pi*y);
+func uy  =  pi*cos(pi*x)*cos(pi*y);
+func uxx = -(pi^2)*cos(pi*x)*sin(pi*y);
+func uyy = -(pi^2)*cos(pi*x)*sin(pi*y);
+
+func f   = -(uxx + uyy);
+
+//----- Macros
+macro sig [ux,uy] //
+
+macro sigh [sigh1,sigh2] //
+macro tauh [tauh1,tauh2] //
+
+macro norm [N.x,N.y] //
+macro div(tauh) ( dx(tauh[0]) + dy(tauh[1]) ) //
+
+//---------------------------------------------------------------------------------
+//	 							   Defining The Domain
+//---------------------------------------------------------------------------------
+for(int n = 0; n < nref; n++){
+
+int size = 2^(n + 2); // space discretization
+int Gamma = 11;
+
+border GammaD1(t=0,1){x=t; y=0; label = Gamma;};
+border GammaD2(t=0,1){x=1; y=t; label = Gamma;};
+border GammaD3(t=1,0){x=t; y=1; label = Gamma;};
+border GammaD4(t=1,0){x=0; y=t; label = Gamma;};
+
+mesh Th = buildmesh(GammaD1(size) + GammaD2(size) + GammaD3(size) + GammaD4(size));
+//
+//               GammaD3
+//           --------------
+//           |            |
+//           |            |
+//   GammaD4 |   OmegaD   |GammaD2
+//           |            |
+//           |            |
+//           --------------
+//               GammaD1
+//
+//plot(Th,wait=true);
+//---------------------------------------------------------------------------------
+// 						Finite element spaces
+//---------------------------------------------------------------------------------
+fespace Hhsig(Th,RT0);
+fespace Qhu(Th,P0);
+
+fespace Ph(Th,P1); // discrete space to compute the meshsize
+//---------------------------------------------------------------------------------
+// 			      			Defining the bilinear forms 
+//---------------------------------------------------------------------------------
+Hhsig sigh;
+Qhu uh;
+//----- bilinear forms
+varf a(sigh,tauh) = int2d(Th)( sigh'*tauh );
+varf b([uh],tauh) = int2d(Th)( uh*div(tauh) );
+
+//-----	RHS
+varf rhs1(sigh,tauh) = int1d(Th,Gamma)( u*(tauh'*norm) );
+varf rhs2(uh,vh)     = int2d(Th)( -(f*vh) );
+
+//---------------------------------------------------------------------------------
+// 			      			Building matrices
+//---------------------------------------------------------------------------------
+matrix A = a(Hhsig,Hhsig);
+matrix B = b(Qhu,Hhsig);
+
+matrix M;{
+M = [[  A, B],
+     [ B', 0]];}
+
+//---------------------------------------------------------------------------------
+// 			      					Load vector
+//---------------------------------------------------------------------------------
+real[int] RHS1 = rhs1(0,Hhsig);
+real[int] RHS2 = rhs2(0,Qhu);
+
+real[int] L(Hhsig.ndof + Qhu.ndof);{
+L = 0;
+L(0:Hhsig.ndof - 1) = RHS1;
+L(Hhsig.ndof:Hhsig.ndof + Qhu.ndof - 1) = RHS2;
+} 	  
+           
+set(M,solver = sparsesolver);
+   
+//----- calculating the solution
+real[int] sol = M^-1*L;
+
+//----- exporting data
+sigh1[] = sol(0:Hhsig.ndof - 1);
+uh[]    = sol(Hhsig.ndof:Hhsig.ndof + Qhu.ndof - 1);
+
+//-----  calculating the errors
+Hdivsig[n] = sqrt(int2d(Th)( (sig - sigh)'*(sig - sigh) + (f + div(sigh))^2 ));
+L2u[n]     = sqrt(int2d(Th)( (u - uh)^2 ));
+
+//----- for the meshsize in Omega
+Ph h = hTriangle;
+H[n] = h[].max;
+DOF[n] = Hhsig.ndof + Qhu.ndof;
+
+//----- exporting to Praraview
+savevtk("Data_Paraview_2D/Poisson_aprox"+n+".vtk",Th,[sigh1,sigh2,0],uh,dataname="sigh uh");
+savevtk("Data_Paraview_2D/Poisson_exact"+n+".vtk",Th,[ux,uy,0],u,dataname="sig u");
+}
+//
+//---------------------------------------------------------------------------------
+// 			      				showing the tables
+//---------------------------------------------------------------------------------
+cout << " sigerror =" << Hdivsig <<endl;
+for(int n = 1; n < nref; n++)
+sigrate[n-1] = log(Hdivsig[n-1]/Hdivsig[n]) / log(H[n-1]/H[n]);
+cout <<" convergence rate sig = " << sigrate <<endl;
+
+cout << " uerror =" << L2u <<endl;
+for(int n =1; n < nref; n++)
+urate[n-1] = log(L2u[n-1]/L2u[n]) / log(H[n-1]/H[n]);
+cout <<" convergence rate u = " << urate <<endl;
+
+cout << " mesh size = " << H <<endl;
+cout << " degrees of freedom = " << DOF <<endl;

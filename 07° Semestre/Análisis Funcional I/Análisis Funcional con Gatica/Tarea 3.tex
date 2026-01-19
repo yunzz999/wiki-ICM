@@ -1,0 +1,271 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage[mathscr]{euscript}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Analisis Funcional I}}
+\newcommand{\tarea}{\textbf{Tarea 3}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\D}{$\partial$}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\newcommand{\Huno}{H^{1}(\Omega)}
+\newcommand{\Hdos}{H^{2}(\Omega)}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\PI}[1]{\left\langle #1  \right\rangle}
+\providecommand{\piH}[1]{\left\langle #1  \right\rangle_{H}}
+\providecommand{\piHH}[1]{\left\langle #1  \right\rangle_{H \times H}}
+\providecommand{\piQ}[1]{\left\langle #1 \right\rangle_{Q}}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Método de Galerkin Discontinuo}\\
+	\textbf{Tarea 3}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}
+		Sean $(H,\left\langle\cdot,\cdot \right\rangle_{H})$ y $(Q,\left\langle\cdot,\cdot \right\rangle_{Q})$ espacios de Hilbert, y sea $\textbf{B}\in \mathcal{L}\left(H,Q\right)$ con espacio nulo $V:= N\left(\textbf{B}\right)$.
+		\begin{itemize}
+		     \item[$a)$] Demuestre que $\displaystyle \sup_{\overset{v\in H}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}} = \sup_{\overset{v\in V^{\bot}}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}}\hspace{3mm} \forall q\in Q$.
+		     \item[$b)$] Suponga que existe $\beta>0$ tal que $\displaystyle \sup_{\overset{v\in V^{\bot}}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}} \geq \beta \norm{q}_{Q}\hspace{3mm}\forall q\in Q$, y pruebe que $H = R\left(\textbf{B}^{*}\right)\oplus V.$ 
+		\end{itemize}
+	\end{pro}
+    \begin{proof}
+    	\begin{itemize}
+    		\item[$(a)$] Dado $\textbf{B}\in\mathcal{L}\left(H,Q\right)$ y $q\in Q$ se tiene $V^{\perp}\subset H$ de aquí
+    		\begin{align*}
+    			\sup_{\overset{v\in H}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}} \geq \sup_{\overset{v\in V^{\perp}}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}}
+    		\end{align*}
+    		Como $\textbf{B}\in \mathcal{L}\left(H,Q\right)$, entonces $V$ es cerrado, ademas como $(H,\left\langle\cdot,\cdot \right\rangle_{H})$ es Hilbert, se tiene por teorema de descomposición ortogonal que
+    		\begin{align*}
+    			H = V\oplus V^{\perp}.
+    		\end{align*}
+    	    Considerando esto
+    	    \begin{align*}
+    	    	\displaystyle \sup_{\overset{v\in H}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}} &= \displaystyle \sup_{\overset{v\in V\oplus V^{\perp} }{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}}\\ &= \displaystyle \sup_{\overset{v = w+z\in V\oplus V^{\perp} }{v\neq \theta}}\frac{\piQ{\textbf{B}(w+z),q}}{\norm{w+z}_{H}}\\ &= \displaystyle \sup_{\overset{v = w+z\in V\oplus V^{\perp} }{v\neq \theta}}\frac{\piQ{\textbf{B}(w)+\textbf{B}(z),q}}{\norm{w+z}_{H}}\\ &= \displaystyle \sup_{\overset{v = w+z\in V\oplus V^{\perp} }{v\neq \theta}}\frac{\piQ{\textbf{B}(z),q}}{\norm{w+z}_{H}} 
+    	    \end{align*}
+            Sean $(w,z)\in V\times V^{\perp}$, por def de norma
+            \begin{align*}
+            	\norm{w+z}^{2}_{H} &= \piH{w+z,w+z}\\ &= \piH{w,w+z} + \piH{z,w+z}\\ &= \piH{w,w} + \piH{w,z} + \piH{z,w} + \piH{z,z}\\ &= \norm{w}^{2}_{H} + \norm{z}^{2}_{H}
+            \end{align*}
+            de aquí
+            \begin{align*}
+            	\norm{z}_{H}\leq \norm{w+z}_{H}\Longrightarrow \frac{1}{\norm{w+z}_{H}} \leq \frac{1}{\norm{z}_{H}}\hspace{4mm}\textup{con}\  \norm{w+z}_{H} \neq 0 \ \textup{y}\ \norm{z}_{H}\neq 0.
+            \end{align*}
+            Utilizando esta desigualdad
+            \begin{align*}
+            	\sup_{\overset{v\in H}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}} = \displaystyle \sup_{\overset{v = w+z\in V\oplus V^{\perp} }{v\neq \theta}}\frac{\piQ{\textbf{B}(z),q}}{\norm{w+z}_{H}} \leq \displaystyle \sup_{\overset{z\in V^{\perp} }{z\neq \theta}}\frac{\piQ{\textbf{B}(z),q}}{\norm{z}_{H}}. 
+            \end{align*}
+            Como ambas desigualdades se cumplen entonces
+            \begin{align*}
+            	\sup_{\overset{v\in H}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}} = \sup_{\overset{v\in V^{\bot}}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}}\hspace{3mm} \forall q\in Q
+            \end{align*}
+            \item[$(b)$] De la parte $(a)$ se sabe que 
+            \begin{align*}
+            	H = V\oplus V^{\perp}
+            \end{align*}
+            por lo que solo basta probar que $R\left(\textbf{B}^{*}\right) = N\left(\textbf{B}\right)^{\perp}$. De la parte $(a)$ es fácil ver que
+            \begin{align*}
+            	\norm{\textbf{B}^{*}(q)}_{H} = \sup_{\overset{v\in V^{\bot}}{v\neq \theta}}\frac{\piQ{\textbf{B}(v),q}}{\norm{v}_{H}} \hspace{4mm} \forall q\in Q
+            \end{align*} 
+           Y así por hipotesis se tiene que 
+           \begin{align*}
+           	\norm{\textbf{B}^*(q)}\geq \beta\norm{q}\hspace{4mm}\forall q\in Q.
+           \end{align*}
+           En particular, para $q\in N(\textbf{B}^*)$ se tiene que 
+           \begin{align*}
+           	0 = \norm{\textbf{B}^*(q)}\geq \beta\norm{q}
+           \end{align*}
+           esto implica que $q = \theta_{Q}$, por lo que $N(\textbf{B}^*) = \{\theta_{Q}\}$. Aplicando teorema \ref{teo2}, se tiene que $R\left(\textbf{B}^{*}\right)$ es cerrado y por tanto $R\left(\textbf{B}^{*}\right) = \overline{R\left(\textbf{B}^{*}\right)} = N\left(\left(\textbf{B}^{*}\right)^{*}\right)^{\perp} = N(\textbf{B})^{\perp}$.
+    	\end{itemize}
+    \end{proof}
+    \begin{pro}
+    	Sea $(H,\left\langle\cdot,\cdot \right\rangle_{H})$ un espacio de Hilbert complejo y considere $H\times H$ provisto del producto escalar 
+    	\begin{align*}
+    		\piHH{(u,v),(z,w)} := \piH{u,z} + \piH{v,w}\hspace{4mm} \forall (u,v),\ (z,w)\in H\times H.
+    	\end{align*}
+        Además, dado $A\in \mathcal{L}\left(H,H\right)$, defina el operador $B: H\times H\longrightarrow H\times H$ por 
+        \begin{align*}
+        	B\left(\left(u,v\right)\right) := \left(iA(v),-iA^{*}(u)\right)\hspace{4mm} \forall (u,v)\in H\times H.
+        \end{align*}
+        Demuestre que $\norm{B} = \norm{A}$ y que $B$ es autoadjunto.
+    \end{pro}
+    \begin{proof}
+    	En primer lugar, veamos que $B$ es lineal y acotado. Sea $\alpha,\beta\in \mathbb{C}$ y $(u,v),(w,z)\in H\times H$, entonces
+    	\begin{align*}
+    		B\left(\alpha(u,v) + \beta(w,z)\right) &= B\left((\alpha u + \beta w),(\alpha v + \beta z)\right)\\ &= \left(iA\left(\alpha v + \beta z\right),-iA^{*}\left(\alpha u + \beta w\right)\right)\\
+    		&= \left(i\alpha A(v) + i\beta A(z),-i\alpha A^{*}(u) -i\beta A^{*}(w)\right)\\
+    		&= \left(i\alpha A(v) +,-i\alpha A^{*}(u)\right) +  \left(i\beta A(z),-i\beta A^{*}(w)\right)\\
+    		&= \alpha \left(i A(v) +,-i A^{*}(u)\right) +  \beta\left(i A(z),-i A^{*}(w)\right)\\
+    		&= \alpha B\left((u,v)\right) + \beta B\left((w,z)\right)
+    	\end{align*}
+        Por tanto $B$ es lineal, veamos que es acotado, dado $(u,v)\in H\times H$ se tiene 
+        \begin{align*}
+        	\norm{B((u,v))}^{2}_{H\times H} &= \norm{\left(iA(v),-iA^{*}(u)\right)}^{2}_{H\times H}\\
+        	&= \piHH{\left(iA(v),-iA^{*}(u)\right),\left(iA(v),-iA^{*}(u)\right)}\\
+        	&= \piH{iA(v),iA(v)} + \piH{-iA^{*}(u),-iA^{*}(u)}\\
+        	&= i(-i)\piH{A(v),A(v)} + (-i)i\piH{A^{*}(u),A^{*}(u)}\\
+        	&= \piH{A(v),A(v)} + \piH{A^{*}(u),A^{*}(u)}\\
+        	&= \norm{A(v)}^{2}_{H} + \norm{A^{*}(u)}^{2}_{H} \\
+        	&= \norm{A(v)}^{2}_{H} + \norm{A(u)}^{2}_{H}\\
+        	&\leq \norm{A}_{H}^{2}\norm{v}_{H}^{2} + \norm{A}^{2}_{H}\norm{u}^{2}_{H} \\
+        	&\leq \norm{A}^{2}_{H}\left(\norm{v}^{2} + \norm{u}^{2}\right)\\
+        	&= \norm{A}^{2}_{H}\left(\piH{v,v}+\piH{u,u}\right)\\
+        	&= \norm{A}^{2}_{H}\left(\piH{u,u}+\piH{v,v}\right)\\
+        	&= \norm{A}^{2}_{H}\piHH{(u,v),(u,v)}\\
+        	&= \norm{A}^{2}_{H}\norm{(u,v)}^{2}_{H\times H}
+        \end{align*}
+    Así, 
+    \begin{align*}
+    	\norm{B\left(\left(u,v\right)\right)}\leq \norm{A}_{H}\norm{(u,v)}_{H\times H}
+    \end{align*}
+    De aquí se deduce que $B\in \mathcal{L}\left(H\times H\right)$ y que $\norm{B}\leq \norm{A}$. Por otro lado
+    \begin{align*}
+    	B\left((\theta_{H},v)\right) = \left(iA(v),-iA^{*}(\theta_{H})\right) = \left(iA(v),\theta_{H}\right)
+    \end{align*}
+    ademas
+    \begin{align*}
+    	\norm{B\left(\left(\theta_{H},v\right)\right)}_{H\times H}^{2} = \piHH{(iA(v),\theta_{H}),(iA(v),\theta_{H})} = \piH{iA(v),iA(v)} + \piH{\theta_{H},\theta_{H}} = i(-i)\piH{A(v),A(v)} = \norm{A(v)}^{2}_{H}
+    \end{align*}
+    de esto es fácil ver
+    \begin{align*}
+    	\norm{(\theta,v)}^{2}_{H\times H} = \norm{v}_{H}.
+    \end{align*}
+    Utilizando lo anterior
+    \begin{align*}
+    	\norm{A} = \sup_{\overset{v\in H}{\norm{v}_{H}\leq1}} \norm{A(v)}_{H} = 
+    	\sup_{\overset{v\in H}{\norm{v}_{H}\leq1}} \norm{B\left(\left(\theta_{H},v\right)\right)}_{H\times H}\leq 
+    	 \sup_{\overset{v\in H}{\norm{v}_{H}\leq1}} \norm{B}\norm{(\theta_{H},v)} =  \sup_{\overset{v\in H}{\norm{v}_{H}\leq1}} \norm{B}\norm{v}_{H} = \norm{B}.
+    \end{align*}
+    Juntando ambas desigualdades, se tiene que $\norm{A} = \norm{B}$. Para mostrar que $B$ es autoadjunto se procede como sigue. Dados $(u,v),(w,z)\in H\times H$
+    \begin{align*}
+    	\piHH{B(u,v),(w,z)} &= \piHH{(iA(v),-iA^{*}(u)),(w,z)}\\ &= \piH{iA(v),w} + \piH{-iA^{*}(u),z}\\
+    	&= i\piH{A(v),w} + -i\piH{A^{*}(u),z}\\
+    	&= i\piH{v,A^{*}(w)} + -i\piH{u,A(z)}\\
+    	&= \piH{v,-iA^{*}(w)} + \piH{u,iA(z)}\\
+    	&= \piH{u,iA(z)} + \piH{v,-iA^{*}(w)}\\
+    	&= \piHH{(u,v),\left(iA(z),-iA^{*}(w)\right)}\\
+    	&= \piHH{(u,v),B^{*}\left(w,z\right)}
+    \end{align*} 
+    de esto se desprende
+    \begin{align*}
+    	B^{*}\left(w,z\right) = \left(iA(z),-iA^{*}(w)\right) = B(w,z)
+    \end{align*}
+    es decir, $B$ es autoadjunto.
+    \end{proof}
+    \begin{pro}
+    	Dado $\Omega$ un abierto acotado de $\mathbb{R}^{n}$, defina el operador $A:H^{1}\left(\Omega\right)\longrightarrow H^{2}\left(\Omega\right)$ por 
+    	\begin{align*}
+    		A(u) := \sum_{j=1}^{N}\left\{\int_{\Omega}\nabla u \cdot\nabla u_{j}\right\} v_{j}\hspace{4mm} \forall u\in H^{1}(\Omega)
+    	\end{align*}
+        donde $\{u_{1},u_{2},\dots,u_{N}\}\subset H^{1}\left(\Omega\right)$ y $\{v_{1},v_{2},\dots,v_{N}\}\subset H^{2}\left(\Omega\right)$. Demuestre que $A$ es lineal y acotado y encuentre el operador adjunto $A^{*}$.
+    \end{pro} 
+    \begin{proof}
+    	Antes de comenzar, dado $j\in\{1,\dots,N\}$ con $N\in \mathbb{N}$ definimos el funcional
+    	\begin{align*}
+    		F_{j} &: H^{1}\left(\Omega\right)\longrightarrow \mathbb{R}\\
+    		&u \mapsto F_{j}(u) := \int_{\Omega}\nabla u\cdot \nabla u_{j}
+    	\end{align*}
+    	El cual es lineal y acotado, en efecto, dados $\alpha,\beta\in \mathbb{R}$ y $u,v\in H^{1}(\Omega)$
+    	\begin{align*}
+    		F_{j}(\alpha u + \beta v) &= \int_{\Omega}\nabla \left(\alpha u + \beta v\right)\cdot \nabla u_{j}\\ &= \int_{\Omega}\left(\alpha\nabla u + \beta\nabla v\right)\cdot \nabla u_{j}\\ &= \int_{\Omega}\left(\alpha\nabla u \cdot \nabla u_{j} + \beta\nabla v \cdot \nabla u_{j}\right)\\ &= \int_{\Omega}\alpha\nabla u \cdot \nabla u_{j} + \int_{\Omega}\beta\nabla v \cdot \nabla u_{j}\\
+    		&= \alpha\int_{\Omega}\nabla u \cdot \nabla u_{j} + \beta\int_{\Omega}\nabla v \cdot \nabla u_{j}\\
+    		&= \alpha F_{j}(u) + \beta F_{j}(v)
+    	\end{align*}
+    	Así, $F_{j}$ es lineal con $j\in\{1,\dots,N\}$. Por otro lado, dado $u\in H^{1}(\Omega)$ y $j\in\{1,\dots,N\}$ 
+    	\begin{align*}
+    		\abs{F_{j}(u)} &= \abs{\int_{\Omega}\nabla u\cdot \nabla u_{j}}\\ 
+    		&\leq \int_{\Omega}\abs{\nabla u \cdot\nabla u_{j}}\\
+    		&\underset{\textup{CS}}{\leq} \int_{\Omega} \norm{\nabla u}_{\mathbb{R}^{n}}\norm{\nabla u_{j}}_{\mathbb{R}^{n}}\\
+    		&\underset{\textup{CS}}{\leq} \norm{\nabla u_{j}}_{L^{2}(\Omega)}\norm{\nabla u}_{L^{2}(\Omega)}\\
+    		&\leq \left(\norm{u_{j}}^{2}_{L^{2}(\Omega)}+\norm{\nabla u_{j}}^{2}_{L^{2}(\Omega)}\right)^{1/2}\left(\norm{u}^{2}_{L^{2}(\Omega)}+\norm{\nabla u}^{2}_{L^{2}(\Omega)}\right)^{1/2}\\
+    		&= \norm{ u_{j}}_{H^{1}(\Omega)}\norm{u}_{H^{1}(\Omega)}
+    	\end{align*}
+        Por tanto $F_{j}$ es acotado con $j\in\{1,\dots,N\}$. Considerando lo anterior probaremos que $A\in\mathcal{L}\left(H^{1}(\Omega),H^{2}(\Omega)\right)$, primero probemos que $A$ es lineal, dado $u,v\in H^{1}(\Omega)$ y $\alpha,\beta\in\mathbb{R}$ se tiene
+        \begin{align*}
+        	A(\alpha u + \beta v) &= \sum_{j=1}^{N}F_{j}(\alpha u + \beta v)v_{j}\\
+        	&= \sum_{j=1}^{N}\left(\alpha F_{j}(u) + \beta F_{j}(v)\right)v_{j}\\
+        	&= \sum_{j=1}^{N}\left(\alpha F_{j}(u)v_{j} + \beta F_{j}(v)v_{j}\right)\\
+        	&= \alpha\sum_{j=1}^{N} F_{j}(u)v_{j} + \beta\sum_{j=1}^{N} F_{j}(v)v_{j}\\
+        	&= \alpha A(u) + \beta A(v).
+        \end{align*}
+        Es decir $A$ es lineal. Veamos que $A$ es acotado, dado $u\in H^{1}\left(\Omega\right)$, se tiene
+        \begin{align*}
+        	\norm{A(u)}_{H^{2}(\Omega)} &= \norm{\sum_{j=1}^{N}F_{j}(u)v_{j}}_{H^{2}(\Omega)}\\ &\leq \sum_{j=1}^{N}\norm{F_{j}(u)v_{j}}_{H^{2}(\Omega)}\\ &= \sum_{j=1}^{N}\abs{F_{j}(u)}\norm{v_{j}}_{H^{2}(\Omega)}\\ &\leq \sum_{j=1}^{N}\norm{ u_{j}}_{H^{1}(\Omega)}\norm{u}_{H^{1}(\Omega)}\norm{v_{j}}_{H^{2}(\Omega)}\\
+        	&\leq \left(\sum_{j=1}^{N}\norm{ u_{j}}_{H^{1}(\Omega)}\norm{v_{j}}_{H^{2}(\Omega)}\right)\norm{u}_{H^{1}(\Omega)}
+        \end{align*}
+        Así $A$ es acotado y por tanto $A\in \mathcal{L}\left(H^{1}(\Omega),H^{2}(\Omega)\right)$. Para encontrar el operador adjunto $A^{*}$, se procede como sigue, dados $u\in H^{1}\left(\Omega\right)$ y $v\in H^{2}\left(\Omega\right)$ se tiene 
+        \begin{align*}
+        	\PI{A(u),v}_{\Hdos} = \PI{\sum_{j=1}^{N}F_{j}(u)v_{j},v}_{\Hdos} = \sum_{j=1}^{N}F_{j}(u)\PI{v_{j},v}_{\Hdos}
+        \end{align*}
+        Dado que $\left(\Huno,\PI{\cdot,\cdot}_{\Huno}\right)$ es un espacio de Hilbert y $F_{j}\in \Huno'$ para todo $j\in\{1,\dots,N\}$, entonces por teorema de representación de Riesz se tiene que para todo $u\in\Huno$
+        \begin{align*}
+        	F_{j}(u) = \PI{u,\mathcal{R}(F_{j})}_{\Huno}\hspace{4mm} \forall j\in\{1,\dots,N\},
+        \end{align*}
+        considerando esto
+        \begin{align*}
+        	\sum_{j=1}^{N}F_{j}(u)\PI{v_{j},v}_{\Hdos} &= \sum_{j=1}^{N}\PI{u,\mathcal{R}(F_{j})}_{\Huno}\PI{v_{j},v}_{\Hdos}\\ 
+        	&= \sum_{j=1}^{N}\PI{u,\mathcal{R}(F_{j})\PI{v_{j},v}_{\Hdos}}_{\Huno}\\
+        	&= \PI{u,\sum_{j=1}^{N}\mathcal{R}(F_{j})\PI{v_{j},v}_{\Hdos}}_{\Huno}
+        \end{align*}
+        de aquí
+        \begin{align*}
+        	A^{*}(v) = \sum_{j=1}^{N}\mathcal{R}(F_{j})\PI{v_{j},v}_{\Hdos} \hspace{4mm} \forall v\in \Hdos
+        \end{align*}
+    \end{proof}
+    \section*{Apendice}
+    \begin{teo}\label{teo2}
+    	Sean $X$ e $Y$ dos espacios de Banach, y sea $A:\mathcal{D}(A)\subseteq X\longrightarrow Y$ un operador lineal cerrado tal que $N(A) = \{\theta_X\}$. Entonces $R(A)$ es un subespacio cerrado de $Y$ si y solo si existe $C>0$ tal que 
+    	\begin{align*}
+    		\norm{x} \leq C\norm{A(x)}\hspace{4mm} \forall x\in \mathcal{D}(A).
+    	\end{align*}
+    \end{teo}
+\end{document}

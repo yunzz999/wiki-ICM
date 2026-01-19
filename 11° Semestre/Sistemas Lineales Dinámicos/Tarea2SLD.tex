@@ -1,0 +1,393 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}
+\usepackage{stix}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{\color{azul}{Problema}}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Sistemas Lineales Dinámicos}}
+\newcommand{\tarea}{\textbf{Tarea 2}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dy}{\textup{d}y}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\ds}{\textup{d}s}
+\newcommand{\dS}{\textup{d}S}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\Norm}[1]{\lVert#1\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+\renewcommand{\theequation}{\roman{equation}}
+
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Análisis Real I }\\
+	\textbf{Técnicas de Demostración}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}
+		Considere el sistema electromecánico ilustrado en la Fig. \ref{fig:tarea1}. En la Tarea $1$ se encontró un sistema simplificado con solo dos variables de estado. Utilice este sistema simplificado como base para desarrollar, justificar y comentar todos sus resultados en las siguientes preguntas:
+		\begin{itemize}
+			\item[$a)$] Para el sistema simplificado en la Tarea $1$ (Pregunta $1.e$), obtenga la representación en espacio de estados. Luego obtenga la expresión de la F. de T. $h(s)$. Encuentre la expresión exacta para $h(t)$ y grafíquela para $0\leq t < 1s$.
+			\item[$b)$] Utilizando $h(t)$ encontrada en $a)$ y las propiedades de convolución, encuentre la expresión de salida $y(t)$ para la señal $e(t) = -3\left[u(t-2T_{0}/18) - u(t-7T_{0}/18) - u(t - 11T_{0}/18) + u(t-16T_{0}/18)\right]$, con $T_{0} = 1s$. Grafique $y(t)$ para $0\leq t < 2T_{0}$. Luego simule el sistema para la señal anterior y compare con el gráfico obtenido por convolución.
+			\item[$c)$] Determine las expresiones de $e(\omega)$, $h(\omega)$ e $y(\omega)$ como las T.F. de $e(t)$, $h(t)$ e $y(t)$, respectivamente. Grafique $e(\omega)$, $h(\omega)$ e $y(\omega)$ para $-30\pi\leq \omega \leq 30\pi $.
+			\item[$d)$] Si la señal $e(t)$ se hace periódica de periodo $T_{0}$. Determine la expresión de $y_{p}(n)$ que es la T.F.F.D. de la salida del sistema $y_{p}(t)$ correspondiente a esta señal periódica. Grafique el módulo (por $T_{0}$) y la fase de $y_{p}(n)$ y superpóngalos sobre la gráfica del módulo y fase de $y(\omega)$, respectivamente, para $-30\pi \leq n\omega_{0} \leq 30\pi$.
+			\item[$e)$] Grafique la ubicación de los polos del sistema lineal no simplificado (Pregunta $1.c$ de la Tarea $1$). Comente la grafica en relación a las dinámicas del sistema. Obtenga la ganancia e indique si el sistema es de fase mínima. Puede resolver utilizando comandos en Matlab.
+		\end{itemize}
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=0.4\linewidth]{Tarea1}
+			\caption{Sistema electromecánico del Problema 1.}				\label{fig:tarea1}
+		\end{figure} 
+	\end{pro}
+    \begin{proof}[{\color{rojo}{Solución}}]
+    	\begin{itemize}
+    		\item[$a)$] Denotando $x_{1}(t) = x(t)$ y $x_{2}(t) = \dot{x}(t)$, el sistema simplificado de la Tarea $1$ es
+    		\begin{align*}
+    			\dot{x}_{1}(t) &= x_{2}(t)\\
+    			\dot{x}_{2}(t) &= \frac{k_{i}u^{2}(t)}{MR^{2}\left(l_{1} - x_{1}(t) + a\right)} - \frac{k\left(x_{1}(t) - l_{0}\right)}{M} - \frac{d}{M}x_{2}(t)
+    		\end{align*}
+    		 Luego, la representación en espacio de estados del sistema esta dada por 
+    		 \begin{align*}
+    		 	\Delta \dot{x} &= A\Delta x + B\Delta u ,\\
+    		 	\Delta y &= C\Delta x + D\Delta u 
+    		 \end{align*} 
+    	     donde 
+    	     \begin{align*}
+    	     	A = \begin{bmatrix}
+    	     	  0	& 1 \\~\\
+    	     	  \frac{k_{i}u_{0}^{2}}{MR^{2}\left(l_{1} - x^{0}_{1} + a\right)^{2}}-\frac{k}{M}	& -\frac{d}{M} 
+    	     	\end{bmatrix},\hspace{0.5cm}
+         	   B = \begin{bmatrix}
+         	   	0 \\
+         	   	\frac{2k_{i}u_{0}}{MR^{2}\left(l_{1} - x^{0}_{1} + a\right)}
+         	   \end{bmatrix},\hspace{0.5cm} C = \begin{bmatrix}
+         	   1&
+         	   0
+            \end{bmatrix},\hspace{0.5cm} \text{y} \hspace{0.5cm} D = [0].
+    	     \end{align*}
+             Con lo anterior se puede encontrar $h(s)$, pues
+             \begin{align*}
+             	h(s) = C\left(sI - A\right)^{-1}B + D 
+             \end{align*}
+             Ahora resta obtener $\left(sI - A\right)^{-1}$, a modo de simplificar algunas cuentas se hacen los siguientes cambios de variable $\eta = \frac{d}{M}$, $\xi = 	\frac{k_{i}u_{0}^{2}}{MR^{2}\left(l_{1} - x^{0}_{1} + a\right)^{2}}-\frac{k}{M}$ y $\hat{\xi} = \frac{2k_{i}u_{0}}{MR^{2}\left(l_{1} - x^{0}_{1} + a\right)}$ luego 
+             \begin{align*}
+             	\left(sI - A\right)^{-1} = \begin{bmatrix}
+             		s	& -1 \\~\\
+             		-\xi	& s + \eta
+             	\end{bmatrix}^{-1} = \frac{1}{s(s+\eta) + \xi}\begin{bmatrix}
+             	s + \eta	& 1 \\~\\
+             	\xi	& s
+             \end{bmatrix}
+             \end{align*}
+             De esta forma
+             \begin{align*}
+             	h(s) = \frac{1}{s(s+\eta) + \xi}\begin{bmatrix}
+             		1 &
+             		0
+             	\end{bmatrix}\begin{bmatrix}
+             		s + \eta	& 1 \\~\\
+             		\xi	& s
+             	\end{bmatrix}\begin{bmatrix}
+             		0\\
+             		\hat{\xi}
+             	\end{bmatrix} = \frac{1}{s(s+\eta) - \xi}\begin{bmatrix}
+             		1 &
+             		0
+             	\end{bmatrix}\begin{bmatrix}
+             		\hat{\xi} \\
+             		\hat{\xi}s
+             	\end{bmatrix} = \frac{\hat{\xi}}{s^{2} + s\eta - \xi}
+             \end{align*}
+            Asumiendo que $\Delta = \eta^{2}  + 4\xi<0$, con esto $u_{0}\leq 4$, se deduce que el polinomio $s^{2} + s\eta - \xi$ no tiene raíces reales, por lo que
+            \begin{align*}
+            	h(s) = -\frac{\hat{\xi}}{s^{2} + \eta s + \frac{\eta^{2}}{4} - \frac{\eta^{2}}{4} -\xi} = -\frac{\hat{\xi}}{\left(s + \frac{\eta}{2}\right)^{2} +\left(\sqrt{ -\frac{\eta^{2}}{4} -\xi}\right)^{2}}  
+            \end{align*}
+            definiendo $\alpha = \sqrt{ -\frac{\eta^{2}}{4} -\xi}$ y $\beta = \hat{\xi}$, se obtiene
+            \begin{align*}
+            	h(s) = \frac{\beta}{\left(s+\frac{\eta}{2}\right)^{2} + \alpha^{2}}
+            \end{align*}
+            Luego,
+            \begin{align*}
+            	h(t) = \mathcal{L}^{-1}\{h(s)\}(t) = \frac{\beta}{\alpha} \mathcal{L}^{-1}\left\{\frac{\alpha}{\left(s+\frac{\eta}{2}\right)^{2} + \alpha^{2}}\right\}(t) = \frac{\beta}{\alpha} e^{-\frac{\eta}{2}t}\sen\left(\alpha t\right)
+            \end{align*}
+            Gráficamente
+             \begin{figure}[h!]
+             	\centering
+             	\includegraphics[width=0.5\linewidth]{Tarea1SLD/T2/p1a}
+             	\caption{Expresión exacta de $h(t)$ con el punto de operación (0.302,0,1).}
+             	\label{fig:p1a}
+             \end{figure}
+             \newpage
+             \item[$b)$] En primera instancia se sabe que 
+             \begin{align*}
+             	y(t) = h(t)*e(t)
+             \end{align*}
+             Aplicando Transformada de Laplace y usando $T_{0} = 1$ se obtiene
+             \begin{align*}
+             	y(s) = h(s)e(s) = \frac{\beta}{\left(s+\frac{\eta}{2}\right)^{2} + \alpha^{2}}\frac{-3}{s}\left[e^{-2s/18} - e^{-7s/18} - e^{-11s/18} + e^{-16s/18}\right]
+             \end{align*}
+             aplicando Transformada Inversa de Laplace con ayuda del paquete simbólico de Matlab, se obtiene el valor de $y(t)$. Gráficamente, queda
+             \begin{figure}[h!]
+             	\centering
+             	\includegraphics[width=0.5\linewidth]{Tarea1SLD/T2/P1b}
+             	\caption{Comparación de la respuesta del sistema obtenida mediante convolución versus simulación.}
+             	\label{fig:p1b}
+             \end{figure}
+             
+             \item[$c)$] Por definición
+             \begin{align*}
+             	h(\omega) &= \mathcal{F}\{h(|t|)\}(\omega) = \int_{-\infty}^{\infty}h(|t|)e^{-j\omega t}\text{d}t = \frac{\beta}{\alpha}\int_{-\infty}^{\infty}e^{-\frac{\eta}{2}|t|}\sen\left(\alpha |t|\right)e^{-j\omega t}\text{d}t = \frac{\beta}{\alpha}\mathcal{L}\left\{e^{-\frac{\eta}{2}|t|}\sen\left(\alpha |t|\right)\right\}(j\omega) = \frac{\beta}{\left(\omega + \frac{\eta}{2}\right)^{2} + \alpha^{2}}\\
+             	e(\omega) &= \mathcal{L}\left\{e(t)\right\}(j\omega) = e^{-2T_{0}\omega j/18}\frac{1}{\omega j} - e^{-7T_{0}\omega j/18}\frac{1}{\omega j} - e^{-11T_{0}\omega j/18}\frac{1}{\omega j} + e^{-16T_{0}\omega j/18}\frac{1}{\omega j}\\
+             	y(\omega) &= h(\omega)e(\omega) =  \frac{\beta}{\left(\omega  + \frac{\eta}{2}\right)^{2} + \alpha^{2}}\left(e^{-2T_{0}\omega j/18}\frac{1}{\omega j} - e^{-7T_{0}\omega j/18}\frac{1}{\omega j} - e^{-11T_{0}\omega j/18}\frac{1}{\omega j} + e^{-16T_{0}\omega j/18}\frac{1}{\omega j}\right)
+             \end{align*}
+             Gráficamente
+             \begin{figure}[h!]
+             	\centering
+             	\includegraphics[width=0.5\linewidth]{Tarea1SLD/T2/p1c}
+             	\caption{$y(\omega)$, $e(\omega)$ y $h(\omega)$ respectivamente.}
+             	\label{fig:p1c}
+             \end{figure}
+             
+             \newpage
+             \item[$e)$] Mediante comandos de Matlab, se obtiene
+             \begin{figure}[h!]
+             	\centering
+             	\includegraphics[width=0.5\linewidth]{Tarea1SLD/T2/P1e}
+             	\caption{Polos y ceros del sistema lineal no simplificado.}
+             	\label{fig:p1e}
+             \end{figure}
+             De aquí se puede ver que ningún polo tiene parte real positiva, por lo tanto el sistema es
+             de fase mínima, es decir, el sistema es estable.\hspace{0.2cm}
+             
+             El sistema es de orden 3, pero dado que el polo real en $z = -10$ está a una distancia considerable del eje $y$, la dinámica del sistema se parece a uno de orden 2.\hspace{0.2cm}
+             
+             Por otro lado, la ganancia del sistema es $h(0) = C(-A)^{-1}B \approx 0.00455$.
+    	\end{itemize}
+    \end{proof}
+    \newpage
+    \begin{pro}
+    	Considere el sistema con la siguiente función de transferencia:
+    	\begin{align*}
+    		\frac{0.3 s}{s^{2}+3s + 2}
+    	\end{align*}
+        Se solicita desarrollar, justificar y comentar todos sus resultados para las siguientes preguntas:
+        \begin{itemize}
+        	\item[$a)$] Encuentre una representación en espacio de estados del sistema.
+        	\item[$b)$] Obtenga la matriz de transición en el plano $s$ y en el tiempo del modelo en espacio de estados
+        	encontrado en $a)$.
+        	\item[$c)$] Obtenga la respuesta homogénea de los estados en el plano $s$ y en el tiempo del modelo encontrado en $a)$. Considere $x_{0} = \left[1\ 1\right]^{t}$.
+        	\item[$d)$] Obtenga la respuesta forzada de los estados en el plano $s$ y en el tiempo del modelo encontrado en $a)$. Considere entrada escalón.
+        	\item[$e)$] Obtenga la respuesta transitoria y estacionaria de los estados en el tiempo del modelo encontrado en $a)$.
+        \end{itemize}
+    \end{pro}
+    \begin{proof}[{{\color{rojo}{Solución}}}]
+    	\begin{itemize}
+    		\item[$a)$] Usando que $y(s) = h(s)u(s)$ se tiene que 
+    		\begin{align*}
+    			h(s) = \frac{y(s)}{u(s)}\frac{z(s)}{z(s)} = \frac{0.3 sz(s)}{(s^{2}+3s + 2)z(s)}
+    		\end{align*}
+    	    de aquí se deduce
+    	    \begin{align*}
+    	    	u(s) = (s^{2}+3s + 2)z(s)\\
+    	    	y(s) = 0.3sz(s)
+    	    \end{align*}
+            Aplicando Transformada Inversa de Laplace y asumiendo que $z(0) = \dot{z}(0) = 0$, se obtiene 
+            \begin{align*}
+            	y(t) &= 0.3\dot{z}(t)\\
+            	u(t) &= \ddot{z}(t) + 3\dot{z}(t) + z(t)
+            \end{align*}
+            haciendo los cambios de variable $x_{1}(t) = z(t)$ y $x_{2}(t) = \dot{z}(t)$, se obtiene el sistema
+            \begin{align*}
+            	\begin{bmatrix}
+            		\dot{x}_{1}\\
+            		\dot{x}_{2}
+            	\end{bmatrix} = \begin{bmatrix}
+            		0 & 1\\
+            		-2 & -3
+            	\end{bmatrix}\begin{bmatrix}
+            		x_{1}\\
+            		x_{2}
+            	\end{bmatrix} + \begin{bmatrix}
+            		0\\
+            		1
+            	\end{bmatrix}u,
+                \hspace{0.5cm} y = \begin{bmatrix}
+                	0 & 0.3
+                \end{bmatrix}\begin{bmatrix}
+                x_{1}\\
+                x_{2}
+            \end{bmatrix}
+            \end{align*}
+            \item[$b)$] Interesa obtener $\Phi(s)$ y $\Phi(t)$, el primero esta dado por
+            \begin{align*}
+            	\Phi(s) = \left(sI - A\right)^{-1} = \begin{bmatrix}
+            		s & -1\\
+            		2 & s+3
+            	\end{bmatrix}^{-1} = \frac{1}{s^{2}+3s+2}\begin{bmatrix}
+            		s+3 & 1\\
+            		-2 & s
+            	\end{bmatrix} = \frac{1}{(s+1)(s+2)}\begin{bmatrix}
+            		s+3 & 1\\
+            		-2 & s
+            	\end{bmatrix}
+            \end{align*}
+            Por otro lado, $\Phi(t)$ se deduce de aplicar la Transformada Inversa de Laplace a cada elemento de la matriz $\Phi(s)$. 
+            \begin{align*}
+            	\Phi(t)_{1,1} &= \mathcal{L}^{-1}\left\{\frac{s+3}{(s+1)(s+2)}\right\} = 	\mathcal{L}^{-1}\left\{\frac{2}{s+1}\right\} - \mathcal{L}^{-1}\left\{\frac{1}{s+2}\right\} = 2e^{-t} - e^{-2t}\\
+            	\Phi(t)_{1,2} &= \mathcal{L}^{-1}\left\{\frac{1}{(s+1)(s+2)}\right\} = 	\mathcal{L}^{-1}\left\{\frac{1}{s+1}\right\} - \mathcal{L}^{-1}\left\{\frac{1}{s+2}\right\} = e^{-t} - e^{-2t}\\
+            	\Phi(t)_{2,1} &= \mathcal{L}^{-1}\left\{\frac{-2}{(s+1)(s+2)}\right\} = 	\mathcal{L}^{-1}\left\{\frac{-2}{s+1}\right\} + \mathcal{L}^{-1}\left\{\frac{2}{s+2}\right\} = -2e^{-t} + 2e^{-2t}\\
+            	\Phi(t)_{2,2} &= \mathcal{L}^{-1}\left\{\frac{s}{(s+1)(s+2)}\right\} = 	\mathcal{L}^{-1}\left\{\frac{-1}{s+1}\right\} + \mathcal{L}^{-1}\left\{\frac{2}{s+2}\right\} = -e^{-t} + 2e^{-2t}
+            \end{align*}
+            Por tanto
+            \begin{align*}
+            	\Phi(t) = \begin{bmatrix}
+            		2e^{-t} - e^{-2t} &  e^{-t} - e^{-2t}\\
+            		-2e^{-t} + 2e^{-2t} & -e^{-t} + 2e^{-2t}
+            	\end{bmatrix}
+            \end{align*}
+            \item[$c)$] La respuesta homogénea en el plano $s$ viene dada por 
+            \begin{align*}
+            	\boldsymbol{x}(s) &= \Phi(s)\boldsymbol{x}(0) = \frac{1}{(s+1)(s+2)}\begin{bmatrix}
+            		s+3 & 1\\
+            		-2 & s
+            	\end{bmatrix}\begin{bmatrix}
+            		1\\
+            		1
+            	\end{bmatrix} =  \frac{1}{(s+1)(s+2)}\begin{bmatrix}
+            		s+4\\
+            		s-2
+            	\end{bmatrix},\\
+            	\boldsymbol{y}(s) &= \frac{1}{(s+1)(s+2)}\begin{bmatrix}
+            		0 & 0.3
+            	\end{bmatrix}\begin{bmatrix}
+            		s+4\\
+            		s-2
+            	\end{bmatrix} = \frac{0.3(s-2)}{(s+1)(s+2)}
+            \end{align*}
+            Por otro lado, respuesta homogénea en el tiempo
+            \begin{align*}
+            	\boldsymbol{x}(t) &= \Phi(t)\boldsymbol{x}(0) =  \begin{bmatrix}
+            		2e^{-t} - e^{-2t} &  e^{-t} - e^{-2t}\\
+            		-2e^{-t} + 2e^{-2t} & -e^{-t} + 2e^{-2t}
+            	\end{bmatrix}\begin{bmatrix}
+            		1\\
+            		1
+            	\end{bmatrix} = \begin{bmatrix}
+            		3e^{-t}-2e^{-2t}\\
+            		-3e^{-t} + 4e^{-2t}
+            	\end{bmatrix}\\
+            	 y(t) &= \begin{bmatrix}
+            		0 & 0.3
+            	\end{bmatrix}\begin{bmatrix}
+            		3e^{-t}-2e^{-2t}\\
+            		-3e^{-t} + 4e^{-2t}
+            	\end{bmatrix} = 0.3\left(-3e^{-t} + 4e^{-2t}\right)
+            \end{align*}
+            \item[$d)$] La respuesta forzada en el plano $s$ viene dada por 
+            \begin{align*}
+            	\boldsymbol{x}(s) &= \Phi(s)Bu(s) = \frac{1}{(s+1)(s+2)}\begin{bmatrix}
+            		s+3 & 1\\
+            		-2 & s
+            	\end{bmatrix}\begin{bmatrix}
+            		0\\
+            		1
+            	\end{bmatrix}\frac{1}{s} = \frac{1}{s(s+1)(s+2)}\begin{bmatrix}
+            		1\\
+            		s
+            	\end{bmatrix}\\
+                y(s) &= C\boldsymbol{x}(s) =  \frac{1}{s(s+1)(s+2)}\begin{bmatrix}
+                	0 & 0.3
+                \end{bmatrix}\begin{bmatrix}
+                1\\
+                s
+            \end{bmatrix} = \frac{0.3}{(s+1)(s+2)}
+            \end{align*}
+             Luego respuesta forzada en el tiempo es
+             \begin{align*}
+             	\boldsymbol{x}(t) &= \mathcal{L}^{-1}\left\{\boldsymbol{x(s)}\right\} = \begin{bmatrix}
+             		\frac{1}{2}u(t)-e^{-t}+\frac{1}{2}e^{-2t}\\
+             		e^{-t}-e^{-2t}
+             	\end{bmatrix}\\
+             	y(t) &= \mathcal{L}^{-1}\left\{y(s)\right\} = 0.3\left(e^{-t} - e^{-2t}\right)
+             \end{align*}
+             \item[$e)$] Notar que
+             \begin{align*}
+             	\boldsymbol{x}(t) = \begin{bmatrix}
+             		3e^{-t}-2e^{-2t}\\
+             		-3e^{-t} + 4e^{-2t}
+             	\end{bmatrix} + \begin{bmatrix}
+             	\frac{1}{2}u(t)-e^{-t}+\frac{1}{2}e^{-2t}\\
+             	e^{-t}-e^{-2t}
+             \end{bmatrix}
+             \end{align*}
+             de aquí es inmediato notar que 
+             \begin{align*}
+             	\boldsymbol{x}_{ss}(t) = \begin{bmatrix}
+             		\frac{1}{2}u(t)\\
+             		0
+             	\end{bmatrix}
+             \end{align*}
+            y por tanto 
+            \begin{align*}
+            	\boldsymbol{x}_{tr}(t) = \boldsymbol{x}(t) - \boldsymbol{x}_{ss}(t) = \begin{bmatrix}
+            		2e^{-t}-\frac{3}{2} e^{-2t} \\
+            		-2e^{-t} + 3e^{-2t}
+            	\end{bmatrix}
+            \end{align*}
+    	\end{itemize}
+    \end{proof}
+\end{document}

@@ -1,0 +1,912 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{braket}
+\usepackage{amsthm}
+\usepackage{ dsfont }
+\usepackage{stmaryrd}
+\usepackage{stix}
+\usepackage[mathscr]{euscript}
+% Bibliografia
+\usepackage[backend=biber]{biblatex}
+\bibliography{Referencias.bib}
+% Cajas
+\usepackage{tcolorbox}
+\usepackage{tikz}
+% Comandos
+\newtheorem{teo}{Teorema}
+\newtheorem{prop}{Proposición}
+\newtheorem{pro}{Problema}
+\newcommand{\autor}{\textbf{Brayan Sandoval}}
+\newcommand{\asignatura}{\textbf{Tópicos En Información Cuántica}}
+\newcommand{\tarea}{\textbf{Tarea 1}}
+\newcommand{\fecha}{\textbf{\today}}
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\dx}{\textup{d}x}
+\newcommand{\dy}{\textup{d}y}
+\newcommand{\dt}{\textup{d}t}
+\newcommand{\ds}{\textup{d}s}
+\newcommand{\dS}{\textup{d}S}
+\newcommand{\DG}{\textup{DG}}
+\newcommand{\Th}{\mathscr{T}_{h}}
+\newcommand{\Hdiv}{H\left(\textup{div};\Omega\right)}
+\newcommand{\Hdivt}{H(\textup{div};\mathscr{T}_{h})}
+\providecommand{\tr}[1]{\textup{tr}\left(#1\right)}
+\providecommand{\Dt}[1]{\frac{\textup{d} #1}{\textup{d}t}}
+\providecommand{\Dx}[1]{\frac{\textup{d} #1}{\textup{d}x}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+\providecommand{\salto}[1]{\left\llbracket#1\right\rrbracket}
+\providecommand{\prom}[1]{\left \{\!\left \{#1\right \}\!\right \}}
+\providecommand{\PI}[2]{\left\langle #1,#2  \right\rangle}
+\providecommand{\Pii}[2]{\left( #1,#2  \right)}
+\renewcommand{\theequation}{\roman{equation}}
+
+%texto
+\usepackage{lipsum} % Genera texto aleatorio
+\renewcommand*{\familydefault}{\sfdefault} % Letra mas bonita
+% Figuras
+\usepackage{graphicx}
+% Geometría
+\usepackage[left= 2 cm, right = 2 cm, top = 2 cm, bottom = 2 cm]{geometry}
+\usepackage{lastpage}
+% Color
+\usepackage{xcolor}
+\definecolor{azul}{RGB}{10,10,115}
+\definecolor{amarillo}{RGB}{255,204,0}
+\definecolor{rojo}{RGB}{247,0,30}
+% Encabezado
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{4pt} %Aumentar grosor linea encabezado
+\let\oldheadrule\headrule
+\renewcommand{\headrule}{\color{azul}\oldheadrule}
+\renewcommand{\footrulewidth}{4pt} %Aumentar grosor linea pie de pagina
+\let\oldfootrule\footrule
+\renewcommand{\footrule}{\color{azul}\oldfootrule}
+\rhead{\color{azul}\autor}
+\chead{\color{azul}\tarea}
+\lhead{\color{azul}\asignatura}
+\rfoot{\color{azul} \textbf{Pág. \thepage\ - \pageref{LastPage}}}
+\cfoot{}
+\lfoot{\color{azul}\fecha}
+% Titulo
+\title{\color{azul}\textbf{Tópicos En Información Cuántica}\\
+	\textbf{Tarea 1}}
+\author{\color{azul}\autor}
+\date{\color{azul}\fecha}
+\begin{document}
+	\begin{pro}
+		\textit{Entrelazamiento de los estados de Werner.}\\
+		El estado de Werner de $2$ qubits está definido por 
+		\begin{align*}
+			\rho_{w} = p\ket{\varPhi_{-}}\bra{\varPhi_{-}} + \frac{1-p}{4}\mathds{1},
+		\end{align*}
+	    donde $p\in[0,1]$ y $\ket{\varPhi_{-}} = \frac{1}{\sqrt{2}}\big(\ket{01}-\ket{10}\big)$ es un estado de Bell.
+	    \begin{itemize}
+	    	\item[$1.$] Muestre que $\rho_{w}$ es un operador densidad y calcule su pureza $\tr{\rho^{2}_{w}}$.
+	    	\item[$2.$] Use el criterio de Peres-Horodecki para hallar una condición necesaria y suficiente sobre el parámetro $p$ para que $\rho_{w}$ sea un estado entrelazado.
+	    \end{itemize}
+	\end{pro}
+    \begin{proof}
+    	Sea $\mathcal{H} := \mathbb{C}^{2}$ un espacio de Hilbert con la base $\{\ket{0},\ket{1}\}$ y el espacio producto $\mathcal{H}\otimes\mathcal{H}$ con la base $\{\ket{00},\ket{01},\ket{10},\ket{11}\}$. Para mostrar que $\rho_{w}$ es un operador densidad, se debe probar que $\rho_{w}\in \mathcal{E}_{\mathcal{H}^{2}}$ donde 
+    	\begin{align*}
+    		\mathcal{E}_{\mathcal{H}^{2}} := \{\rho:\mathcal{H}\otimes\mathcal{H}\longrightarrow\mathcal{H}\otimes\mathcal{H}; \ \rho\geq0, \quad \tr{\rho}=1\}.
+    	\end{align*}
+        Se puede ver que
+    	\begin{itemize}
+    		\item[$a)$] $\rho_{w}$ es positivo. En efecto, sea $\ket{\varphi}\in \mathcal{H}\otimes\mathcal{H}$, luego
+    		\begin{align*}
+    			\bra{\varphi}\rho_{w}\ket{\varphi} &= \bra{\varphi}\left(p\ket{\varPhi_{-}}\bra{\varPhi_{-}} + \frac{1-p}{4}\mathds{1}\right)\ket{\varphi} = p\braket{\varphi|\varPhi_{-}}\braket{\varPhi_{-}|\varphi} + \frac{1-p}{4}\bra{\varphi}\mathds{1}\ket{\varphi}\\
+    			&= p|\braket{\varphi|\varPhi_{-}}|^{2} + \frac{1-p}{4}\bra{\varphi}\left(\sum_{i,j=0}^{1}\ket{ij}\bra{ij}\right)\ket{\varphi}\\
+    			&= p|\braket{\varphi|\varPhi_{-}}|^{2} + \frac{1-p}{4}\sum_{i,j=0}^{1}\braket{\varphi|ij}\braket{ij|\varphi}\\
+    			&= p|\braket{\varphi|\varPhi_{-}}|^{2} + \frac{1-p}{4}\sum_{i,j=0}^{1}|\braket{\varphi|ij}|^{2} \geq 0.
+    		\end{align*}
+    	    \item[$b)$] $\tr{\rho_{w}} = 1$. En efecto, 
+    	    \begin{align*}
+    	    	\tr{\rho_{w}} &= \tr{p\ket{\varPhi_{-}}\bra{\varPhi_{-}} + \frac{1-p}{4}\mathds{1}}\\ 
+    	    	&= p\ \tr{\ket{\varPhi_{-}}\bra{\varPhi_{-}}} + \frac{1-p}{4}\tr{\mathds{1}}\\ 
+    	    	&= p\braket{\varPhi_{-}|\varPhi_{-}} + \frac{1-p}{4}4\\
+    	    	&= \frac{p}{2}\big(\braket{01|01} - \braket{01|10} - \braket{10|01} + \braket{10|10}\big) + 1-p\\
+    	    	&= \frac{p}{2}2 + 1-p\\
+    	    	&= p + 1-p\\
+    	    	&= 1.
+    	    \end{align*}
+    	\end{itemize}
+        Y por tanto $\rho_{w}\in \mathcal{E}_{\mathcal{H}^{2}}$, es decir, $\rho_{w}$ es un operador densidad. Para determinar la pureza de $\rho_{w}$ se procede como sigue
+        \begin{align*}
+        	\rho^{2}_{w} &= \left(p\ket{\varPhi_{-}}\bra{\varPhi_{-}} + \frac{1-p}{4}\mathds{1}\right)\left(p\ket{\varPhi_{-}}\bra{\varPhi_{-}} + \frac{1-p}{4}\mathds{1}\right)\\ 
+        	&= p^{2}\braket{\varPhi_{-}|\varPhi_{-}} \ket{\varPhi_{-}}\bra{\varPhi_{-}} + \frac{p(1-p)}{4}\ket{\varPhi_{-}}\bra{\varPhi_{-}} + \frac{p(1-p)}{4}\ket{\varPhi_{-}}\bra{\varPhi_{-}}  + \frac{(1-p)^{2}}{16}\mathds{1}\\
+        	&= \frac{p^{2}+p}{2}\ket{\varPhi_{-}}\bra{\varPhi_{-}} + \frac{(1-p)^{2}}{16}\mathds{1},
+        \end{align*}
+        aplicando traza y usando e hecho que es lineal
+        \begin{align*}
+        	\tr{\rho^{2}_{w}} &= \frac{p^{2}+p}{2}\tr{\ket{\varPhi_{-}}\bra{\varPhi_{-}}} + \frac{(1-p)^{2}}{16}\tr{\mathds{1}}\\
+        	&= \frac{p^{2}+p}{2}\braket{\Phi_{-}|\Phi_{-}} + \frac{(1-p)^{2}}{16}4\\
+        	&= \frac{p^{2}+p}{2} + \frac{(1-p)^{2}}{4}\\
+        	&= \frac{3p^{2}+1}{4}.
+        \end{align*} 
+       Por tanto, la pureza de $\rho_{w}$ es $\frac{3p^{2}+1}{4}$.\\~\\
+       Por otro lado. Sean $\mathcal{H}_{A}:= \mathcal{H}$ y $\mathcal{H}_{B} := \mathcal{H}$, es inmediato notar que $\textup{dim}(\mathcal{H}_{A}) = n_{A} = 2 = n_{B} =  \textup{dim}(\mathcal{H}_{B}) $, por lo que es valido el criterio de Peres-Horodecki. Esto es 
+       \begin{align*}
+       	\rho_{W}\ \textup{es separable} \iff \rho^{T_{B}}_{W} \ \textup{es un operador densidad.}
+       \end{align*}
+       Lo anterior motiva a hallar condiciones sobre $p$ para las cuales $\rho^{T_{B}}_{W}$ sea un operador densidad.
+       \begin{itemize}
+       	\item[$a)$] Positividad de $\rho^{T}_{W}$. En primer lugar, de un calculo directo se tiene que 
+       	\begin{align*}
+       		\ket{\varPhi_{-}}\bra{\varPhi_{-}} &= \frac{1}{2}\left(\ket{01}-\ket{10}\right)\left(\bra{01}-\bra{10}\right)\\
+       		&= \frac{1}{2} \begin{pmatrix}
+       			0 & 0 & 0 & 0\\ 
+       			0 & 1 & -1 & 0 \\ 
+       			0 & -1 & 1 & 0\\ 
+       			0 & 0 & 0 & 0
+       		\end{pmatrix},
+       	\end{align*}
+       	luego,
+       	\begin{align*}
+       		\rho_{W} = \frac{p}{2} \begin{pmatrix}
+       			0 & 0 & 0 & 0\\ 
+       			0 & 1 & -1 & 0 \\ 
+       			0 & -1 & 1 & 0\\ 
+       			0 & 0 & 0 & 0
+       		\end{pmatrix} + \frac{1-p}{4} \begin{pmatrix}
+       		1 & 0 & 0 & 0\\ 
+       		0 & 1 & 0 & 0 \\ 
+       		0 & 0 & 1 & 0\\ 
+       		0 & 0 & 0 & 1
+       	\end{pmatrix} = \begin{pmatrix}
+       	\frac{1-p}{4} & 0 & 0 & 0\\ 
+       	0 & \frac{1+p}{4} & -\frac{p}{2} & 0 \\ 
+       	0 & -\frac{p}{2} & \frac{1+p}{4} & 0\\ 
+       	0 & 0 & 0 & \frac{1-p}{4}
+       \end{pmatrix}
+       	\end{align*}
+       con lo cual
+       \begin{align*}
+       	\rho^{T_{B}}_{W} = \begin{pmatrix}
+       		\begin{bmatrix}
+       			\frac{1-p}{4} & 0\\ 
+       			0 & \frac{1+p}{4}
+       		\end{bmatrix}^{T} & \begin{bmatrix}
+       			0 & 0\\ 
+       			-\frac{p}{2} & 0 
+       		\end{bmatrix}^{T}\\~\\ 
+       		\begin{bmatrix}
+       			0 & -\frac{p}{2}\\ 
+       			0 & 0
+       		\end{bmatrix}^{T} & \begin{bmatrix}
+       			\frac{1+p}{4} & 0 \\ 
+       			0 & \frac{1-p}{4}
+       		\end{bmatrix}^{T}
+       	\end{pmatrix} = \begin{pmatrix}
+       	\frac{1-p}{4} & 0 & 0 & -\frac{p}{2}\\ 
+       	0 & \frac{1+p}{4} & 0 & 0 \\ 
+       	0 & 0 & \frac{1+p}{4} & 0\\ 
+       	-\frac{p}{2} & 0 & 0 & \frac{1-p}{4}
+       \end{pmatrix}.
+       \end{align*}
+      Una vez encontrada la matriz representante del operador lineal, se procede a obtener lo valores propios de dicha matriz, los cuales se pueden calcular encontrando las raíces del polinomio característico asociado a la matriz, en este caso el polinomio característico viene dado por  
+      \begin{align*}
+      	p_{\rho^{T_{B}}_{W}}(\lambda) &= \textup{det}\left(\rho^{T_{B}}_{W} - \lambda\mathds{1}\right)\\ &= \begin{vmatrix}
+      		\frac{1-p}{4}-\lambda & 0 & 0 & -\frac{p}{2}\\ 
+      		0 & \frac{1+p}{4}-\lambda & 0 & 0 \\ 
+      		0 & 0 & \frac{1+p}{4}-\lambda & 0\\ 
+      		-\frac{p}{2} & 0 & 0 & \frac{1-p}{4}-\lambda
+      	\end{vmatrix}\\
+      &= \left(\frac{1-p}{4}-\lambda\right)\begin{vmatrix}
+      	\frac{1+p}{4}-\lambda & 0 & 0 \\ 
+      	0 & \frac{1+p}{4}-\lambda & 0\\
+      	0 & 0 & \frac{1-p}{4}-\lambda
+      \end{vmatrix} + \frac{p}{2}\begin{vmatrix}
+      0 & 0 & -\frac{p}{2} \\ 
+      \frac{1+p}{4}-\lambda & 0 & 0\\
+      0 & \frac{1+p}{4}-\lambda & 0
+  \end{vmatrix}\\
+      &= \left(\frac{1-p}{4}-\lambda\right)^{2}\left(\frac{1+p}{4}-\lambda\right)^{2} - \frac{p^{2}}{4}\left(\frac{1+p}{4}-\lambda\right)^{2}\\
+      &= \left(\frac{1+p}{4}-\lambda\right)^{2}\left[\left(\frac{1-p}{4}-\lambda\right)^{2} - \frac{p^{2}}{4}\right]\\
+      &= \left(\frac{1+p}{4}-\lambda\right)^{2}\left[\frac{1-p}{4}-\lambda - \frac{p}{2}\right]\left[\frac{1-p}{4}-\lambda + \frac{p}{2}\right]\\
+      &= \left(\frac{1+p}{4}-\lambda\right)^{3}\left(\frac{1-3p}{4}-\lambda\right)
+      \end{align*}
+      De lo anterior se desprende que 
+      \begin{align*}
+      	p_{\rho^{T_{B}}_{W}}(\lambda) = 0 \iff \lambda = \frac{1+p}{4} \ \vee \ \lambda = \frac{1-3p}{4}.
+      \end{align*} 
+      De esta forma 
+      \begin{align*}
+      	\rho^{T_{B}}_{W} \geq 0 \ &\iff \ \frac{1+p}{4}\geq0\ \wedge\ \frac{1-3p}{4}\geq0\\
+      	                          &\iff \ p\geq -1 \ \wedge \ p\leq \frac{1}{3}.  
+      \end{align*} 
+      Pero como $p\in[0,1]$ se tiene que
+      \begin{align*}
+      	  \rho^{T_{B}}_{W} \geq 0 \ &\iff \ p\in\left[0,\frac{1}{3}\right]
+      \end{align*}
+      \item[$b)$] $\textup{tr}\left(\rho^{T_{B}}_{W}\right) = 1$. Usando el hecho que $\textup{tr}\left(\rho_{W}\right) = 1$ y que la transposición parcial preserva la traza, se concluye lo pedido.
+       \end{itemize}
+      Finalmente, se deduce que 
+      \begin{align*}
+      	\rho_{W}\ \textup{es separable} \iff \ p\in\left[0,\frac{1}{3}\right].
+      \end{align*}
+      Y esto muestra que 
+      \begin{align*}
+      	\rho_{W}\ \textup{es un estado entrelazado} \iff \ p\in \left(\frac{1}{3}, 1 \right].
+      \end{align*}
+    \end{proof}
+    \newpage
+    \begin{pro}
+    	\textit{La transposición no es un canal cuántico.}\\
+    	Muestre que la aplicación transposición en la base canónica $\{\ket{i}\}^{1}_{i=0}$ de $\mathbb{C}^{2}$,
+    	\begin{align*}
+    		A \mapsto A^{T} := \sum^{1}_{i,j=0} \bra{j}A\ket{i}\ket{i}\bra{j},
+    	\end{align*}
+        es una aplicación positiva $\mathcal{B}\left(\mathbb{C}^{2}\right)\rightarrow\mathcal{B}\left(\mathbb{C}^{2}\right)$, pero no es un canal cuántico.
+    \end{pro}
+    \begin{proof}
+    	En primer lugar, es fácil probar que $A$ y $A^{T}$ tienen los mismos valores propios. En efecto 
+    	\begin{align*}
+    		p_{A^{T}}(\lambda) = \textup{det}\left(A^{T}-\lambda\mathds{1}\right) = \textup{det}\left(\left(A-\lambda\mathds{1}\right)^{T}\right) = \textup{det}\left(A-\lambda\mathds{1}\right) = p_{A}(\lambda).
+    	\end{align*}
+        Como ambos operadores tienen el mismo polinomio característico se deduce los valores propios de $A$ y $A^{T}$ coinciden. En otras palabras, dado $A$ positivo, se tendrá que el operador $A^{T}$ también es positivo, lo cual equivale a decir, la aplicación transposición es positiva.\\~\\
+        Por otro lado, se puede observar que la aplicación transposición no es un canal cuántico ya que no es $2-$positiva. En efecto, considere el operador densidad $\rho_{W}$ definido en el \textbf{Problema 1}, luego 
+        \begin{align*}
+        	T\otimes\mathds{1}_{\mathbb{C}^{2}}\left(\rho_{W}\right) = \begin{pmatrix}
+        		\begin{bmatrix}
+        			\frac{1-p}{4} & 0\\ 
+        			0 & \frac{1+p}{4}
+        		\end{bmatrix}^{T} & \begin{bmatrix}
+        			0 & 0\\ 
+        			-\frac{p}{2} & 0 
+        		\end{bmatrix}^{T}\\~\\ 
+        		\begin{bmatrix}
+        			0 & -\frac{p}{2}\\ 
+        			0 & 0
+        		\end{bmatrix}^{T} & \begin{bmatrix}
+        			\frac{1+p}{4} & 0 \\ 
+        			0 & \frac{1-p}{4}
+        		\end{bmatrix}^{T}
+        	\end{pmatrix} = \rho^{T_{B}}_{W}.
+        \end{align*} 
+       Por lo hecho en el \textbf{Problema 1}, se tiene para $p\in \left( \frac{1}{3},1 \right]$ que $\rho^{T_{B}}_{W}$ no es positivo, entonces, $T\otimes\mathds{1}_{\mathbb{C}^{2}}$ no puede ser un operador positivo y por tanto  la aplicación transposición no es $2-$positiva.
+    \end{proof}
+    \newpage
+    \begin{pro}\textit{Propiedad del número de Schmidt.}
+    	\begin{enumerate}
+    		\item Muestre que el número de Schmidt de un estado puro $\ket{\Psi}$ de un sistema compuesto $AB$ es igual al rango de la matriz densidad reducida $\rho_{A} = \underset{B}{\textup{tr}}\ket{\Psi}\bra{\Psi}$.
+    		\item Muestre que si
+    		\begin{align*}
+    			\ket{\Psi} = \sum_{j=1}^{m}c_{j}\ket{\psi_{j}}\ket{\phi_{j}},
+    		\end{align*}
+    	    donde $\{\ket{\psi_{j}}\}^{m}_{j=1}$ y $\{\ket{\phi_{j}}\}^{m}_{j=1}$ son familias (no necesariamente ortogonales) de vectores de $\mathcal{H}_{A}$ y $\mathcal{H}_{B}$ y $c_{j}\in \mathbb{C}$, $c_{j}\neq 0$, luego $m$ es igual o mayor al número de Schmidt de $\ket{\psi}$.
+    	    \item Suponga que $\ket{\Psi} = c_{1}\ket{\Phi_{1}} + c_{2}\ket{\Phi_{2}}$, donde $\ket{\Phi_{1}}$ y $\ket{\Phi_{2}}$ son estados puros de $AB$ y $c_{1},c_{2}\in \mathbb{C}$, $c_{1}\neq 0$, $c_{2}\neq 0$. Muestre que los números de Schmidt $q_{1},q_{2}$ y $q$ de $\ket{\Phi_{1}}$, $\ket{\Phi_{2}}$ y $\ket{\varPhi}$, respectivamente, satisfacen la desigualdad $q\geq |q_{1}-q_{2}|$.
+    	\end{enumerate}
+    \end{pro}
+    \begin{proof}
+    	\begin{enumerate}
+    		\item Por teorema, se llega a 
+    		\begin{align*}
+    			\ket{\Psi} = \sum^{q}_{i=1}\sqrt{\mu_{i}}\ket{\alpha_{i}}_{A}\ket{\beta_{i}}_{B},
+    		\end{align*}
+    	    donde $q\leq \min\{n_{A},n_{B}\}$, $\mu_{i}>0$ para todo $i\in\{1,...,q\}$ y $\{\ket{\alpha_{i}}_{A}\}^{q}_{i=1}$, $\{\ket{\beta_{i}}_{B}\}^{q}_{i=1}$ son familias $||\perp||$ de vectores de $\mathcal{H}_{A}$ y $\mathcal{H}_{B}$. Ademas, los $\mu_{i}$, $\ket{\alpha_{i}}$ y $\ket{\beta_{i}}$ son los valores y vectores propios no nulos de  $\rho_{A} = \underset{B}{\textup{tr}}\ket{\Psi}\bra{\Psi}$ y $\rho_{B} = \underset{A}{\textup{tr}}\ket{\Psi}\bra{\Psi}$. Luego usando la descomposición de Schmidt en la matriz de densidad reducida $\rho_{A}$
+    	    \begin{align*}
+    	    	\rho_{A} &= \underset{B}{\textup{tr}}\left[\left(\sum^{q}_{i=1}\sqrt{\mu_{i}}\ket{\alpha_{i}}_{A}\ket{\beta_{i}}_{B}\right)\left(\sum^{q}_{j=1}\sqrt{\mu_{j}}\bra{\alpha_{j}}_{A}\bra{\beta_{j}}_{B}\right)\right]\\
+    	    	&= \underset{B}{\textup{tr}}\left[\sum^{q}_{i,j=1}\sqrt{\mu_{i}\mu_{j}}\ket{\alpha_{i}}_{A}\bra{\alpha_{j}}_{A}\ket{\beta_{i}}_{B}\bra{\beta_{j}}_{B}\right]\\
+    	    	&= \sum^{q}_{i,j=1}\sqrt{\mu_{i}\mu_{j}}\ \underset{B}{\textup{tr}}\left(\ket{\alpha_{i}}_{A}\bra{\alpha_{j}}_{A}\ket{\beta_{i}}_{B}\bra{\beta_{j}}_{B}\right)\\
+    	    	&= \sum^{q}_{i,j=1}\sqrt{\mu_{i}\mu_{j}}\ket{\alpha_{i}}_{A}\bra{\alpha_{j}}_{A} \textup{tr}\ket{\beta_{i}}_{B}\bra{\beta_{j}}_{B}\\
+    	    	&= \sum^{q}_{i,j=1}\sqrt{\mu_{i}\mu_{j}}\ket{\alpha_{i}}_{A}\bra{\alpha_{j}}_{A}\braket{\beta_{i}|\beta_{j}}_{B}\\
+    	    	&= \sum^{q}_{i=1}\mu_{i}\ket{\alpha_{i}}_{A}\bra{\alpha_{i}}_{A}
+    	    \end{align*}
+            Luego, por teorema de las dimensiones 
+            \begin{align*}
+            	n_{A} = r(\rho_{A}) + n(\rho_{A}) 
+            \end{align*}
+            por lo que, demostrar $r\left(\rho_{A}\right) = q$, es equivalente a probar que 
+            $n\left(\rho_{A}\right) = n_{A}-q$. Usando que $\{\ket{\alpha_{i}}\}^{q}_{i=1}$ es una familia $||\perp||$, se deduce que es un conjunto linealmente independiente y por tanto $\{\ket{\alpha_{i}}\}^{q}_{i=1}$ es una base de $S = \textup{span}\left(\{\ket{\alpha_{q}},\dots,\ket{\alpha_{q}}\}\right)$. Así, por teorema de descomposición ortogonal
+            \begin{align*}
+            	\mathcal{H}_{A} = S\oplus S^{\perp},
+            \end{align*}
+            de aquí, se deduce que $\textup{dim}\left(S^{\perp}\right) = n_{A}-q$. Luego, dado $\ket{\varPhi}\in \textup{Ker}\left(\rho_{A}\right)$, entonces
+            \begin{align*}
+            	0 &= \rho_{A}\ket{\varPhi}\\ 
+            	  &= \sum^{q}_{i=1}\mu_{i}\ket{\alpha_{i}}_{A}\braket{\alpha_{i}|\varPhi}\\ 
+            	  &= \sum^{q}_{i=1}\mu_{i}\ket{\alpha_{i}}_{A}\braket{\alpha_{i}|\textup{Proj}_{S}\left(\ket{\varPhi}\right) + \textup{Proj}_{S^{\perp}}\left(\ket{\varPhi}\right)} \}\\ 
+            	  &= \sum^{q}_{i=1}\mu_{i}\braket{\alpha_{i}|\textup{Proj}_{S}\left(\ket{\varPhi}\right)}\ket{\alpha_{i}}_{A},
+            \end{align*} 
+            dado que $\{\alpha_{i}\}^{q}_{i=1}$ es linealmente independiente, se tiene que 
+            \begin{align*}
+            	\braket{\alpha_{i}|\textup{Proj}_{S}\left(\ket{\varPhi}\right)} = 0,\quad \forall i\in\{1,\dots,q\}
+            \end{align*}
+            y como $\textup{Proj}_{S}\left(\ket{\varPhi}\right)\notin S^{\perp}$, se tiene que $\textup{Proj}_{S}\left(\ket{\varPhi}\right) = 0_{A}$. Esto implica que $\varPhi\in S^{\perp}$ y por tanto $\textup{Ker}\left(\rho_{A}\right)\subset S^{\perp}$. Recíprocamente, dado $\ket{\varPhi}\in S^{\perp}$, luego
+            \begin{align*}
+            	\rho_{A}\ket{\varPhi} =  \sum^{q}_{i=1}\mu_{i}\ket{\alpha_{i}}_{A}\braket{\alpha_{i}|\varPhi}_{A} = 0
+            \end{align*}
+            Así, $S^{\perp}\subset\textup{Ker}\left(\rho_{A}\right)$ y por tanto $S^{\perp}=\textup{Ker}\left(\rho_{A}\right)$. Lo anterior implica que $n\left(\rho_{A}\right) = n_{A}-q$, lo cual es equivalente a decir que $r\left(\rho_{A}\right) = q$.
+            \item Usando la descomposición descrita en el enunciado
+            \begin{align*}
+            	\rho_{A} &= \underset{B}{\textup{tr}}\left[\left(\sum^{m}_{i=1}c_{i}\ket{\psi_{i}}\ket{\phi_{i}}\right)\left(\sum^{m}_{j=1}\bar{c}_{j}\bra{\psi_{j}}\bra{\phi_{j}}\right)\right]\\
+            	&= \underset{B}{\textup{tr}}\left[\sum^{m}_{i,j=1}c_{i}\bar{c}_{j}\ket{\psi_{i}}\bra{\psi_{j}}\ket{\phi_{i}}\bra{\phi_{j}}\right]\\
+            	&= \sum^{m}_{i,j=1}c_{i}\bar{c}_{j}\ \underset{B}{\textup{tr}}\left(\ket{\psi_{i}}\bra{\psi_{j}}\ket{\phi_{i}}\bra{\phi_{j}}\right)\\
+            	&= \sum^{m}_{i,j=1}c_{i}\bar{c}_{j}\ket{\psi_{i}}\bra{\psi_{j}} \textup{tr}\ket{\phi_{i}}\bra{\phi_{j}}\\
+            	&= \sum^{m}_{i,j=1}c_{i}\bar{c}_{j}\braket{\phi_{i}|\phi_{j}}\ket{\psi_{i}}\bra{\psi_{j}}.
+            \end{align*}
+            Usando que la familia $\{\ket{\Psi_{i}}\}^{m}_{i=1}$ no es necesariamente ortogonal y por tanto, no necesariamente linealmente independiente se deduce que
+            \begin{align*}
+            	r\left(\rho_{A}\right) \leq m.
+            \end{align*}
+            Además, usando el hecho que $\ket{\Psi}$ es un estado puro, se deduce que $r\left(\rho_{A}\right) = q$. Por tanto
+            \begin{align*}
+            	q\leq m.
+            \end{align*}
+            \item En primer lugar, si $q_{1}=q_{2}$, se tiene de forma inmediata la propiedad. Por otro lado si $q_{1}>q_{2}$, notar que 
+            \begin{align*}
+            	\ket{\Phi_{1}} &= \frac{1}{c_{1}}\ket{\Psi} - \frac{c_{2}}{c_{1}}\ket{\Phi_{2}}\\
+            	               &= \frac{1}{c_{1}}\sum^{q}_{j=1}\sqrt{\mu_{j}}\ket{\alpha_{j}}\ket{\beta_{j}} - \frac{c_{2}}{c_{1}}\sum^{q_{2}}_{j=1}\sqrt{\mu_{2,j}}\ket{\alpha_{2,j}}\ket{\beta_{2,j}}\\
+            	               &= \sum^{q+q_{2}}_{j=1}a_{j}\ket{\tilde{\alpha}_{j}}\ket{\tilde{\beta}_{j}}.
+            \end{align*}
+            Por parte 2, $q_{1}\leq q + q_{2}$. Entonces
+            \begin{align*}
+            	q\geq q_{1}-q_{2}.
+            \end{align*}
+            Mostrar el caso en que $q_{2}>q_{1}$, es análogo al caso recién demostrado, por tanto
+            \begin{align*}
+            	q\geq |q_{1}-q_{2}|.
+            \end{align*}
+    	\end{enumerate}
+    \end{proof}
+    \newpage
+    \begin{pro}
+    	\textit{Conjunto de estados puros minimal de un operador densidad}\\
+    	Decimos que un conjunto de estados puros $\{\ket{\psi_{i}},p_{i}\}^{r}_{i=1}$ es minimal para el operador densidad $\rho$ si $\rho = \sum_{i}p_{i}\ket{\psi_{i}}\bra{\psi_{i}}$ con $p_{i}>0\quad \forall i= 1,\dots,r$ y el número $r$ de estados del conjunto es igual al rango de $\rho$.
+    	\begin{enumerate}
+    		\item Muestre que los estados propios normalizados de $\rho$ asociados a valores propios no nulos forman un conjunto minimal para $\rho$.
+    		\item Sea $\ket{\psi_{1}}\in\textup{supp}(\rho)$, $||\psi_{1}||=1$, donde $\textup{supp}(\rho)$ es el subespacio imagen de $\mathcal{H}$ por $\rho$. Considere los operadores 
+    		\begin{align*}
+    			A_{p} = \rho - p\ket{\psi_{1}}\bra{\psi_{1}}
+    		\end{align*}
+    	    con $0\leq p \leq 1$.
+    	    \begin{itemize}
+    	    	\item[$(a)$] Muestre que existe un único $p\in ]0,1]$ y un único vector normalizado $\ket{\phi}\in \textup{supp}(\rho)$ módulo un factor de fase tales que $A_{p}\ket{\phi} = 0$. Muestre que estos $p$ y $\ket{\phi}$ están dados por
+    	    	\begin{align*}
+    	    		p = p_{1} = \bra{\phi_{1}}\rho^{-1}\ket{\psi_{1}}^{-1},\quad \ket{\phi} = c\rho^{-1}\ket{\psi_{1}},
+    	    	\end{align*}
+        	    donde $c$ es una constante de normalización y se define $\rho^{-1}$ como el inverso del operador $\rho$ restringido a $\textup{supp}(\rho)$.
+        	    \item[$(b)$] Muestre que $A_{p}$ es un operador no negativo para todo $p\in[0,p_{1}]$. ¿Cuál es el rango de $A_{p_{1}}$?
+        	    \item[$(c)$] Deduzca de las preguntas anteriores que existe un conjunto de estados puros minimal para $\rho$ que contiene $\ket{\psi_{1}}$, en el cual la probabilidad asociada a $\ket{\psi_{1}}$ es igual a $p_{1}$.
+    	    \end{itemize}
+    	\end{enumerate}
+    \end{pro}
+    \begin{proof}
+    	\begin{enumerate}
+    		\item Por descomposición espectral 
+    		\begin{align*}
+    			\rho = \sum^{d}_{i=1}\lambda_{i}\ket{\varphi_{i}}\bra{\varphi_{i}}
+    		\end{align*}
+    	    donde $\{\lambda_{i}\}^{d}_{i=1}$ son los valores propios de $\rho$ y $\{\ket{\varphi_{i}}\}^{d}_{i=1}$ es una base $||\perp||$ de vectores propios de $\rho$. Considerando $r$ como el numero de valores propios no nulos de $\rho$, se tiene que
+    	    \begin{align*}
+    	    	\rho = \sum^{r}_{i=1}\lambda_{i}\ket{\varphi_{i}}\bra{\varphi_{i}},
+    	    \end{align*}
+            luego, procediendo de forma análoga a la demostración del \textbf{Problema 3.1}, se deduce que 
+            \begin{align*}
+            	n\left(\rho\right) = n-r.
+            \end{align*}
+            Por tanto, $r(\rho) = r$, es decir $\{\lambda_{i},\ket{\varphi_{i}}\}^{r}_{i=1}$ forma un conjunto minimal para $\rho$.
+            \item 
+            \begin{itemize}
+            	\item[$(a)$] Usando el hecho que $\rho$ es biyectivo cuando esta restringido en $\textup{supp}(\rho)$, se deduce para $\ket{\psi_{1}}\in \textup{supp}(\rho)$ que existe un único $\ket{\phi}\in \textup{supp}(\rho)$ tal que
+            	\begin{align*}
+            		\rho\ket{\phi} = c\ket{\psi_{1}},
+            	\end{align*}  
+                con lo cual, existe un único $\ket{\phi}\in \textup{supp}(\rho)$ tal que
+                \begin{align*}
+                	\ket{\phi} = c\rho^{-1}\ket{\psi_{1}}.
+                \end{align*}
+                Además,
+                \begin{align*}
+                	A_{p}\ket{\phi} &= \rho\ket{\phi} - p\ket{\psi_{1}}\braket{\psi_{1}|\phi}\\
+                	                &= c\ket{\psi_{1}} - cp\bra{\psi_{1}}\rho^{-1}\ket{\psi_{1}}\ket{\psi_{1}}\\
+                	                &= c\left(1- p\bra{\psi_{1}}\rho^{-1}\ket{\psi_{1}}\right)\ket{\psi_{1}},
+                \end{align*}
+                luego, la única forma en que $A_{p}\ket{\phi} = 0$ es cuando 
+                \begin{align*}
+                	p = \frac{1}{\bra{\psi_{1}}\rho^{-1}\ket{\psi_{1}}}.
+                \end{align*} 
+                Ahora, para probar que $p_{1} = p$, se observa que
+                \begin{align*}
+                	\rho = \sum_{i=1}^{r}\lambda_{i}\ket{\varphi_{i}}\bra{\varphi_{i}}\ \textup{y}\ \rho = \sum_{i=1}^{r}p_{i}\ket{\psi_{i}}\bra{\psi_{i}}.
+                \end{align*}
+                Por resultado visto en clases, existe un unitario tal que 
+                \begin{align*}
+                	\sqrt{p_{j}}\ket{\psi_{j}} = \sum_{i=1}^{r}u_{ij}\sqrt{\lambda_{i}}\ket{\varphi_{i}}\quad \forall j\in\{1,\dots,r\}.
+                \end{align*}
+                Usando que $\textup{span}\left(\ket{\varphi_{1}},\dots,\ket{\varphi_{r}}\right) = \textup{supp}(\rho)$, se llega a que 
+                \begin{align*}
+                	\ket{\psi_{1}} = \sum^{r}_{i=1} \frac{\braket{\psi_{1}|\varphi_{i}}}{||\varphi_{i}||^{2}}\ket{\varphi_{i}} = \sum^{r}_{i=1} \braket{\psi_{1}|\varphi_{i}}\ket{\varphi_{i}},
+                \end{align*}
+                de esta forma 
+                \begin{align*}
+                	\sqrt{p_{1}}\sum^{r}_{i=1}\braket{\psi_{1}|\varphi_{i}}\ket{\varphi_{i}} = \sum_{i=1}^{r}u_{i1}\sqrt{\lambda_{i}}\ket{\varphi_{i}},
+                \end{align*}
+                luego,
+                \begin{align*}
+                	\sqrt{p_{1}}\sum^{r}_{i=1}\braket{\psi_{1}|\varphi_{i}}\braket{\varphi_{k}|\varphi_{i}} = \sum_{i=1}^{r}u_{i1}\sqrt{\lambda_{i}}\braket{\varphi_{k}|\varphi_{i}}\quad\forall k\in\{1,\dots,k\},
+                \end{align*}
+                entonces
+                \begin{align*}
+                	\sqrt{p_{1}}\braket{\psi_{1}|\varphi_{k}} = u_{k1} \sqrt{\lambda_{k}}\quad\forall k\in\{1,\dots,k\},
+                \end{align*}
+                de aquí se desprende que 
+                \begin{align*}
+                	u_{k1} = \sqrt{\frac{p_{1}}{\lambda_{k}}}\braket{\psi_{1}|\varphi_{k}}\quad\forall k\in\{1,\dots,k\},
+                \end{align*}
+                sumando y multiplicando por el conjugado
+                \begin{align*}
+                	1 = \sum^{r}_{k=1}|u_{k1}|^{2} = \sum^{r}_{k=1}u_{k1}\bar{u}_{k1} = \sum^{r}_{k=1} \frac{p_{1}}{\lambda_{k}}\braket{\psi_{1}|\varphi_{k}}\braket{\varphi_{k}|\psi_{1}} = p_{1}\bra{\psi_{1}}\left(\sum_{k=1}^{r}\lambda^{-1}_{k}\ket{\varphi_{k}}\bra{\varphi_{k}}\right)\ket{\psi_{1}} = p_{1}\bra{\psi_{1}}\rho^{-1}\ket{\psi_{1}}.
+                \end{align*}
+                De esta forma
+                \begin{align*}
+                	p_{1} = \frac{1}{\bra{\psi_{1}}\rho^{-1}\ket{\psi_{1}}} = p.
+                \end{align*}
+                \item[$(b)$] En primer lugar, se puede ver que 
+                \begin{align*}
+                	A_{p}\geq 0 \iff \rho^{-1/2}A_{p}\rho^{-1/2}\geq 0.
+                \end{align*}
+                desarrollando la expresión $\rho^{-1/2}A_{p}\rho^{-1/2}$, se llega
+                \begin{align*}
+                	\rho^{-1/2}A_{p}\rho^{-1/2} &= \rho^{-1/2}\left(\rho - p \ket{\psi_{1}}\bra{\psi_{1}}\right)\rho^{-1/2}\\
+                	&= \mathds{1} - p\rho^{-1/2}\ket{\psi_{1}}\bra{\psi_{1}}\rho^{-1/2}.
+                \end{align*}
+                dado $\ket{\xi}\in \textup{supp}(\rho)$
+                \begin{align*}
+                	\bra{\xi}\left(\mathds{1} - p\rho^{-1/2}\ket{\psi_{1}}\bra{\psi_{1}}\rho^{-1/2}\right)\ket{\xi} &= \braket{\xi|\xi} - p \bra{\xi}\rho^{-1/2}\ket{\psi_{1}}\bra{\psi_{1}}\rho^{-1/2}\ket{\xi}\\
+                	&= ||\xi||^{2} - p |\bra{\xi}\rho^{-1/2}\ket{\psi_{1}}|^{2}\\
+                	&\geq ||\xi||^{2} - p_{1} |\bra{\xi}\rho^{-1/2}\ket{\psi_{1}}|^{2}.
+                \end{align*}
+                Por Cauchy Schwarz
+                \begin{align*}
+                	|\bra{\xi}\rho^{-1/2}\ket{\psi_{1}}|^{2}\leq ||\xi||^{2}||\rho^{-1/2}\ket{\psi_{1}}||^{2} = ||\xi||^{2}\bra{\psi_{1}}\rho^{-1/2}\rho^{-1/2}\ket{\psi_{1}} = ||\xi||^{2}\frac{1}{p_{1}}
+                \end{align*}
+                De esta forma
+                \begin{align*}
+                	\bra{\xi}\left(\mathds{1} - p\rho^{-1/2}\ket{\psi_{1}}\bra{\psi_{1}}\rho^{-1/2}\right)\ket{\xi} \geq ||\xi||^{2} - p_{1} |\bra{\xi}\rho^{-1/2}\ket{\psi_{1}}|^{2} \geq ||\xi||^{2} - \frac{p_{1}}{p_{1}}||\xi||^{2} = 0.
+                \end{align*}
+                Por tanto, 
+                \begin{align*}
+                	A_{p}\geq 0.
+                \end{align*}
+                Para determinar el rango de $A_{p_{1}}$, se puede observar que
+                \begin{align*}
+                	A_{p_{1}} = \rho - p_{1}\ket{\psi_{1}}\bra{\psi_{1}} = \sum^{r}_{i=1}p_{i}\ket{\psi_{i}}\bra{\psi_{i}} - p_{1}\ket{\psi_{1}}\bra{\psi_{1}} = \sum^{r}_{i=2}p_{i}\ket{\psi_{i}}\bra{\psi_{i}}.
+                \end{align*}
+                Luego, el $r\left(A_{p_{1}}\right) = r-1$.
+                \item[$(c)$] Dado $\ket{\psi_{1}}\in\textup{supp}(\rho)$, luego, se tiene que 
+                \begin{align*}
+                	\rho = p\ket{\psi_{1}}\bra{\psi_{1}} + A_{p}
+                \end{align*}
+                luego, existe un único $\ket{\phi}\in\textup{supp}(\rho)$ y $p\in]0,1]$ tal que
+                \begin{align*}
+                	A_{p}\ket{\phi} = 0 
+                \end{align*} 
+                donde 
+                \begin{align*}
+                	p = p_{1} = \bra{\phi_{1}}\rho^{-1}\ket{\psi_{1}}^{-1},\quad \ket{\phi} = c\rho^{-1}\ket{\psi_{1}},
+                \end{align*}
+                Además $r\left(A_{p_{1}}\right) = r-1$, por lo que, por teorema espectral 
+                \begin{align*}
+                	A_{p_{1}} = \sum_{i=1}^{r-1}\nu_{i}\ket{\eta_{i}}\bra{\eta_{i}}
+                \end{align*}
+                de esta forma 
+                \begin{align*}
+                	\rho = p_{1}\ket{\psi_{1}}\bra{\psi_{1}} + \sum_{i=1}^{r-1}\nu_{i}\ket{\eta_{i}}\bra{\eta_{i}}
+                \end{align*}
+                dado $r\left(\rho\right) =  r$, se tiene que $\{\ket{\psi_{1}},p_{1},\ket{\eta_{1}},\nu_{1},\dots,\ket{\eta_{r-1}},\nu_{r-1}\}$ es un conjunto minimal para $\rho$. Además, $\textup{Proba}(\psi_{1}) = p_{1}$.
+            \end{itemize}
+    	\end{enumerate}
+    \end{proof}
+    \begin{pro}
+    	\textit{Purificación del estado de salida del canal cuántico.}\\
+    	Sea $\rho_{S}$ un operador densidad sobre un espacio de Hilbert $\mathcal{H}_{S}$ y $\mathcal{M}:\mathcal{B}\left(\mathcal{H}_{S}\right)\longrightarrow\mathcal{B}\left(\mathcal{H}_{S}\right)$ un canal cuántico. Sea $\ket{\Psi_{SA}}$ una purificación de $\rho_{S}$ sobre $\mathcal{H}_{S}\otimes\mathcal{H}_{A}$. Sea $\mathcal{H}_{E}$ un espacio de Hilbert, $U_{SE}$ el unitario sobre $\mathcal{H}_{S}\otimes\mathcal{H}_{E}$ y $\ket{\epsilon_{0}}\in\mathcal{H}_{E}$ el estado puro en la dilatación de Stinespring de $\mathcal{M}$,
+    	\begin{align*}
+    		\mathcal{M}\left(\rho_{S}\right) = \underset{E}{\textup{tr}}\left(U_{SE}\rho_{S}\otimes\ket{\epsilon_{0}}\bra{\epsilon_{0}}U^{\dagger}_{SE}\right)
+    	\end{align*}
+        \begin{enumerate}
+        	\item Muestre que 
+        	\begin{align*}
+        		\ket{\Psi^{\mathcal{M}}_{SAE}} = U_{SE}\otimes\mathds{1}_{A}\ket{\Psi_{SA}}\ket{\epsilon_{0}}
+        	\end{align*}
+            es una purificación de $\mathcal{M}\left(\rho_{S}\right)$ sobre $\mathcal{H}_{S}\otimes\mathcal{H}_{A}\otimes\mathcal{H}_{E}$.
+            \item Sea $\rho_{S} = \sum_{k}\mu_{k}\ket{\varphi_{k}}\bra{\varphi_{k}}$ la descomposición espectral de $\rho_{S}$ y $\{A_{i}\}$ una familia de operadores de Kraus para $\mathcal{M}$. Muestre que 
+            \begin{align*}
+            	\ket{\Psi^{\mathcal{M}}_{SAE}} = \sum_{k}\sum_{i}\sqrt{\mu_{k}}A_{i}\ket{\varphi_{k}}\ket{\alpha_{k}}\ket{\epsilon_{i}}
+            \end{align*}
+            es una purificación de $\mathcal{M}\left(\rho_{S}\right)$ sobre $\mathcal{H}_{S}\otimes\mathcal{H}_{A}\otimes\mathcal{H}_{E}$, donde $\{\ket{\alpha_{k}}\}$ y $\ket{\epsilon_{i}}$ son familias ortonormales arbitrarias de $\mathcal{H}_{A}$ y $\mathcal{H}_{E}$, respectivamente. 
+        \end{enumerate}
+    \end{pro}
+    \begin{proof}
+    	\begin{enumerate}
+    		\item Dado que $\ket{\Psi_{SA}}$ es un estado puro sobre $\mathcal{H}_{S}\otimes\mathcal{H}_{A}$ y que $\ket{\epsilon_{0}}$ es un estado puro sobre $\mathcal{H}_{E}$ se puede deducir que $\ket{\Psi^{\mathcal{M}}_{SAE}}$ es un estado puro. Luego de un cálculo directo
+    		\begin{align*}
+    			\underset{AE}{\textup{tr}}\left(\ket{\Psi^{\mathcal{M}}_{SAE}}\bra{\Psi^{\mathcal{M}}_{SAE}}\right) &= \underset{A}{\textup{tr}}\ \underset{E}{\textup{tr}}\left(U_{SE}\otimes\mathds{1}_{A}\ket{\Psi_{SA}}\ket{\epsilon_{0}} \bra{\epsilon_{0}}\bra{\Psi_{SA}}\mathds{1}_{A}\otimes U^{\dagger}_{SE}\right)\\
+    			&= \underset{E}{\textup{tr}}\ \underset{A}{\textup{tr}}\left(U_{SE}\otimes\mathds{1}_{A}\ket{\Psi_{SA}}\ket{\epsilon_{0}} \bra{\epsilon_{0}}\bra{\Psi_{SA}}\mathds{1}_{A}\otimes U^{\dagger}_{SE}\right)\\
+    			&= \underset{E}{\textup{tr}}\ \underset{A}{\textup{tr}}\left(U_{SE}\otimes\mathds{1}_{A}\ket{\Psi_{SA}}\bra{\Psi_{SA}}\otimes\ket{\epsilon_{0}} \bra{\epsilon_{0}}\mathds{1}_{A}\otimes U^{\dagger}_{SE}\right)\\
+    			&= \underset{E}{\textup{tr}}\left( U_{SE} \ \underset{A}{\textup{tr}}\left( \ket{\Psi_{SA}}\bra{\Psi_{SA}}\otimes\ket{\epsilon_{0}} \bra{\epsilon_{0}}\right)U^{\dagger}_{SE} \right)\\
+    			&= \underset{E}{\textup{tr}}\left( U_{SE} \ \underset{A}{\textup{tr}}\left( \ket{\Psi_{SA}}\bra{\Psi_{SA}}\otimes\ket{\epsilon_{0}} \bra{\epsilon_{0}}\right)U^{\dagger}_{SE} \right)\\
+    			&= \underset{E}{\textup{tr}}\left( U_{SE} \ \underset{A}{\textup{tr}}\left( \ket{\Psi_{SA}}\bra{\Psi_{SA}}\right)\ket{\epsilon_{0}} \bra{\epsilon_{0}} U^{\dagger}_{SE} \right)\\
+    			&= \underset{E}{\textup{tr}}\left( U_{SE} \rho_{S}\otimes\ket{\epsilon_{0}} \bra{\epsilon_{0}} U^{\dagger}_{SE} \right)\\
+    			&= \mathcal{M}\left(\rho_{S}\right)
+    		\end{align*}
+    	\item De un cálculo directo
+    	\begin{align*}
+    		\underset{AE}{\textup{tr}}\left(\ket{\Psi^{\mathcal{M}}_{SAE}}\bra{\Psi^{\mathcal{M}}_{SAE}}\right) &= \underset{E}{\textup{tr}}\underset{A}{\textup{tr}}\left(\sum_{kijl}\sqrt{\mu_{k}\mu_{j}}A_{i}\ket{\varphi_{k}}\ket{\alpha_{k}}\ket{\epsilon_{i}}\bra{\epsilon_{l}}\bra{\alpha_{j}}\bra{\varphi_{j}}A^{\dagger}_{l}\right)\\
+    		&= \underset{E}{\textup{tr}}\underset{A}{\textup{tr}}\left(\sum_{kijl}\sqrt{\mu_{k}\mu_{j}}A_{i}A^{\dagger}_{l}\ket{\varphi_{k}}\bra{\varphi_{j}}\ket{\alpha_{k}}\bra{\alpha_{j}}\ket{\epsilon_{i}}\bra{\epsilon_{l}}\right)\\
+    		&= \sum_{kijl}\sqrt{\mu_{k}\mu_{j}}\braket{\alpha_{k}|\alpha_{j}}\underset{E}{\textup{tr}}\left(A_{i}A^{\dagger}_{l}\ket{\varphi_{k}}\bra{\varphi_{j}}\ket{\epsilon_{i}}\bra{\epsilon_{l}}\right)\\
+    		&= \sum_{ijl}\sqrt{\mu_{j}\mu_{j}}\ \underset{E}{\textup{tr}}\left(A_{i}A^{\dagger}_{l}\ket{\varphi_{j}}\bra{\varphi_{j}}\ket{\epsilon_{i}}\bra{\epsilon_{l}}\right) \\
+    		&= \sum_{ijl}\mu_{j} A_{i}A^{\dagger}_{l}\ket{\varphi_{j}}\bra{\varphi_{j}} \braket{\epsilon_{i}|\epsilon_{l}}\\
+    		&= \rho_{S}\sum_{i}A_{i}A^{\dagger}_{i} \\
+    		&= \mathcal{M}(\rho_{S}).
+    	\end{align*}
+    	\end{enumerate}
+    \end{proof}
+    \newpage
+    \begin{pro}
+    	\textit{Discriminación ambigua de 2 estados.}\\
+    	Suponga que Alice prepara un sistema cuántico en uno de los dos estados $\rho_{1}$ o $\rho_{2}$ con
+    	probabilidades $p_{1}$ y $p_{2} = 1-p_{1}$. Luego ella transmite el sistema a Bob. Con el fin de
+    	determinar cual de los dos estados ha sido preparado por Alice, Bob realiza una medición
+    	generalizada sobre el sistema, descrita por un POVM $\{M_{1},M_{2}\}$. El decide que el estado es $\rho_{1}$
+    	si el resultado de la medición es “1” y es $\rho_{2}$ si el resultado de la medición es “2”. El propósito
+    	de la discriminación ambigua de estados (o discriminación con error mínimo) es hallar la
+    	medición óptima que minimiza la probabilidad de equivocación de Bob. Esta probabilidad
+    	está dada por
+    	\begin{align*}
+    		P_{\textup{err}} = 1 - \sum_{i=1}^{2}p_{i}\textup{Proba}(i|i),
+    	\end{align*}
+        donde $\textup{Proba}(i|i) = \textup{tr}\left(M_{i}\rho_{i}\right)$ es la probabilidad del resultado $i$ sabiendo que el estado es $\rho_{i}$.
+        \begin{enumerate}
+        	\item Muestre que $P_{\textup{err}} = p_{1} - \textup{tr}\left(M_{1}\Lambda\right)$ con $\Lambda = p_{1}\rho_{1} - p_{2}\rho_{2}$.
+        	\item Deduzca que la probabilidad de error mínima está dada por 
+        	\begin{align*}
+        		P_{\textup{err}} = \frac{1}{2}\left(1-\textup{tr}|\Lambda|\right)
+        	\end{align*} 
+            y que la medición óptima es $\{M^{\textup{op}}_{1} = \Pi_{+},M^{\textup{op}}_{2} = \mathds{1} - \Pi_{+}\}$, donde $\Pi_{+}$ es la proyección sobre el subespacio generado por los vectores propios de $\Lambda$ con valores propios positivos.
+            \item Muestre que en el caso de dos estados puros equiprobables, $\rho_{i} = \ket{\psi_{i}}\bra{\psi_{i}}$ con $p_{i} = 1/2$, $i=1,2$, donde $\ket{\psi_{1}}$ y $\ket{\psi_{2}}$ no son ortogonales entre sí,
+            \begin{align*}
+            	P_{\textup{err}} = \frac{1}{2}\left(1-\sqrt{1-|\braket{\psi_{1}|\psi_{2}}|^{2}}\right).
+            \end{align*} 
+            Determine la base de medición optimal $\{\ket{\phi^{\textup{op}}_{1}},\ket{\phi^{\textup{op}}_{2}}\}$ en función de $\ket{\psi_{1}}$ y $\psi_{2}$ y represente gráficamente en el plano los vectores $\ket{\psi_{1}},\ket{\psi_{2}},\ket{\phi^{\textup{op}}_{1}}$ y $\ket{\phi^{\textup{op}}_{2}}$.
+        \end{enumerate}
+    \end{pro}
+    \begin{proof}
+    	\begin{enumerate}
+    		\item Del enunciado se sabe
+    		\begin{align*}
+    			P_{\textup{err}} &= 1 - \sum_{i=1}^{2}p_{i}\textup{Proba}(i|i)\\
+    			                 &= 1 - p_{1}\textup{tr}\left(M_{1}\rho_{1}\right) - p_{2}\textup{tr}\left(M_{2}\rho_{2}\right)\\
+    			                 &= 1 - p_{1}\textup{tr}\left(M_{1}\rho_{1}\right) - p_{2}\textup{tr}\left(\left(\mathds{1} - M_{1}\right)\rho_{2}\right)\\
+    			                 &= 1 - p_{1}\textup{tr}\left(M_{1}\rho_{1}\right) - p_{2}\textup{tr}\left(\rho_{2}\right) + p_{2}\textup{tr}\left(M_{1}\rho_{2}\right)\\
+    			                 &=  1 - p_{1}\textup{tr}\left(M_{1}\rho_{1}\right) - p_{2} + p_{2}\textup{tr}\left(M_{1}\rho_{2}\right)\\
+    			                 &= 1-p_{2}  - \textup{tr}\left(p_{1}M_{1}\rho_{1} - p_{2}M_{1}\rho_{2}\right)\\
+    			                 &= p_{1}  - \textup{tr}\left(M_{1}\Lambda\right),
+    		\end{align*}
+    	    con $\Lambda := p_{1}\rho_{1} - p_{2}\rho_{2}$.
+    	    \item En vista que $\Lambda$ no necesariamente es un operador positivo, considere la descomposición
+    	    \begin{align*}
+    	    	\Lambda = \Lambda_{+} - \Lambda_{-}
+    	    \end{align*}
+            donde 
+            \begin{align*}
+            	\Lambda_{\pm} = \frac{|\Lambda|\pm \Lambda}{2}\geq 0.
+            \end{align*}
+            Luego, se tiene el siguiente problema de minimización
+            \begin{align*}
+            	\min_{M_{1}} \ &p_{1} - \textup{tr}\left(M_{1}\Lambda\right)\\
+            	\textup{s.a.}\ &M_{1} + M_{2} = \mathds{1},\\
+            	&M_{1},M_{2}\geq 0.
+            \end{align*}
+            el cual es equivalente al problema de maximización
+            \begin{align*}
+            	\max_{M_{1}} \ &\textup{tr}\left(M_{1}\Lambda\right)\\
+            	\textup{s.a.}\ &M_{1} + M_{2} = \mathds{1},\\
+            	&M_{1},M_{2}\geq 0.
+            \end{align*} 
+            Desarrollando la función objetivo
+            \begin{align*}
+            	\textup{tr}\left(M_{1}\Lambda\right) = \textup{tr}\left(M_{1}\Lambda_{+}\right) - \textup{tr}\left(M_{1}\Lambda_{-}\right).
+            \end{align*}
+            En vista que $M_{1}\Lambda_{+}$ y $M_{1}\Lambda_{-}$ son operadores no negativos se deduce que
+            \begin{align*}
+            	\textup{tr}\left(M_{1}\Lambda_{+}\right) - \textup{tr}\left(M_{1}\Lambda_{-}\right) \geq 0.
+            \end{align*}
+            Por lo que el máximo se encuentra cuando $\textup{tr}\left(M_{1}\Lambda_{-}\right) = 0$ y cuando $\textup{tr}\left(M_{1}\Lambda_{+}\right) = \textup{tr}\left(\Lambda_{+}\right)$. Lo anterior ocurre cuando $M_{1} = \Pi_{+}$, donde $\Pi_{+}$ es la proyección sobre el subespacio generado por los vectores propios de $\Lambda$ con valores propios positivos. Además, dado que
+            \begin{align*}
+            	M_{1} + M_{2} = \mathds{1},
+            \end{align*}
+            se deduce que 
+            \begin{align*}
+            	M_{2} = \mathds{1} - \Pi_{+}.
+            \end{align*}
+            De esta forma la medición optima es $\{M^{\textup{op}}_{1} = \Pi_{+},M^{\textup{op}}_{2} = \mathds{1} - \Pi_{+}\}$, teniendo en cuenta esto, se deduce que 
+            \begin{align*}
+            	P_{\textup{err}} &= p_{1} - \tr{M^{\textup{op}}_{1}\Lambda}\\
+            	                 &= p_{1} - \tr{\Lambda_{+}}\\
+            	                 &= p_{1} - \frac{1}{2}\tr{|\Lambda| + \Lambda}\\
+            	                 &= p_{1} - \frac{1}{2}\textup{tr}|\Lambda| - \frac{1}{2}\tr{\Lambda}\\
+            	                 &= p_{1} - \frac{1}{2}\textup{tr}|\Lambda| - \frac{1}{2}\left(p_{1}\tr{\rho_{1}} + p_{2}\tr{\rho_{2}}\right)\\
+            	                 &=  p_{1} - \frac{1}{2}\textup{tr}|\Lambda| - \frac{p_{1}}{2} + \frac{p_{2}}{2}\\
+            	                 &= \frac{p_{1}}{2} + \frac{p_{2}}{2} - \frac{1}{2}\textup{tr}|\Lambda|\\
+            	                 &= \frac{1}{2}\big(1-\textup{tr}|\Lambda|\big)
+            \end{align*}
+            \item Del \textbf{Problema 6.2} se sabe que 
+             \begin{align*}
+             	P_{\textup{err}} = \frac{1}{2}\left(1-\textup{tr}|\Lambda|\right).
+             \end{align*}
+             Por lo que basta con demostrar que $\textup{tr}|\Lambda| = sqrt{1 - |\braket{\psi_{1}|\psi_{2}}|^{2}}$. Para esto,
+             sea $\mathcal{H}$ un espacio de Hilbert, en el cual $\ket{\psi_{1}},\ket{\psi_{2}}\in \mathcal{H}$ y ademas se define $S := \textup{span}\left(\ket{\psi_{1}}\right)$, por teorema de descomposición ortogonal
+            \begin{align*}
+            	\mathcal{H} = S\oplus S^{\perp}.
+            \end{align*}
+            De aquí se infiere que existen constantes $\alpha,\beta\in \mathbb{C}$ tales que 
+            \begin{align*}
+            	\ket{\psi_{2}} = \alpha \ket{\psi_{1}} + \beta \ket{\xi}
+            \end{align*}
+            donde $\ket{\xi}\in S^{\perp}$. Mediante un simple calculo simple, se deduce que 
+            \begin{align*}
+            	1  = |\alpha|^{2} + |\beta|^{2}
+            \end{align*}
+            y también se puede deducir de calcular $\braket{\psi_{2}|\psi_{2}}$ que 
+            \begin{align*}
+            	\alpha = \braket{\psi_{1}|\psi_{2}}
+            \end{align*}
+            Por lo que 
+            \begin{align*}
+            	|\beta|^{2} = 1 - |\braket{\psi_{1}|\psi_{2}}|^{2}.
+            \end{align*}
+            Por otro lado
+            \begin{align*}
+            	\rho_{2} &= \ket{\psi_{2}}\bra{\psi_{2}}\\
+            	         &= \left(\alpha \ket{\psi_{1}} + \beta \ket{\xi}\right)\left(\bar{\alpha} \bra{\psi_{1}} + \bar{\beta} \bra{\xi}\right)\\
+            	         &= |\alpha|^{2}\rho_{1} + \alpha\bar{\beta}\ket{\psi_{1}}\bra{\xi} + \beta\bar{\alpha}\ket{\xi}\bra{\psi_{1}} + |\beta|^{2}\ket{\xi}\bra{\xi}.
+            \end{align*}
+            Luego
+            \begin{align*}
+            	\Lambda &= \frac{1}{2}\left(\rho_{1} - |\alpha|^{2}\rho_{1} - \alpha\bar{\beta}\ket{\psi_{1}}\bra{\xi} - \beta\bar{\alpha}\ket{\xi}\bra{\psi_{1}} - |\beta|^{2}\ket{\xi}\bra{\xi}\right)\\
+            	&=  \frac{1}{2}\left( |\beta|^{2}\rho_{1} - \alpha\bar{\beta}\ket{\psi_{1}}\bra{\xi} - \beta\bar{\alpha}\ket{\xi}\bra{\psi_{1}} - |\beta|^{2}\ket{\xi}\bra{\xi}\right)\\
+            	&= \frac{1}{2}\left(|\beta|^{2} \rho_{1} - \left(\alpha\bar{\beta}\ket{\psi_{1}}\bra{\xi} + \beta\bar{\alpha}\ket{\xi}\bra{\psi_{1}} + |\beta|^{2}\ket{\xi}\bra{\xi}\right)\right),
+            \end{align*}
+            Por lo que 
+            \begin{align*}
+            	\Lambda\Lambda^{\dagger} &= \frac{1}{4}\left(|\beta|^{2}\ket{\psi_{1}}\bra{\psi_{1}} - \alpha\bar{\beta}\ket{\psi_{1}}\bra{\xi} - \beta\bar{\alpha}\ket{\xi}\bra{\psi_{1}} - |\beta|^{2}\ket{\xi}\bra{\xi}\right)\left(|\beta|^{2}\ket{\psi_{1}}\bra{\psi_{1}} - \overline{\alpha\bar{\beta}}\ket{\xi}\bra{\psi_{1}} - \overline{\beta\bar{\alpha}}\ket{\psi_{1}}\bra{\xi} - |\beta|^{2}\ket{\xi}\bra{\xi}\right)\\
+            	&= \frac{1}{4}\left(|\beta|^{4}\ket{\psi_{1}}\bra{\psi_{1}} - \beta\bar{\alpha}|\beta|^{2}\ket{\xi}\bra{\psi_{1}} + |\alpha\bar{\beta}|^{2}\ket{\psi_{1}}\bra{\psi_{1}} + |\beta|^{2}\overline{\alpha\bar{\beta}}\ket{\xi}\bra{\psi_{1}} - \overline{\beta\bar{\alpha}}|\beta|^{2}\ket{\psi_{1}}\bra{\xi} + |\beta\bar{\alpha}|^{2}\ket{\xi}\bra{\xi}\right.\\
+            	&+ \left.\alpha\bar{\beta}|\beta|^{2}\ket{\psi_{1}}\bra{\xi} + |\beta|^{4}\ket{\xi}\bra{\xi}\right)\\
+            	&= \frac{1}{4}\left(|\beta|^{4} + |\alpha|^{2}|\beta|^{2}\right)\ket{\psi_{1}}\bra{\psi_{1}} + \frac{1}{4}\left(|\beta|^{4} + |\alpha|^{2}|\beta|^{2}\right)\ket{\xi_{1}}\bra{\xi_{1}}\\
+            	&= \frac{|\beta|^{2}}{4}\left(\ket{\psi_{1}}\bra{\psi_{1}} + \ket{\xi}\bra{\xi}\right)\\
+            	&= \frac{|\beta|^{2}}{4}\mathds{1}.
+            \end{align*}
+            Así,
+            \begin{align*}
+            	\textup{tr}|\Lambda| = \textup{tr}\sqrt{\Lambda\Lambda^{\dagger}} = |\beta| = \sqrt{1 - |\braket{\psi_{1}|\psi_{2}}|^{2}}.
+            \end{align*}
+            Por tanto
+            \begin{align*}
+            		P_{\textup{err}} = \frac{1}{2}\left(1-\sqrt{1-|\braket{\psi_{1}|\psi_{2}}|^{2}}\right).
+            \end{align*}
+            Del álgebra lineal, se deduce que la base de medición optimal es $\{\ket{\phi^{\textup{op}}_{1}},\ket{\phi^{\textup{op}}_{2}}\}$ donde, $\ket{\phi^{\textup{op}}_{1}} = \ket{\psi_{1}}\in S$ y $\ket{\phi^{\textup{op}}_{2}} = \ket{\psi_{1}} - \ket{\psi_{2}}\in S^{\perp}.$ Gráficamente
+            \begin{figure}[h]
+            	 \begin{center}
+            	 	\begin{picture}(20,60)
+            	 		\put(0,0){\vector(1,0){50}}
+            	 		\put(0,0){\vector(1,1){40}}
+            	 		\put(0,0){\vector(-1,2){20}}
+            	 		\put(-62,40){$\ket{\phi^{\textup{op}}_{2}}$}
+            	 		\put(-30,44){$\ket{\psi_{2}}$}
+            	 		\put(-5,55){$\ket{1}$}
+            	 		\put(55,0){$\ket{0}$}
+            	 		\put(0,0){\vector(0,1){50}}
+            	 		\put(0,0){\vector(-1,1){40}}\put(40,40){$\ket{\phi^{\textup{op}}_{1}}$}
+            	 	\end{picture}
+            	 \end{center}
+            \end{figure}
+    	\end{enumerate}
+    \end{proof}
+    \newpage
+    \begin{pro}
+    	\textit{Discriminación no ambigua de 2 estados puros.}\\
+    	Una estrategia alternativa a la contemplada en el problema anterior para discriminar
+    	estados consiste en tratar de identificar con certeza el estado preparado por Alice a costa de
+    	tener un resultado inconcluso. Más precisamente, Bob hace una medición con $3$ resultados,
+    	descrita por un POVM $\{M_{j}\}^{2}_{j=0}$. Si el obtiene el resultado “1”, el estado es con certeza $\rho_{}1$,
+    	si el obtiene “2” el estado es con certeza $\rho_{2}$, y si el obtiene “0” no se sabe. Queremos hallar
+    	una medición óptima que minimiza la probabilidad $Q_{0}$ del resultado inconcluso “0”,
+    	\begin{align*}
+    		Q_{0} = \sum^{2}_{i=1}p_{i}P_{0|i},
+    	\end{align*}
+    	donde $P_{0|i} = \tr{M_{0}\rho_{i}}$ es la probabilidad del resultado “0” sabiendo que el estado es $\rho_{i}$. La condición de no ambigüedad se escribe $P_{j|i} = \tr{M_{j}\rho_{j}} = 0$ si $i\neq j$, $i,j=1,2.$ En este problema suponemos que Alice prepara estados puros $\rho_{i} = \ket{\psi_{i}}\bra{\psi_{i}}$ con probabilidad $p_{i}$, $i=1,2.$ Sin perdida de la generalidad, podemos suponer que el espacio de Hilbert tiene dimensión $2$, esto es, $\mathcal{H} = \textup{span}\{\ket{\psi_{1}},\ket{\psi_{2}}\}$,
+    	\begin{enumerate}
+    		\item Muestre que la condición de no ambigüedad implica que 
+    		\begin{align*}
+    			M_{i} = P_{i|i}\ket{\tilde{\psi}^{*}_{i}}\bra{\tilde{\psi}^{*}_{i}}, \quad i= 1,2,
+    		\end{align*} 
+    	    donde $\{\ket{\tilde{\psi}^{*}_{i}}\}^{2}_{i=1}$ es la base dual de $\{\ket{\psi_{i}}\}^{2}_{i=1}$ y $P_{i|i} = 1-P_{0|i}>0$ es la probabilidad del resultado $i$ sabiendo que el estado es $\ket{\psi_{i}}$. Deduzca que para que la discriminación no ambigua sea posible, $P_{1|1}$ y $P_{2|2}$ deben ser tales que 
+    	    \begin{align*}
+    	    	\sum_{i=1}^{2}P_{i|i}\ket{\tilde{\psi}^{*}_{i}}\bra{\tilde{\psi}^{*}_{i}}\leq \mathds{1}.
+    	    \end{align*}
+            ¿El POVM $\{M_{j}\}^{2}_{j=1}$ puede ser asociado a una medición de von Neumann?
+            \item En lo que sigue consideramos una medición generalizada $\{A_{j}\}^{2}_{j=0}$ asociada a $\{M_{j}\}^{2}_{j=0}$. Denotamos por $U_{SA}$, $\{\ket{\alpha_{j}}\}^{2}_{j=0}$ y $\ket{0}$ el operador unitario sobre $\mathcal{H}_{SA}$, la base ortonormal de medición sobre el ancilla $A$, y el estado inicial de $A$ asociado a $\{A_{j}\}^{2}_{j=0}$ en el teorema de extensión de Neumark. Sea
+            \begin{align*}
+            	\ket{\Psi_{i}^{SA}} = U_{SA}\ket{\psi_{i}}\ket{0},\quad \braket{\alpha_{j}|\Psi_{i}^{SA}} = C_{ji}\ket{\varphi_{j|i}},
+            \end{align*}
+            donde $\ket{\varphi_{j|i}}$ es un vector normalizado del espacio de Hilbert $\mathcal{H}_{S}$ del sistema y $C_{ji}\geq0$.
+            \begin{itemize}
+            	\item[$(a)$] Muestre que $C^{2}_{ji} = P_{j|i}$ y que $\ket{\varphi_{j|i}}$ es el estado del sistema después de la medición con resultado $j$ sabiendo que el estado inicial es $\ket{\psi_{i}}$.
+            	\item[$(b)$] Usando la condición de no ambigüedad $P_{1|2} = P_{2|1} = 0$, muestre que 
+            	\begin{align*}
+            		\braket{\Psi_{1}^{SA}|\Psi_{2}^{SA}} = \sqrt{P_{0|1}P_{0|2}}\braket{\varphi_{0|1}|\varphi_{0|2}}
+            	\end{align*} 
+            	\item[$(c)$] Deduzca que 
+            	\begin{align*}
+            		P_{0|1}P_{0|2}\geq\cos^{2}\theta\quad\textup{con}\quad \cos\theta = |\braket{\psi_{1}|\psi_{2}}|,
+            	\end{align*}
+                y que la desigualdad es una igualdad si y sólo si $\ket{\varphi_{0|2}}$ coincide con $\ket{\varphi_{0|1}}$ módulo un factor de fase.
+            \end{itemize}
+            \item Muestre que si $\sqrt{p_{2}/p_{1}}\cos\theta \leq 1$ y $\sqrt{p_{1}/p_{2}}\cos\theta \leq 1$, luego la probabilidad mínima del resultado inconclusivo está dada por 
+            \begin{align*}
+                Q^{\textup{op}}_{0} = \min_{P_{0|1}\in[\cos^{2}\theta,1]}\left\{p_{1}P_{0|1} + p_{2}\frac{\cos^{2}\theta}{P_{0|1}}\right\} = 2\sqrt{p_{1}p_{2}}|\braket{\psi_{1}|\psi_{2}}|.
+            \end{align*}
+            \item Similarmente, halle el mínimo de $Q_{0}$ en los casos  $\sqrt{p_{2}/p_{1}}\cos\theta \geq 1$ y $\sqrt{p_{1}/p_{2}}\cos\theta \geq 1$.
+    	\end{enumerate}
+    \end{pro}
+    \newpage
+    \begin{proof}
+    	\begin{enumerate}
+    		\item Dado que $\{\ket{\tilde{\psi}^{*}_{i}}\}^{2}_{i=1}$ es una base, los $M_{i}$ se pueden obtener mediante 
+    		\begin{align*}
+    			M_{i} = c_{1i}\ket{\tilde{\psi}^{*}_{1}}\bra{\tilde{\psi}^{*}_{1}} +  c_{4i}\ket{\tilde{\psi}^{*}_{2}}\bra{\tilde{\psi}^{*}_{2}}, \quad \forall i\in\{1,2\}
+    		\end{align*}
+    	    Ademas,
+    	    \begin{align*}
+    	    	P_{1|1} &= \tr{M_{1}\rho_{1}}\\
+    	    	&= c_{11}\tr{\ket{\tilde{\psi}^{*}_{1}}\braket{\tilde{\psi}^{*}_{1}|\psi_{1}}\bra{\psi_{1}}}c_{41}\tr{\ket{\tilde{\psi}^{*}_{2}}\braket{\tilde{\psi}^{*}_{2}|\psi_{1}}\bra{\psi_{1}}}\\
+    	    	&= c_{11}\tr{\ket{\tilde{\psi}^{*}_{1}}\bra{\psi_{1}}} \\
+    	    	&= c_{11} \\
+    	    	P_{1|2} &= \tr{M_{1}\rho_{2}}\\
+    	    	&= c_{11}\tr{\ket{\tilde{\psi}^{*}_{1}}\braket{\tilde{\psi}^{*}_{1}|\psi_{2}}\bra{\psi_{2}}}+c_{21}\tr{\ket{\tilde{\psi}^{*}_{2}}\braket{\tilde{\psi}^{*}_{2}|\psi_{2}}\bra{\psi_{2}}}\\
+    	    	&= c_{41}\\
+    	    	P_{2|1} &= \tr{M_{2}\rho_{1}}\\
+    	    	&= c_{12}\tr{\ket{\tilde{\psi}^{*}_{1}}\braket{\tilde{\psi}^{*}_{1}|\psi_{1}}\bra{\psi_{1}}}+c_{22}\tr{\ket{\tilde{\psi}^{*}_{2}}\braket{\tilde{\psi}^{*}_{2}|\psi_{1}}\bra{\psi_{1}}}\\
+    	    	&= c_{12}\\
+    	    	P_{2|2} &= \tr{M_{2}\rho_{2}}\\
+    	    	&= c_{12}\tr{\ket{\tilde{\psi}^{*}_{1}}\braket{\tilde{\psi}^{*}_{1}|\psi_{2}}\bra{\psi_{2}}}+c_{22}\tr{\ket{\tilde{\psi}^{*}_{2}}\braket{\tilde{\psi}^{*}_{2}|\psi_{2}}\bra{\psi_{2}}}\\
+    	    	&= c_{22}.
+    	    \end{align*} 
+            Por la condición de no ambigüedad, $c_{12} = c_{21} = 0$. Y por tanto 
+            \begin{align*}
+            	M_{i} = P_{i|i}\ket{\tilde{\psi}^{*}_{i}}\bra{\tilde{\psi}^{*}_{i}}\quad \forall i\in\{1,2\}.
+            \end{align*} 
+            Por otro lado, dado que $\{M_{i}\}^{2}_{i=0}$ es un POVM
+            \begin{align*}
+            	M_{0} + M_{1} + M_{2} = \mathds{1}
+            \end{align*}
+            por lo que necesariamente 
+            \begin{align*}
+            	M_{1} + M_{2} \leq \mathds{1}.
+            \end{align*}
+            Además, el POVM $\{M_{j}\}^{2}_{j=1}$ puede ser asociado a una medición de von Neumann siempre y cuando $\{\ket{\tilde{\psi}^{*}_{i}}\}^{2}_{i=1}$ sea una base ortonormal.
+            \item 
+            \begin{itemize}
+            	\item[$(a)$] Por el teorema de extensión de Neumark
+            	\begin{align*}
+            		A_{j}\rho_{i}A^{\dagger}_{j} &= \underset{A}{\textup{tr}}\left(\mathds{1}_{S}\otimes\ket{\alpha_{j}}\bra{\alpha_{j}}U_{SA}\rho_{i}\otimes\ket{0}\bra{0}U_{SA}^{\dagger}\mathds{1}_{S}\otimes\ket{\alpha_{j}}\bra{\alpha_{j}}\right)\\ &=  \underset{A}{\textup{tr}}\left(\mathds{1}_{S}\otimes\ket{\alpha_{j}}\braket{\alpha_{j}|\Psi_{i}^{SA}}\bra{\Psi_{i}^{SA}}\mathds{1}_{S}\otimes\ket{\alpha_{j}}\bra{\alpha_{j}}\right)\\ &= \braket{\alpha_{j}|\Psi_{i}^{SA}}\braket{\Psi_{i}^{SA}|\alpha_{j}},
+            	\end{align*}
+                luego,
+                \begin{align*}
+                	P_{j|i} = \tr{\braket{\alpha_{j}|\Psi_{i}^{SA}}\braket{\Psi_{i}^{SA}|\alpha_{j}}} = C^{2}_{ji}\tr{\ket{\varphi_{j|i}}\bra{\varphi_{j|i}}} = C^{2}_{ji}.
+                \end{align*}
+                Además,
+                \begin{align*}
+                	\rho_{j|i}\ket{\varphi_{j|i}} &= \frac{A_{j}\rho_{i}A^{\dagger}_{j}}{P_{i|j}}\\ &= \frac{\braket{\alpha_{j}|\Psi_{i}^{SA}}\braket{\Psi_{i}^{SA}|\alpha_{j}}}{P_{i|j}}\ket{\varphi_{j|i}}\\ &= \frac{\braket{\alpha_{j}|\Psi_{i}^{SA}}}{P_{i|j}}C_{ji}\braket{\varphi_{j|i}|\varphi_{j|i}}\\  &= \frac{\braket{\alpha_{j}|\Psi_{i}^{SA}}}{P_{i|j}}\sqrt{P_{i|j}}\\ &= \frac{\sqrt{P_{j|i}}}{P_{j|i}}\sqrt{P_{j|i}}\ket{\varphi_{j|i}}\\ &= \ket{\varphi_{j|i}}
+                \end{align*}
+                \item[$(b)$] De un cálculo directo
+                \begin{align*}
+                	\braket{\Psi^{SA}_{1}|\Psi^{SA}_{2}} &= \bra{\Psi^{SA}_{1}}\mathds{1}\ket{\Psi^{SA}_{2}}\\ &= \sum_{j=0}^{2}\braket{\Psi^{SA}_{1}|\alpha_{j}}\braket{\alpha_{j}|\Psi^{SA}_{2}}\\ &= \sum_{j=0}^{2}C_{j1}\bra{\varphi_{j|1}}C_{j2}\ket{\varphi_{j|2}}\\ &= \sum_{j=0}^{2}C_{j2}C_{j1}\braket{\varphi_{j|1}|\varphi_{j|2}}\\ &= \sum_{j=0}^{2}\sqrt{P_{j|2}P_{j|1}}\braket{\varphi_{j|1}|\varphi_{j|2}}\\
+                	&= \sqrt{P_{0|2}P_{0|1}}\braket{\varphi_{0|1}|\varphi_{0|2}}
+                \end{align*}
+                \item[$(c)$] Usando lo mostrado en \textbf{Problema 7.2.b} se deduce
+                \begin{align*}
+                	|\braket{\Psi^{SA}_{1}|\Psi^{SA}_{2}}|^{2} &= \braket{\Psi^{SA}_{1}|\Psi^{SA}_{2}}\braket{\Psi^{SA}_{2}|\Psi^{SA}_{1}}\\ &= \sqrt{P_{0|2}P_{0|1}}\braket{\varphi_{0|1}|\varphi_{0|2}}\sqrt{P_{0|1}P_{0|2}}\braket{\varphi_{0|1}|\varphi_{0|2}}\\ &= P_{0|1}P_{0|2}|\braket{\varphi_{0|1}|\varphi_{0|2}}|^{2}
+                \end{align*}
+                De aquí
+                \begin{align}\label{eq:wea}
+                	P_{0|1}P_{0|2} = \frac{|\braket{\Psi^{SA}_{1}|\Psi^{SA}_{2}}|^{2}}{|\braket{\varphi_{0|1}|\varphi_{0|2}}|^{2}} = \frac{|\bra{0}\bra{\psi_{1}}U^{\dagger}_{SA}U_{SA}\ket{\psi_{2}}\ket{0}|^{2}}{|\braket{\varphi_{0|1}|\varphi_{0|2}}|^{2}} = \frac{|\braket{\psi_{1}|\psi_{2}}|^{2}}{|\braket{\varphi_{0|1}|\varphi_{0|2}}|^{2}} = \frac{\cos^{2}\theta}{|\braket{\varphi_{0|1}|\varphi_{0|2}}|^{2}},
+                \end{align}
+                De esta identidad, si $\ket{\varphi_{0|1}}$ coincide con $\ket{\varphi_{0|2}}$ modulo factor de fase, se obtiene
+                \begin{align*}
+                	P_{0|1}P_{0|2} = \frac{\cos^{2}\theta}{|e^{-i\phi}\braket{\varphi_{0|1}|\varphi_{0|1}}|^{2}} = \cos^{2}\theta.
+                \end{align*}
+                Recíprocamente, si 
+                \begin{align*}
+                	P_{0|1}P_{0|2} = \cos^{2}\theta,
+                \end{align*}
+                entonces 
+                \begin{align*}
+                	\cos^{2}\theta = \frac{\cos^{2}\theta}{|\braket{\varphi_{0|1}|\varphi_{0|2}}|^{2}} \iff \cos^{2}\theta\left(1-\frac{1}{|\braket{\varphi_{0|1}|\varphi_{0|2}}|^{2}}\right) = 0 \iff \psi_{1}\perp\psi_{2} \ \vee \ |\braket{\varphi_{0|1}|\varphi_{0|1}}|^{2} = 1
+                \end{align*}
+            
+            Como en este no se asume ortogonalidad de entre $\psi_{1}$ y $\psi_{2}$, se tiene que 
+            \begin{align*}
+            	|\braket{\varphi_{0|1}|\varphi_{0|1}}|^{2} = 1
+            \end{align*} 
+            lo cual implica que $\ket{\varphi_{0|1}}$ coincide con $\ket{\varphi_{0|2}}$ modulo un factor de fase. Por otro lado, para probar la desigualdad notar que
+            \begin{align*}
+            	|\braket{\varphi_{0|1}|\varphi_{0|1}}|^{2} \leq ||\varphi_{0|1}||^{2}||\varphi_{0|2}||^{2} = 1 \Longrightarrow 1 \leq \frac{1}{|\braket{\varphi_{0|1}|\varphi_{0|1}}|^{2}}
+            \end{align*}
+            retomando \eqref{eq:wea} se deduce que
+            \begin{align*}
+            	P_{0|1}|P_{0|2} = \frac{\cos^{2}\theta}{|\braket{\varphi_{0|1}|\varphi_{0|1}}|^{2}}\geq \cos^{2}\theta 
+            \end{align*}
+        \end{itemize}
+        \newpage
+        \item Suponga que $\sqrt{p_{2}/p_{1}}\cos\theta \leq 1$ y $\sqrt{p_{1}/p_{2}}\cos\theta \leq 1$, luego, por definición y por lo mostrado en \textbf{Problema 7.2.c}
+        \begin{align*}
+        	Q_{0} = p_{1}P_{0|1} + p_{2}P_{0|2}\geq p_{1}P_{0|1} + p_{2}\frac{\cos^{2}\theta}{P_{0|1}},
+        \end{align*}
+        de esta forma, encontrar $P_{0|1}$ y $P_{0|2}$ tal que minimiza $Q_{0}$ se puede reducir a encontrar $P_{0|1}$ tal que minimiza $Q_{0}$, además, dado que 
+        \begin{align*}
+        	P_{0|1}P_{0|2}\geq \cos^{2}\theta \quad P_{0|1},P_{0|2}\leq 1,
+        \end{align*}
+        se deduce que $P_{0|1}\in [\cos^{2}\theta,1]$, es decir
+        \begin{align*}
+        	Q^{\textup{op}}_{0} = \min_{P_{0|1}\in[\cos^{2}\theta,1]}\left\{p_{1}P_{0|1} + p_{2}\frac{\cos^{2}\theta}{P_{0|1}}\right\}.
+        \end{align*}
+        Dado que la función objetivo $f:[\cos^{2}\theta,1]\longrightarrow\mathbb{R}$ es continua en un intervalo cerrado y acotado, se deduce que tiene mínimo. Ahora derivando respecto a $P_{0|1}$ e igualando a cero
+        \begin{align*}
+        	0 = \frac{\textup{d}f}{\textup{d}P_{0|1}} = p_{1} - p_{2}\cos^{2}\theta\frac{1}{P^{2}_{0|1}} \iff P_{0|1} = \pm\sqrt{\frac{p_{2}\cos^{2}\theta}{p_{1}}}.
+        \end{align*}
+        Dado que $P_{0|1}\in [\cos^{2}\theta,1]$, y que $\sqrt{p_{2}/p_{1}}\cos\theta \leq 1$ entonces el único punto critico de interés es
+        \begin{align*}
+        	P_{0|1} = \sqrt{\frac{p_{2}}{p_{1}}}\cos\theta
+        \end{align*}
+        luego, analizando la concavidad de $f$
+        \begin{align*}
+        	\frac{\textup{d}^{2}f}{\textup{d}P_{0|1}^{2}} = \frac{\textup{d}}{\textup{d}P_{0|1}}\left( p_{1} - p_{2}\cos^{2}\theta\frac{1}{P^{2}_{0|1}}\right) = 2p_{2}\cos^{2}\theta\frac{1}{P^{3}_{0|1}}>0 \quad \textup{en} [\cos^{2}\theta,1]
+        \end{align*}
+        Por tanto, $P_{0|1} = \sqrt{\frac{p_{2}\cos^{2}\theta}{p_{1}}}$ es un mínimo local y así
+        \begin{align*}
+        	Q^{\textup{op}}_{0} = p_{1}\sqrt{\frac{p_{2}}{p_{1}}}\cos\theta + p_{2}\sqrt{\frac{p_{1}}{p_{2}}}\cos\theta = 2\sqrt{p_{1}p_{1}}\cos\theta = 2\sqrt{p_{1}p_{1}}\  |\braket{\psi_{1}|\psi_{2}}|
+        \end{align*}
+        \item Suponga $\sqrt{p_{2}/p_{1}}\cos\theta \geq 1$, luego, $\cos^{2}\theta\geq \frac{p_{1}}{p_{2}}$. Por definición y por lo demostrado en el \textbf{Problema 7.3.c}
+        \begin{align*}
+        	Q_{0} = p_{1}P_{0|1} + p_{2}P_{0|2} \geq  p_{1}P_{0|1} + p_{2}\frac{\cos^{2}\theta}{P_{0|1}}\geq p_{1}\left(P_{0|1} + \frac{1}{P_{0|1}}\right)
+        \end{align*}
+        Procediendo de forma análoga al \textbf{Problema 7.3}, buscamos minimizar la función $f:[\cos^{2}\theta,1]\longrightarrow\mathbb{R}$ definida por 
+        \begin{align*}
+        	f\left(P_{0|1}\right) = p_{1}\left(P_{0|1} + \frac{1}{P_{0|1}}\right)
+        \end{align*}
+        derivando e igualando a cero
+        \begin{align*}
+        	0 = \frac{\textup{d}f}{\textup{d}P_{0|1}} = p_{1} - \frac{p_{1}}{P^{2}_{0|1}} \Longrightarrow P_{0|1} = \pm 1.
+        \end{align*}
+        Dado que $P_{0|1}\in [\cos^{2}\theta,1]$, se deduce que el único punto critico de interés es
+        \begin{align*}
+        	P_{0|1} = 1.
+        \end{align*}
+        Notar que si $P_{0|1}\leq 1$, se tiene que 
+        \begin{align*}
+        	\frac{\textup{d}f}{\textup{d}P_{0|1}} <0
+        \end{align*}
+        Por lo que la función es decreciente en $[\cos^{2}\theta,1]$ y por tanto, como $f$ es continua y monótona decreciente en un intervalo cerrado y acotado, se tiene que la función alcanza su mínimo en el punto $P_{0|1} = 1$. Por tanto
+        \begin{align*}
+        	Q^{\textup{op}}_{0} = 2p_{1}
+        \end{align*}
+        Por otro lado, si $\sqrt{p_{1}/p_{2}}\cos\theta \geq 1$, luego, $\cos^{2}\theta\geq \frac{p_{2}}{p_{1}}$. Por definición y por lo demostrado en el \textbf{Problema 7.3.c}
+        \begin{align*}
+        	Q_{0} = p_{1}P_{0|1} + p_{2}P_{0|2} \geq  p_{2}\frac{\cos^{2}\theta}{P_{0|2}} + p_{2}P_{0|2}\geq p_{1}\left(\frac{1}{P_{0|2}} + P_{0|2}\right)
+        \end{align*}
+        Luego procediendo de forma análoga al caso anterior, se deduce que
+        \begin{align*}
+        	Q^{\textup{op}}_{0} = 2p_{2}.
+        \end{align*} 
+    	\end{enumerate}
+    \end{proof}
+\end{document}

@@ -1,0 +1,255 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsmath}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{esint}
+\usepackage{tikz}
+\usepackage{textcomp}
+\pagestyle{empty}
+\parindent=0pc
+\setlength{\oddsidemargin}{0cm} \setlength{\evensidemargin}{0cm}
+\setlength{\textwidth}{16cm} \setlength{\textheight}{24cm}
+\setlength{\topmargin}{-3.0cm}
+\usepackage{sagetex}
+\newcommand{\Bold}[1]{\mathbb{#1}}
+
+\newcounter{problems}
+
+\begin{document}
+
+\noindent
+\textbf{Universidad de Concepción}\\
+\textbf{Facultad de Ciencias Físicas y Matemáticas}\\
+\textbf{Departamento de Matemática}
+\begin{center}
+{\bfseries Listado 09: Operaciones en campos finitos\\ Álgebra con Software (527282)}\\
+\end{center}
+
+\begin{enumerate}
+    \item Sean $E,F$ campos con $E\subseteq F$. Sean $p(x)\in E[x]$ un polinomio irreducible con coeficientes en $E$ y $a\in F$ una raíz del polinomio $p$. Mostrar: si $a$ es raíz de un polinomio $q(x)\in E[x]$, entonces $q$ es múltiplo de $p$.
+    
+    \item Usar el ejercicio anterior para mostrar el \emph{teorema de las raíces conjugadas}: si $z\in\mathbb{C}\setminus\mathbb{R}$ es raíz de un polinomio real $p(x)\in\mathbb{R}[x]$, entonces el conjugado $\overline{z}$ también es raíz de $p$.
+    
+    \item Determinar, a mano y después con software, los determinantes de cada una de las siguientes matrices. En el caso de que la matriz sea invertible, determinar también su inversa.
+    
+
+    \begin{enumerate}
+      \item
+      \begin{sageblock}
+        R = GF(5)
+        M = matrix(R, [[1,3], [3,2]])
+      \end{sageblock}
+      
+      $$M=\sage{M}$$ con coeficientes en el campo $R$: \sage{R.__repr__()}.
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        R = GF(7)
+        M = matrix(R, [[1,3], [3,2]])
+      \end{sageblock}
+      
+      $$M=\sage{M}$$ con coeficientes en el campo $R$: \sage{R.__repr__()}.
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        x = polygen(GF(5), "x")
+        R.<a> = GF(5).extension(x^2+x+1, "a")
+        M = matrix(R, [[1,a],[a,2*a+1]])
+      \end{sageblock}
+      
+      $$M=\sage{M}$$ con coeficientes en el campo $R$: \sage{R.__repr__()} donde $a$ es raíz de $\sage{a.minpoly()}$.
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        x = polygen(GF(5), "x")
+        R.<a> = GF(5).extension(x^3+x+1, "a")
+        M = matrix(R, [[1,a],[a,2*a+1]])
+      \end{sageblock}
+      
+      $$M=\sage{M}$$ con coeficientes en el campo $R$: \sage{R.__repr__()} donde $a$ es raíz de $\sage{a.minpoly()}$.
+      
+    \end{enumerate}
+    
+    \item Determinar, a mano y después con software, los conjuntos solución de cada uno de los siguientes sistemas lineales. Indicar además la cardinalidad de cada conjunto solución.
+    \begin{enumerate}
+      \item
+      \begin{sageblock}
+        R = GF(7)
+        M = matrix(R, [[1,2,3],[2,6,2],[5,4,3]])
+        b = column_matrix(R, [1,5,3])
+        M_b = M.augment(b, subdivide=True)
+      \end{sageblock}
+      $$M_b = \sage{M_b}$$ con coeficientes en el campo $R$: \sage{R.__repr__()}.
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        R = GF(5)
+        M = matrix(R, [[1,2,3,0],[2,3,2,1],[2,4,3,3]])
+        b = column_matrix(R, [1,5,3])
+        M_b = M.augment(b, subdivide=True)
+      \end{sageblock}
+      $$M_b = \sage{M_b}$$ con coeficientes en el campo $R$: \sage{R.__repr__()}.
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        x = polygen(GF(3), "x")
+        R.<a> = GF(3).extension(x^2+1, "a")
+        M = matrix(R, [[1,a,a+2],[2,1,0],[a,a,1]])
+        b = column_matrix(R, [1,1,1])
+        M_b = M.augment(b, subdivide=True)
+      \end{sageblock}
+      $$M_b = \sage{M_b}$$ con coeficientes en el campo $R$: \sage{R.__repr__()} donde $a$ es raíz de $\sage{a.minpoly()}$.
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        x = polygen(GF(3), "x")
+        R.<a> = GF(3).extension(x^3+2*x+1, "a")
+        M = matrix(R, [[1,a,a+2],[2,1,0],[a,a,1]])
+        b = column_matrix(R, [1,1,1])
+        M_b = M.augment(b, subdivide=True)
+      \end{sageblock}
+      $$M_b = \sage{M_b}$$ con coeficientes en el campo $R$: \sage{R.__repr__()} donde $a$ es raíz de $\sage{a.minpoly()}$.
+      
+    \end{enumerate}
+    
+    \item Determinar los polinomios característicos y los valores y vectores propios de cada una de las siguientes matrices. Extender, si es necesario, el campo de coeficientes.
+    \begin{enumerate}
+      \item
+      \begin{sageblock}
+        R = GF(5)
+        M = matrix(R, [[1,2,2],[1,1,1],[3,2,1]])
+      \end{sageblock}
+      $$M = \sage{M}$$ con coeficientes en el campo $R$: \sage{R.__repr__()}.
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        R = GF(7)
+        M = diagonal_matrix(R,[1,6,2,5,2])
+        M.swap_rows(1,2)
+        M.swap_rows(3,4)
+        # Cuidado: swap_rows cuenta las filas desde el cero
+      \end{sageblock}
+      $$M = \sage{M}$$ con coeficientes en el campo $R$: \sage{R.__repr__()}.
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        x = polygen(GF(7), "x")
+        R.<a> = GF(7).extension(x^3+2*x+1, "a")
+        M = matrix(R, [[1,a,0,a+2],[0,a,a,1],
+                       [1,0,5,3*a],[a,a^2,3,2]])
+      \end{sageblock}
+      
+      $$M=\sage{M}$$ con coeficientes en el campo $R$: \sage{R.__repr__()} donde $a$ es raíz de $\sage{a.minpoly()}$.
+      
+    \end{enumerate}
+    
+    \item Mostrar: si $F$ es un campo finito, y $f:F\to F$ es un homomorfismo de anillos, entonces $f$ es un isomorfismo de anillos.
+    
+    \item Para cada campo finito $R$ indicado, se construye el conjunto $X$ de todos los homomorfismos de anillos $R\to R$. Listar y describir los elementos de $X$. Observando que la composición de dos elementos de $X$ es un elemento de $X$, construir la tabla de la operación composición entre estos isomorfismos. Finalmente, reconocer cuál de estos isomorfismos corresponde al morfismo de Frobenius.
+    \begin{enumerate}
+      \item
+      \begin{sageblock}
+        x = polygen(GF(7), "x")
+        R.<a> = GF(7).extension(x^3+2*x+1, "a")
+        X = End(R)
+      \end{sageblock}
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        x = polygen(GF(13), "x")
+        R.<a> = GF(13).extension(x^4+x^3+1, "a")
+        X = End(R)
+      \end{sageblock}
+      
+    \end{enumerate}
+    
+    \item En cada caso, determinar si la lista $B$ es una base de Gröbner en el anillo de polinomios $P$. Si no lo es, construir una base de Gröbner que genere el mismo ideal que el conjunto $B$.
+    \begin{enumerate}
+      \item
+      \begin{sageblock}
+        R = GF(13)
+        P.<x,y,t> = PolynomialRing(R, order="lex")
+        B = [x^2+y^2-1, y-t*(x+1)]
+      \end{sageblock}
+      
+      Donde $P$: $\sage{P}$ y $B=\sage{B}$
+      
+      \hrulefill
+      
+      \item
+      \begin{sageblock}
+        x = polygen(GF(7), "x")
+        R.<a> = GF(7).extension(x^2+1, "a")
+        P.<x,y> = PolynomialRing(R, order="lex")
+        B = [x^2+a*y^2+1, x*y+3*a]
+      \end{sageblock}
+      
+      Donde $P$: $\sage{P}$ y $B=\sage{B}$
+      
+    \end{enumerate}
+    
+    \item Sean $E,F$ campos con $E\subseteq F$. Si $|E| = p^k$ y $|F|=p^l$, mostrar: $k\mid l$. \emph{(Indicación: considerar $F^+$ como un $E$-espacio vectorial... ¿qué relación hay entre su dimensión y su cardinalidad?)}
+    
+    \item Utilizando el problema anterior, describir todos los subcampos del campo con $64$ elementos \begin{sageblock}R.<a> = GF(2^6, "a")\end{sageblock}
+    
+    Para cada subcampo, determinar un generador.
+    
+    \item \emph{(Desafío de Software)} Construir un método general para obtener generadores de subcampos de un campo con $p^l$ elementos.
+
+
+
+    
+    \setcounter{problems}{\value{enumi}}
+\end{enumerate}
+
+\subsection*{Glosario de comandos útiles}
+
+\textbf{Si $M$ es una matriz:}
+
+\begin{itemize}
+  \item \texttt{M.echelon\_form()} reduce la matriz a su forma reducida escalonada por filas.
+  \item \texttt{M.inverse()} invierte la matriz.
+  \item \texttt{M.right\_kernel()} entrega el kernel de $M$.
+  \item \texttt{M.image()} entrega la imagen de $M$.
+  \item \texttt{M.solve\_right(b)}, donde \texttt{b} es un vector columna, resuelve el sistema $Mx=b$ (sólo una solución).
+  \item \texttt{M.eigenvalues()} entrega una lista con los valores propios de $M$.
+  \item \texttt{M.charpoly()}, \texttt{M.minpoly()} entrega, respectivamente, los polinomios característico y minimal de $M$.
+\end{itemize}
+
+\textbf{Si $E$, $F$ son campos:}
+
+\begin{itemize}
+  \item \texttt{E.frobenius\_endomorphism()} entrega el morfismo de Frobenius $E\to E$.
+  \item \texttt{Hom(E,F)} construye el conjunto de todos los homomorfismos de campos de $E$ en $F$.
+  \item \texttt{V,f,g = E.vector\_space()} construye tres objetos: el espacio vectorial $V$ de las coordenadas de $E^+$ en la base canónica $\{1,a,a^2,\ldots ,a^{d-1}\}$, el isomorfismo de espacios vectoriales $f:V\to E^+$, y su isomorfismo inverso $g:E^+\to V$.
+\end{itemize}
+
+
+
+
+
+
+
+
+\end{document}
